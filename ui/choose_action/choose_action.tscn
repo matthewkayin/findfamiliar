@@ -1,0 +1,85 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://ui/font_16pt.tres" type="DynamicFont" id=1]
+[ext_resource path="res://ui/frame.png" type="Texture" id=2]
+[ext_resource path="res://ui/cursor.png" type="Texture" id=3]
+[ext_resource path="res://ui/choice_dialog.gd" type="Script" id=4]
+
+[node name="choose_action" type="NinePatchRect"]
+margin_right = 242.0
+margin_bottom = 58.0
+texture = ExtResource( 2 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+allow_back = false
+
+[node name="choices" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="col_1" type="Control" parent="choices"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="spell" type="Label" parent="choices/col_1"]
+margin_left = 24.0
+margin_top = 12.0
+margin_right = 104.0
+margin_bottom = 28.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "SPELL"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item" type="Label" parent="choices/col_1"]
+margin_left = 24.0
+margin_top = 36.0
+margin_right = 104.0
+margin_bottom = 52.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "ITEM"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="col_2" type="Control" parent="choices"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="summon" type="Label" parent="choices/col_2"]
+margin_left = 132.0
+margin_top = 12.0
+margin_right = 228.0
+margin_bottom = 28.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "SUMMON"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="run" type="Label" parent="choices/col_2"]
+margin_left = 132.0
+margin_top = 38.0
+margin_right = 212.0
+margin_bottom = 54.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "RUN"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cursor" type="Sprite" parent="."]
+position = Vector2( 8, 10 )
+texture = ExtResource( 3 )
+offset = Vector2( 5, 7 )

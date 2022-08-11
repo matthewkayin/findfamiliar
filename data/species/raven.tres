@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://data/species.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+name = "RAVEN"
+type = 6
+base_health = 50
+base_mana = 60
+base_attack = 85
+base_defense = 75
+base_speed = 40
+catch_rate = 0.5
+base_exp_yield = 60.0

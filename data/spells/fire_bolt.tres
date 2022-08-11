@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://data/spell.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+name = "FIRE BOLT"
+type = 0
+cast_cost = 2
+learn_cost = 100
+power = 40
