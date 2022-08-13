@@ -1,0 +1,27 @@
+extends Node
+
+var familiars = []
+
+func _ready():
+    familiars.append(Familiar.new(load("res://data/species/raven.tres"), 5))
+    familiars.append(Familiar.new(load("res://data/species/raven.tres"), 5))
+    familiars[0].nickname = "Maves"
+    familiars[1].nickname = "Poe"
+    var firebolt = load("res://data/spells/fire_bolt.tres")
+    var witchbolt = load("res://data/spells/witch_bolt.tres")
+    familiars[0].spells = [firebolt, witchbolt]
+    familiars[1].spells = [firebolt, witchbolt]
+
+func swap_familiars(a: int, b: int):
+    if a == b:
+        return
+    var temp = familiars[a]
+    familiars[a] = familiars[b]
+    familiars[b] = temp
+
+func living_familiar_count() -> int:
+    var count = 0
+    for familiar in familiars:
+        if familiar.is_living():
+            count += 1
+    return count

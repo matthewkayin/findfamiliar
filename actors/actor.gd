@@ -2,14 +2,17 @@ extends Area2D
 
 onready var sprite = $sprite
 onready var map = get_parent().get_node("tilemap")
+onready var pause_menu = get_parent().get_node("ui/pause_menu")
 
 const TILE_SIZE = Vector2(32, 32)
 
 var input_direction: Vector2 = Vector2.ZERO
 var facing_direction: Vector2 = Vector2.DOWN
 var target_position: Vector2 = Vector2.ZERO
+var paused: bool = false
 
 func _ready():
+    add_to_group("actors")
     map.reserve_tile(position)
 
 func is_moving():
@@ -27,13 +30,27 @@ func handle_input():
                 if Input.is_action_pressed(Direction.NAMES[other_direction]):
                     input_direction = Direction.VECTORS[other_direction]
                     break
+    if Input.is_action_just_pressed("menu"):
+        if not paused:
+            for actor in get_tree().get_nodes_in_group("actors"):
+                actor.pause()
+            pause_menu.open()
+        else:
+            for actor in get_tree().get_nodes_in_group("actors"):
+                actor.resume()
+            pause_menu.close()
 
 func _process(_delta):
+    if paused and pause_menu.choice == ChoiceDialog.NONE:
+        for actor in get_tree().get_nodes_in_group("actors"):
+            actor.resume()
     handle_input()
     move()
     update_sprite()
 
 func move():
+    if paused:
+        return
     if is_moving():
         facing_direction = position.direction_to(target_position)
         if position.distance_to(target_position) <= 1:
@@ -52,6 +69,8 @@ func move():
 
 
 func update_sprite():
+    if paused:
+        return
     if facing_direction == Vector2.UP:
         sprite.play("back")
     elif facing_direction == Vector2.DOWN:
@@ -63,3 +82,11 @@ func update_sprite():
     if not is_moving():
         sprite.stop()
         sprite.frame = 0
+
+func pause():
+    sprite.stop()
+    paused = true
+
+func resume():
+    sprite.play()
+    paused = false

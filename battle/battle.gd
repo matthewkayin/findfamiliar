@@ -1,5 +1,7 @@
 extends Node2D
 
+onready var party = get_node("/root/Party")
+
 onready var dialog = $ui/dialog
 onready var choose_action = $ui/choose_action
 onready var choose_spell = $ui/choose_spell
@@ -8,6 +10,8 @@ onready var enemy_healthbar = $enemy_healthbar
 onready var player_sprite = $player_sprite
 onready var enemy_sprite = $enemy_sprite
 onready var tween = $tween
+onready var rng = RandomNumberGenerator.new()
+onready var party_menu = $ui/party_menu
 
 onready var screen_rect = get_viewport_rect()
 
@@ -18,10 +22,11 @@ var actions = []
 
 enum State {
     ENTER,
-    PLAYER_SUMMON,
     CHOOSE_ACTION,
     CHOOSE_SPELL,
     ACTION,
+    PLAYER_LOSS,
+    PLAYER_WIN,
 }
 
 var next_state = null
@@ -37,14 +42,14 @@ func _ready():
     player_sprite.visible = false
     enemy_sprite.visible = false
 
+    party_menu.close()
+    rng.randomize()
+
     var raven_species = load("res://data/species/raven.tres")
     var firebolt = load("res://data/spells/fire_bolt.tres")
     var witchbolt = load("res://data/spells/witch_bolt.tres")
-    player_familiar = Familiar.new(raven_species, 5)
-    player_familiar.spells = [firebolt, witchbolt]
     enemy_familiar = Familiar.new(raven_species, 5)
     enemy_familiar.spells = [firebolt, witchbolt]
-    player_familiar.nickname = "Maves"
 
     next_state = State.ENTER
 
@@ -52,16 +57,8 @@ func _process(_delta):
     if next_state != null:
         var state = next_state
         next_state = null
-        if state == State.ENTER:
-            begin_enter()
-        elif state == State.PLAYER_SUMMON:
-            begin_player_summon()
-        elif state == State.CHOOSE_ACTION:
-            begin_choose_action()
-        elif state == State.CHOOSE_SPELL:
-            begin_choose_spell()
-        elif state == State.ACTION:
-            begin_action()
+        var state_function = "begin_" + State.keys()[state].to_lower()
+        call(state_function)
 
 func begin_enter():
     tween.interpolate_property(player_sprite, "position", Vector2(screen_rect.size.x + 56, player_sprite.position.y), player_sprite.position, 1.0)
@@ -76,15 +73,16 @@ func begin_enter():
     yield(dialog, "finished")
 
     open_enemy_healthbar()
-    next_state = State.PLAYER_SUMMON
+    yield(player_summon(), "completed")
+    next_state = State.CHOOSE_ACTION
 
-func begin_player_summon():
-    dialog.open("You summon\nfriend!")
+func player_summon():
+    player_familiar = party.familiars[0]
+    dialog.open_and_split("You summon " + player_familiar.get_name() + "!")
 
     yield(dialog, "finished")
     player_sprite.set_familiar(player_familiar)
     open_player_healthbar()
-    next_state = State.CHOOSE_ACTION
 
 func begin_choose_action():
     choose_action.open()
@@ -92,6 +90,19 @@ func begin_choose_action():
     yield(choose_action, "finished")
     if choose_action.choice == "SPELL":
         next_state = State.CHOOSE_SPELL
+    elif choose_action.choice == "SUMMON":
+        party_menu.context = PartyMenu.Context.SUMMON
+        party_menu.open()
+        yield(party_menu, "finished")
+        if party_menu.switch_index == -1:
+            next_state = State.CHOOSE_ACTION
+        else:
+            actions.append({
+                "who": "player",
+                "what": "summon",
+                "switch_index": party_menu.switch_index
+            })
+            end_choose_action()
     else:
         next_state = State.CHOOSE_ACTION
 
@@ -107,14 +118,18 @@ func begin_choose_spell():
             "what": "spell",
             "spell": player_familiar.spells[choose_spell.cursor_index.y]
         })
-        actions.append({
-            "who": "enemy",
-            "what": "spell",
-            "spell": enemy_familiar.spells[0]
-        })
-        next_state = State.ACTION
+        end_choose_action()
+
+func end_choose_action():
+    actions.append({
+        "who": "enemy",
+        "what": "spell",
+        "spell": enemy_familiar.spells[1]
+    })
+    next_state = State.ACTION
 
 func get_fastest_action():
+    print(actions)
     if actions.size() == 1:
         return 0
 
@@ -130,8 +145,8 @@ func get_fastest_action():
             action_speeds.append(301)
         elif action.what == "run":
             action_speeds.append(302)
-    # Note that the user of <= means that if both have equal speed, player goes first
-    if action_speeds[0] <= action_speeds[1]:
+    # Note that the user of >= means that if both have equal speed, player goes first
+    if action_speeds[0] >= action_speeds[1]:
         return 0
     else:
         return 1
@@ -146,6 +161,8 @@ func begin_action():
     var defender
     var attacker_sprite
     var defender_sprite
+    var attacker_healthbar
+    var defender_healthbar
     var attacker_name
     var defender_name
     if is_player:
@@ -153,6 +170,8 @@ func begin_action():
         defender = enemy_familiar
         attacker_sprite = player_sprite
         defender_sprite = enemy_sprite
+        attacker_healthbar = player_healthbar
+        defender_healthbar = enemy_healthbar
         attacker_name = attacker.get_name()
         defender_name = "Enemy " + defender.get_name()
     else:
@@ -160,6 +179,8 @@ func begin_action():
         defender = player_familiar
         attacker_sprite = enemy_sprite
         defender_sprite = player_sprite
+        attacker_healthbar = enemy_healthbar
+        defender_healthbar = player_healthbar
         attacker_name = "Enemy " + attacker.get_name()
         defender_name = defender.get_name()
 
@@ -168,13 +189,89 @@ func begin_action():
         yield(dialog, "finished")
         attacker_sprite.animate_attack()
         yield(attacker_sprite, "finished")
-        defender_sprite.animate_hurt()
-        yield(defender_sprite, "finished")
 
-    if actions.size() == 0:
+        var damage = spell_compute_damage(attacker, defender, action.spell)
+        defender.change_health(-damage)
+        attacker.change_mana(-action.spell.cast_cost)
+
+        defender_sprite.animate_hurt()
+        attacker_healthbar.update()
+        defender_healthbar.update()
+        yield(defender_sprite, "finished")
+        if not attacker_healthbar.is_finished():
+            yield(attacker_healthbar, "finished")
+        if not defender_healthbar.is_finished():
+            yield(defender_healthbar, "finished")
+
+        if defender.health == 0:
+            yield(faint_familiar(defender_name, defender_sprite, defender_healthbar), "completed")
+        if attacker.burnout != 0:
+            yield(burnout_familiar(attacker, attacker_name, attacker_sprite, attacker_healthbar), "completed")
+        if attacker.health == 0:
+            yield(faint_familiar(attacker_name, attacker_sprite, attacker_healthbar), "completed")
+    elif action.what == "summon":
+        if action.who == "player":
+            player_sprite.visible = false
+            player_healthbar.visible = false
+            party.swap_familiars(0, action.switch_index)
+            yield(player_summon(), "completed")
+
+    if party.living_familiar_count() == 0:
+        next_state = State.PLAYER_LOSS
+    elif not enemy_familiar.is_living():
+        next_state = State.PLAYER_WIN
+    elif not player_familiar.is_living():
+        party_menu.context = PartyMenu.Context.SUMMON
+        party_menu.allow_back = false
+        party_menu.open()
+        yield(party_menu, "finished")
+        party_menu.allow_back = true
+        party.swap_familiars(0, party_menu.switch_index)
+        yield(player_summon(), "completed")
+        next_state = State.CHOOSE_ACTION
+    elif actions.size() == 0:
         next_state = State.CHOOSE_ACTION
     else:
         next_state = State.ACTION
+
+func spell_compute_damage(attacker, defender, spell) -> int:
+    # Compute base damage
+    var base_damage = (((((2 * attacker.level) / 5) + 2) * spell.power * (attacker.attack / defender.defense)) / 50) + 2
+
+    # Compute STAB
+    var stab = 1
+    if attacker.species.type == spell.type:
+        stab = 1.5
+
+    # Compute weakness / resistance
+    var type_mod = 1.0
+    if Types.INFO[defender.species.type].weaknesses.has(spell.type):
+        type_mod = 2.0
+    elif Types.INFO[defender.species.type].resistances.has(spell.type):
+        type_mod = 0.5
+
+    var random = rng.randf_range(0.85, 1.0)
+    return int(base_damage * stab * type_mod * random)
+
+func faint_familiar(familiar_name, familiar_sprite, familiar_healthbar):
+    familiar_sprite.animate_death()
+    yield(familiar_sprite, "finished")
+    familiar_healthbar.visible = false
+    dialog.open_and_split(familiar_name + " fainted!")
+    yield(dialog, "finished")
+
+func burnout_familiar(familiar, familiar_name, familiar_sprite, familiar_healthbar):
+    var burnout_damage = familiar.burnout * (ceil(familiar.level / 25.0) + 1)
+    familiar.change_health(-burnout_damage)
+    familiar_sprite.animate_hurt()
+    familiar_healthbar.update()
+    dialog.open_and_split(familiar_name + " burned out!")
+
+    yield(dialog, "finished")
+    if not familiar_sprite.is_finished():
+        yield(familiar_sprite, "finished")
+    if not familiar_healthbar.is_finished():
+        yield(familiar_healthbar, "finished")
 
 func open_enemy_healthbar():
     enemy_healthbar.set_familiar(enemy_familiar)
@@ -183,3 +280,13 @@ func open_enemy_healthbar():
 func open_player_healthbar():
     player_healthbar.set_familiar(player_familiar)
     player_healthbar.visible = true
+
+func begin_player_loss():
+    dialog.open_and_split("You lose!")
+    yield(dialog, "finished")
+    next_state = null
+
+func begin_player_win():
+    dialog.open_and_split("You win!")
+    yield(dialog, "finished")
+    next_state = null

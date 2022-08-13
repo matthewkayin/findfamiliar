@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://ui/dialog/dialog.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ui/familiar_sprite/familiar_sprite.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://ui/choose_action/choose_action.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/choose_spell/choose_spell.tscn" type="PackedScene" id=5]
 [ext_resource path="res://battle/battle.gd" type="Script" id=6]
+[ext_resource path="res://ui/party_menu/party_menu.tscn" type="PackedScene" id=7]
 
 [node name="battle" type="Node2D"]
 script = ExtResource( 6 )
@@ -29,6 +30,9 @@ margin_top = 207.953
 margin_right = 319.816
 margin_bottom = 287.953
 
+[node name="party_menu" parent="ui" instance=ExtResource( 7 )]
+visible = false
+
 [node name="player_healthbar" parent="." instance=ExtResource( 3 )]
 margin_left = 136.0
 margin_top = 170.445
@@ -43,9 +47,13 @@ margin_bottom = 16.0
 
 [node name="player_sprite" parent="." instance=ExtResource( 2 )]
 position = Vector2( 56, 176 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 56, 56 )
 
 [node name="enemy_sprite" parent="." instance=ExtResource( 2 )]
 position = Vector2( 264, 56 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 56, 56 )
 flipped = true
 
 [node name="tween" type="Tween" parent="."]

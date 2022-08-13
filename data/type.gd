@@ -22,68 +22,68 @@ const NAME = {
 
 const INFO = {
     Type.FIRE: {
-        "weak": [
+        "weaknesses": [
             Type.WATER,
             Type.EARTH
         ],
-        "resist": [
+        "resistances": [
             Type.NATURE,
             Type.POISON
         ]
     },
     Type.WATER: {
-        "weak": [
+        "weaknesses": [
             Type.NATURE,
             Type.POISON,
             Type.STORM
         ],
-        "resist": [
+        "resistances": [
             Type.FIRE,
             Type.EARTH
         ]
     },
     Type.NATURE: {
-        "weak": [
+        "weaknesses": [
             Type.FIRE,
             Type.POISON,
         ],
-        "resist": [
+        "resistances": [
             Type.WATER,
             Type.EARTH
         ]
     },
     Type.EARTH: {
-        "weak": [
+        "weaknesses": [
             Type.WATER,
             Type.NATURE
         ],
-        "resist": [
+        "resistances": [
             Type.FIRE,
             Type.POISON
         ]
     },
     Type.STORM: {
-        "weak": [
+        "weaknesses": [
             Type.EARTH
         ],
-        "resist": [
+        "resistances": [
             Type.WATER,
         ]
     },
     Type.POISON: {
-        "weak": [
+        "weaknesses": [
             Type.EARTH,
             Type.FIRE
         ],
-        "resist": [
+        "resistances": [
             Type.WATER,
 
         ]
     },
     Type.VOIDT: {
-        "weak": [
+        "weaknesses": [
         ],
-        "resist": [
+        "resistances": [
         ]
     }
 }

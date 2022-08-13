@@ -1,0 +1,114 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://ui/party_menu/party_menu.gd" type="Script" id=1]
+[ext_resource path="res://ui/frame.png" type="Texture" id=2]
+[ext_resource path="res://ui/cursor.png" type="Texture" id=3]
+[ext_resource path="res://ui/party_menu/party_menu_healthbar.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/gba.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://ui/party_menu/party_menu_prompt.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/party_menu/party_menu_prompt_noswitch.tscn" type="PackedScene" id=7]
+
+[sub_resource type="DynamicFont" id=1]
+size = 12
+font_data = ExtResource( 5 )
+
+[node name="party_menu" type="NinePatchRect"]
+margin_right = 320.0
+margin_bottom = 288.0
+texture = ExtResource( 2 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="choices" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="exit" type="Label" parent="choices"]
+margin_left = 26.8896
+margin_top = 257.11
+margin_right = 90.8896
+margin_bottom = 273.11
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "EXIT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="healthbars" type="Control" parent="choices"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="party_menu_healthbar" parent="choices/healthbars" instance=ExtResource( 4 )]
+margin_left = 26.8896
+margin_top = 17.1104
+margin_right = 66.8896
+margin_bottom = 57.1104
+
+[node name="party_menu_healthbar2" parent="choices/healthbars" instance=ExtResource( 4 )]
+margin_left = 26.8896
+margin_top = 57.1104
+margin_right = 66.8896
+margin_bottom = 97.1104
+
+[node name="party_menu_healthbar3" parent="choices/healthbars" instance=ExtResource( 4 )]
+margin_left = 26.8896
+margin_top = 97.1104
+margin_right = 66.8896
+margin_bottom = 137.11
+
+[node name="party_menu_healthbar4" parent="choices/healthbars" instance=ExtResource( 4 )]
+margin_left = 26.8896
+margin_top = 137.11
+margin_right = 66.8896
+margin_bottom = 177.11
+
+[node name="party_menu_healthbar5" parent="choices/healthbars" instance=ExtResource( 4 )]
+margin_left = 26.8896
+margin_top = 177.11
+margin_right = 66.8896
+margin_bottom = 217.11
+
+[node name="party_menu_healthbar6" parent="choices/healthbars" instance=ExtResource( 4 )]
+margin_left = 26.8896
+margin_top = 217.11
+margin_right = 66.8896
+margin_bottom = 257.11
+
+[node name="cursor" type="Sprite" parent="."]
+position = Vector2( 12, 60 )
+texture = ExtResource( 3 )
+offset = Vector2( 5, 7 )
+
+[node name="switch_cursor" type="Sprite" parent="."]
+visible = false
+position = Vector2( 12, 60 )
+texture = ExtResource( 3 )
+offset = Vector2( 5, 7 )
+
+[node name="prompt" parent="." instance=ExtResource( 6 )]
+visible = false
+margin_left = 170.226
+margin_top = 230.042
+margin_right = 320.226
+margin_bottom = 288.042
+allow_back = true
+
+[node name="prompt_noswitch" parent="." instance=ExtResource( 7 )]
+visible = false
+margin_left = 170.39
+margin_top = 252.92
+margin_right = 320.39
+margin_bottom = 287.92
+allow_back = true
+
+[node name="timer" type="Timer" parent="."]

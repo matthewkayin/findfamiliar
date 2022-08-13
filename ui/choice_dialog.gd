@@ -9,11 +9,13 @@ const CHOOSING = "CHOOSING"
 onready var cursor = $cursor
 
 export var allow_back = true
+export var close_on_choice = true
 
 var choices = []
 var choices_size = Vector2.ZERO
 var cursor_index = Vector2.ZERO
 var choice = NONE
+var just_opened = false
 
 func _ready():
     for column in $choices.get_children():
@@ -54,6 +56,7 @@ func set_choice_labels(values):
 func open():
     choice = CHOOSING
     visible = true
+    just_opened = true
     set_cursor_index(Vector2.ZERO)
 
 func close():
@@ -61,6 +64,9 @@ func close():
     emit_signal("finished")
 
 func _process(_delta):
+    if just_opened:
+        just_opened = false
+        return
     if choice != CHOOSING:
         return
 
@@ -71,7 +77,8 @@ func _process(_delta):
 
     if Input.is_action_just_pressed("action"):
         choice = choices[cursor_index.x][cursor_index.y].text
-        close()
+        if close_on_choice:
+            close()
         return
 
     for i in range(0, Direction.NAMES.size()):
