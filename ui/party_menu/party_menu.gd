@@ -4,6 +4,7 @@ class_name PartyMenu
 signal finished
 
 onready var party = get_node("/root/Party")
+onready var inventory = get_node("/root/Inventory")
 
 onready var cursor = $cursor
 onready var healthbars = $choices/healthbars.get_children()
@@ -13,6 +14,7 @@ onready var prompt_noswitch = $prompt_noswitch
 onready var switch_cursor = $switch_cursor
 onready var timer = $timer
 onready var summary = $summary
+onready var dialog = $dialog
 
 enum State {
     CLOSED,
@@ -33,6 +35,9 @@ var context = Context.DEFAULT
 var switch_index
 var just_opened = false
 var allow_back = true
+var item
+var item_used = false
+var item_in_battle = false
 
 func _ready():
     visible = false
@@ -101,11 +106,13 @@ func open():
     visible = true
     just_opened = true
     state = State.CHOOSING
+    dialog.visible = false
 
-func close():
+func close(should_emit_signal=true):
     visible = false
     state = State.CLOSED
-    emit_signal("finished")
+    if should_emit_signal:
+        emit_signal("finished")
 
 func refresh_cursor():
     if cursor_index < party.familiars.size():
@@ -118,6 +125,8 @@ func _process(_delta):
         just_opened = false
         return
     if summary.visible:
+        return
+    if dialog.visible:
         return
     if state != State.CHOOSING and state != State.SWITCH:
         return
@@ -133,7 +142,15 @@ func _process(_delta):
         if state == State.SWITCH:
             perform_switch()
         elif context == Context.ITEM:
-            pass
+            var use_string = inventory.use_item(item, party.familiars[cursor_index])
+            refresh_healthbars()
+            dialog.open_and_split(use_string)
+            yield(dialog, "finished")
+            if item_in_battle:
+                item_used = true
+                close()
+            elif inventory.get_count_of(item) == 0:
+                close()
         elif context == Context.SUMMON and (cursor_index == 0 or not party.familiars[cursor_index].is_living()):
             prompt_noswitch.open()
             state = State.SUBMENU

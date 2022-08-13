@@ -1,0 +1,63 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://battle/battle.gd" type="Script" id=1]
+[ext_resource path="res://ui/choose_spell/choose_spell.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/item_menu/item_menu.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/healthbar/healthbar.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/party_menu/party_menu.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ui/choose_action/choose_action.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/familiar_sprite/familiar_sprite.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/dialog/dialog.tscn" type="PackedScene" id=8]
+
+[node name="battle" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="ui" type="CanvasLayer" parent="."]
+
+[node name="dialog" parent="ui" instance=ExtResource( 8 )]
+margin_top = 230.0
+margin_bottom = 288.0
+
+[node name="choose_action" parent="ui" instance=ExtResource( 6 )]
+visible = false
+margin_left = 78.0045
+margin_top = 229.718
+margin_right = 320.004
+margin_bottom = 287.718
+
+[node name="choose_spell" parent="ui" instance=ExtResource( 2 )]
+margin_left = 127.816
+margin_top = 207.953
+margin_right = 319.816
+margin_bottom = 287.953
+
+[node name="party_menu" parent="ui" instance=ExtResource( 5 )]
+visible = false
+
+[node name="item_menu" parent="ui" instance=ExtResource( 3 )]
+visible = false
+
+[node name="player_healthbar" parent="." instance=ExtResource( 4 )]
+margin_left = 136.0
+margin_top = 170.445
+margin_right = 136.0
+margin_bottom = 170.445
+
+[node name="enemy_healthbar" parent="." instance=ExtResource( 4 )]
+margin_left = 8.0
+margin_top = 16.0
+margin_right = 8.0
+margin_bottom = 16.0
+
+[node name="player_sprite" parent="." instance=ExtResource( 7 )]
+position = Vector2( 56, 176 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 56, 56 )
+
+[node name="enemy_sprite" parent="." instance=ExtResource( 7 )]
+position = Vector2( 264, 56 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 56, 56 )
+flipped = true
+
+[node name="tween" type="Tween" parent="."]

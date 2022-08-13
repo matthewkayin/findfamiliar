@@ -12,6 +12,7 @@ onready var enemy_sprite = $enemy_sprite
 onready var tween = $tween
 onready var rng = RandomNumberGenerator.new()
 onready var party_menu = $ui/party_menu
+onready var item_menu = $ui/item_menu
 
 onready var screen_rect = get_viewport_rect()
 
@@ -42,7 +43,8 @@ func _ready():
     player_sprite.visible = false
     enemy_sprite.visible = false
 
-    party_menu.close()
+    party_menu.close(false)
+    item_menu.close(false)
     rng.randomize()
 
     var raven_species = load("res://data/species/raven.tres")
@@ -103,6 +105,15 @@ func begin_choose_action():
                 "switch_index": party_menu.switch_index
             })
             end_choose_action()
+    elif choose_action.choice == "ITEM":
+        item_menu.in_battle = true
+        item_menu.open()
+        yield(item_menu, "finished")
+        open_player_healthbar()
+        if item_menu.item_used:
+            end_choose_action()
+        else:
+            next_state = State.CHOOSE_ACTION
     else:
         next_state = State.CHOOSE_ACTION
 
@@ -129,7 +140,6 @@ func end_choose_action():
     next_state = State.ACTION
 
 func get_fastest_action():
-    print(actions)
     if actions.size() == 1:
         return 0
 

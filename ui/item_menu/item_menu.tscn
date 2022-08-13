@@ -1,0 +1,320 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://ui/frame.png" type="Texture" id=1]
+[ext_resource path="res://ui/gba.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://ui/item_menu/item_menu.gd" type="Script" id=3]
+[ext_resource path="res://ui/item_menu/inventory_prompt.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/cursor.png" type="Texture" id=5]
+[ext_resource path="res://ui/item_menu/inventory_prompt_nouse.tscn" type="PackedScene" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 2 )
+
+[node name="item_menu" type="NinePatchRect"]
+margin_right = 320.0
+margin_bottom = 288.0
+texture = ExtResource( 1 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="list" type="NinePatchRect" parent="."]
+margin_left = 53.8638
+margin_top = 25.9621
+margin_right = 319.864
+margin_bottom = 241.962
+texture = ExtResource( 1 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cursor" type="Sprite" parent="list"]
+position = Vector2( 10, 19.5 )
+texture = ExtResource( 5 )
+offset = Vector2( 5, 7 )
+
+[node name="switch_cursor" type="Sprite" parent="list"]
+visible = false
+position = Vector2( -42, 60 )
+texture = ExtResource( 5 )
+offset = Vector2( 5, 7 )
+
+[node name="nav_up" type="Sprite" parent="list"]
+position = Vector2( 133, 11 )
+rotation = -1.5708
+texture = ExtResource( 5 )
+
+[node name="nav_down" type="Sprite" parent="list"]
+position = Vector2( 133, 204 )
+rotation = 1.5708
+texture = ExtResource( 5 )
+
+[node name="items" type="VBoxContainer" parent="list"]
+margin_left = 26.187
+margin_top = 22.0
+margin_right = 282.187
+margin_bottom = 198.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item" type="Label" parent="list/items"]
+margin_right = 256.0
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item"]
+margin_left = 175.949
+margin_right = 431.949
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "x99"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item2" type="Label" parent="list/items"]
+margin_top = 20.0
+margin_right = 256.0
+margin_bottom = 36.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item2"]
+margin_left = 175.949
+margin_right = 431.949
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "x99"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item3" type="Label" parent="list/items"]
+margin_top = 40.0
+margin_right = 256.0
+margin_bottom = 56.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item3"]
+margin_left = 175.949
+margin_right = 431.949
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "x99"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item4" type="Label" parent="list/items"]
+margin_top = 60.0
+margin_right = 256.0
+margin_bottom = 76.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item4"]
+margin_left = 175.949
+margin_right = 431.949
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "x99"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item5" type="Label" parent="list/items"]
+margin_top = 80.0
+margin_right = 256.0
+margin_bottom = 96.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item5"]
+margin_left = 175.949
+margin_right = 431.949
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "x99"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item6" type="Label" parent="list/items"]
+margin_top = 100.0
+margin_right = 256.0
+margin_bottom = 116.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item6"]
+margin_left = 175.949
+margin_right = 431.949
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "x99"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item7" type="Label" parent="list/items"]
+margin_top = 120.0
+margin_right = 256.0
+margin_bottom = 136.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item7"]
+margin_left = 175.949
+margin_right = 431.949
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "x99"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item8" type="Label" parent="list/items"]
+margin_top = 140.0
+margin_right = 256.0
+margin_bottom = 156.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item8"]
+margin_left = 175.949
+margin_right = 431.949
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "x99"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item9" type="Label" parent="list/items"]
+margin_top = 160.0
+margin_right = 256.0
+margin_bottom = 176.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item9"]
+margin_left = 175.949
+margin_right = 431.949
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "x99"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="desc" type="NinePatchRect" parent="."]
+margin_top = 242.0
+margin_right = 320.0
+margin_bottom = 288.0
+texture = ExtResource( 1 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="label" type="Label" parent="desc"]
+margin_left = 6.83725
+margin_top = 7.83725
+margin_right = 309.837
+margin_bottom = 61.8372
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Heals 20 HP
+20 HP"
+autowrap = true
+max_lines_visible = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="category" type="NinePatchRect" parent="."]
+margin_right = 192.0
+margin_bottom = 26.0
+texture = ExtResource( 1 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="label" type="Label" parent="category"]
+margin_left = 26.0
+margin_top = 8.0
+margin_right = 172.0
+margin_bottom = 62.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "MEDICINE"
+align = 1
+autowrap = true
+max_lines_visible = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="nav_left" type="Sprite" parent="category"]
+position = Vector2( 10, 5.5 )
+texture = ExtResource( 5 )
+offset = Vector2( 5, 7 )
+flip_h = true
+
+[node name="nav_right" type="Sprite" parent="category"]
+position = Vector2( 172, 5.5 )
+texture = ExtResource( 5 )
+offset = Vector2( 5, 7 )
+
+[node name="timer" type="Timer" parent="."]
+
+[node name="inventory_prompt" parent="." instance=ExtResource( 4 )]
+visible = false
+margin_left = 184.0
+margin_top = 230.0
+margin_right = 320.0
+margin_bottom = 288.0
+
+[node name="inventory_prompt_nouse" parent="." instance=ExtResource( 6 )]
+visible = false
+margin_left = 184.0
+margin_top = 256.0
+margin_right = 320.0
+margin_bottom = 288.0

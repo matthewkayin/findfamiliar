@@ -11,6 +11,7 @@ func _ready():
     var witchbolt = load("res://data/spells/witch_bolt.tres")
     familiars[0].spells = [firebolt, witchbolt]
     familiars[1].spells = [firebolt, witchbolt]
+    familiars[0].health = 2
 
 func swap_familiars(a: int, b: int):
     if a == b:

@@ -78,7 +78,6 @@ func open(at_index: int):
 
     just_opened = true
     visible = true
-    print("hi")
 
 func update_spell_list():
     for spell_label in spell_labels:

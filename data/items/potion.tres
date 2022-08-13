@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://data/item.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+name = "POTION"
+category = 0
+desc = "Heals 20HP"
+use_in_world = true
+use_in_battle = true
+medicine_effect = 0
+medicine_effect_value = 20

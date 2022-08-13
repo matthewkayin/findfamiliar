@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://ui/party_menu/party_menu.gd" type="Script" id=1]
 [ext_resource path="res://ui/frame.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://ui/party_menu/party_menu_prompt.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ui/party_menu/party_menu_prompt_noswitch.tscn" type="PackedScene" id=7]
 [ext_resource path="res://ui/summary/summary.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/dialog/dialog.tscn" type="PackedScene" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 size = 12
@@ -116,3 +117,8 @@ allow_back = true
 
 [node name="summary" parent="." instance=ExtResource( 8 )]
 visible = false
+
+[node name="dialog" parent="." instance=ExtResource( 9 )]
+visible = false
+margin_top = 230.0
+margin_bottom = 288.0
