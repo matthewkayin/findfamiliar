@@ -12,6 +12,7 @@ onready var prompt = $prompt
 onready var prompt_noswitch = $prompt_noswitch
 onready var switch_cursor = $switch_cursor
 onready var timer = $timer
+onready var summary = $summary
 
 enum State {
     CLOSED,
@@ -36,8 +37,9 @@ var allow_back = true
 func _ready():
     visible = false
     prompt.connect("finished", self, "_on_prompt_finish")
-    prompt_noswitch.connect("finished", self, "_on_prompt_finish")
+    prompt_noswitch.connect("finished", self, "_on_prompt_noswitch_finish")
     timer.connect("timeout", self, "_on_timer_timeout")
+    summary.connect("finished", self, "_on_summary_finish")
 
 func _on_timer_timeout():
     switch_cursor.visible = not switch_cursor.visible
@@ -54,8 +56,19 @@ func _on_prompt_finish():
         else:
             begin_switch()
 
+func _on_prompt_noswitch_finish():
+    if prompt_noswitch.choice == ChoiceDialog.NONE:
+        state = State.CHOOSING
+    elif prompt_noswitch.choice == "SUMMARY":
+        open_summary()
+
+func _on_summary_finish():
+    state = State.CHOOSING
+
 func open_summary():
-    pass
+    if context == Context.SUMMON:
+        summary.allow_move_prompt = false
+    summary.open(cursor_index)
 
 func begin_switch():
     switch_index = cursor_index
@@ -103,6 +116,8 @@ func refresh_cursor():
 func _process(_delta):
     if just_opened:
         just_opened = false
+        return
+    if summary.visible:
         return
     if state != State.CHOOSING and state != State.SWITCH:
         return

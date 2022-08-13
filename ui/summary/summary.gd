@@ -28,12 +28,13 @@ var familiar_index = -1
 var familiar = null
 var cursor_index = -1
 var switch_index = -1
+var allow_move_prompt = true
+var just_opened = false
 
 func _ready():
     timer.connect("timeout", self, "_on_timeout")
     prompt.connect("finished", self, "_on_prompt_finished")
     visible = false
-    open(0)
 
 func _on_timeout():
     switch_cursor.visible = not switch_cursor.visible
@@ -58,7 +59,7 @@ func open(at_index: int):
 
     sprite.texture = load("res://battle/familiars/" + familiar.species.name.to_lower() + ".png")
     name_label.text = familiar.get_name()
-    level = "L" + String(familiar.level)
+    level.text = "L" + String(familiar.level)
 
     var health_percent = float(familiar.health) / float(familiar.max_health)
     healthbar.region_rect.size.x = int(health_percent * healthbar.texture.get_width())
@@ -75,7 +76,9 @@ func open(at_index: int):
 
     update_spell_list()
 
+    just_opened = true
     visible = true
+    print("hi")
 
 func update_spell_list():
     for spell_label in spell_labels:
@@ -99,6 +102,12 @@ func close():
     emit_signal("finished")
 
 func _process(_delta):
+    if just_opened:
+        just_opened = false
+        return
+    if not visible:
+        return
+
     if cursor_index == -1:
         if Input.is_action_just_pressed("back"):
             close()
@@ -113,9 +122,10 @@ func _process(_delta):
                 familiar_index = 0
             open(familiar_index)
         elif Input.is_action_just_pressed("action"):
-            cursor_index = 0
-            refresh_cursor()
-            open_spell_info()
+            if allow_move_prompt:
+                cursor_index = 0
+                refresh_cursor()
+                open_spell_info()
         return
     else:
         if prompt.visible:

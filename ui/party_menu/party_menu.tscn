@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://ui/party_menu/party_menu.gd" type="Script" id=1]
 [ext_resource path="res://ui/frame.png" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://ui/gba.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://ui/party_menu/party_menu_prompt.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ui/party_menu/party_menu_prompt_noswitch.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/summary/summary.tscn" type="PackedScene" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 12
@@ -112,3 +113,6 @@ margin_bottom = 287.92
 allow_back = true
 
 [node name="timer" type="Timer" parent="."]
+
+[node name="summary" parent="." instance=ExtResource( 8 )]
+visible = false
