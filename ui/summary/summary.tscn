@@ -1,0 +1,371 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://ui/summary/summary.gd" type="Script" id=1]
+[ext_resource path="res://ui/frame.png" type="Texture" id=2]
+[ext_resource path="res://ui/cursor.png" type="Texture" id=3]
+[ext_resource path="res://ui/healthbar/frame.png" type="Texture" id=4]
+[ext_resource path="res://ui/gba.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://ui/summary/summary_prompt.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/healthbar/healthbar.png" type="Texture" id=8]
+[ext_resource path="res://battle/familiars/raven.png" type="Texture" id=9]
+[ext_resource path="res://ui/healthbar/manabar.png" type="Texture" id=10]
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=3]
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 12
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 12
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 12
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 12
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=7]
+size = 12
+font_data = ExtResource( 5 )
+
+[node name="summary" type="NinePatchRect"]
+margin_right = 320.0
+margin_bottom = 288.0
+texture = ExtResource( 2 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sprite" type="Sprite" parent="."]
+position = Vector2( 254, 110 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 9 )
+
+[node name="name" type="Label" parent="."]
+margin_left = 13.2113
+margin_top = 28.0
+margin_right = 173.211
+margin_bottom = 44.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="level" type="Label" parent="."]
+margin_left = 241.118
+margin_top = 28.0
+margin_right = 305.118
+margin_bottom = 44.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "L100"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="health" type="Label" parent="."]
+margin_left = 11.7303
+margin_top = 59.7111
+margin_right = 51.7303
+margin_bottom = 75.7111
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "HP"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="bar" type="Sprite" parent="health"]
+position = Vector2( 105.001, 3 )
+scale = Vector2( 1, 1.5 )
+texture = ExtResource( 8 )
+centered = false
+offset = Vector2( -78, -5 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 156, 10 )
+
+[node name="frame" type="Sprite" parent="health"]
+position = Vector2( 105.001, 3 )
+scale = Vector2( 1, 1.5 )
+texture = ExtResource( 4 )
+
+[node name="value" type="Label" parent="health"]
+margin_left = 63.0011
+margin_top = -0.585449
+margin_right = 147.001
+margin_bottom = 13.4146
+grow_horizontal = 2
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 5 )
+text = "20 / 20"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="mana" type="Label" parent="."]
+margin_left = 12.0111
+margin_top = 80.0314
+margin_right = 52.0111
+margin_bottom = 94.0314
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 5 )
+text = "MP"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="bar" type="Sprite" parent="mana"]
+position = Vector2( 104.934, 3 )
+scale = Vector2( 1, 1.5 )
+texture = ExtResource( 10 )
+centered = false
+offset = Vector2( -78, -5 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 156, 10 )
+
+[node name="frame" type="Sprite" parent="mana"]
+position = Vector2( 104.934, 3 )
+scale = Vector2( 1, 1.5 )
+texture = ExtResource( 4 )
+
+[node name="value" type="Label" parent="mana"]
+margin_left = 62.9339
+margin_top = -0.585
+margin_right = 146.934
+margin_bottom = 13.415
+grow_horizontal = 2
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 5 )
+text = "20 / 20"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="exp" type="Label" parent="."]
+margin_left = 12.011
+margin_top = 100.0
+margin_right = 120.011
+margin_bottom = 116.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+text = "EXP"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="Label" parent="exp"]
+margin_left = 146.0
+margin_right = 182.0
+margin_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+text = "200 / 500"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="attack" type="Label" parent="."]
+margin_left = 12.0113
+margin_top = 123.771
+margin_right = 120.011
+margin_bottom = 139.771
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+text = "ATTACK"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="Label" parent="attack"]
+margin_left = 146.0
+margin_right = 182.0
+margin_bottom = 12.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+text = "200"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="defense" type="Label" parent="."]
+margin_left = 12.011
+margin_top = 139.771
+margin_right = 120.011
+margin_bottom = 155.771
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+text = "DEFENSE"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="Label" parent="defense"]
+margin_left = 146.0
+margin_right = 182.0
+margin_bottom = 12.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+text = "200"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="speed" type="Label" parent="."]
+margin_left = 12.011
+margin_top = 155.771
+margin_right = 120.011
+margin_bottom = 171.771
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+text = "SPEED"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="value" type="Label" parent="speed"]
+margin_left = 146.0
+margin_right = 182.0
+margin_bottom = 12.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+text = "200"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="spells" type="Label" parent="."]
+margin_left = 11.8142
+margin_top = 184.263
+margin_right = 83.8142
+margin_bottom = 200.263
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "SPELLS"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cursor" type="Sprite" parent="spells"]
+position = Vector2( 4, 19 )
+texture = ExtResource( 3 )
+offset = Vector2( 5, 7 )
+
+[node name="switch_cursor" type="Sprite" parent="spells"]
+visible = false
+position = Vector2( 0.185839, -124.263 )
+texture = ExtResource( 3 )
+offset = Vector2( 5, 7 )
+
+[node name="info" type="NinePatchRect" parent="spells"]
+margin_left = -1.0
+margin_top = -109.0
+margin_right = 297.0
+margin_bottom = -25.0
+texture = ExtResource( 2 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="label" type="Label" parent="spells/info"]
+margin_left = 7.0
+margin_top = 8.0
+margin_right = 290.0
+margin_bottom = 80.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 7 )
+text = "NATURE
+POWER: 100 COST: 20
+
+Creates a ward that raises party defense"
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="list" type="Control" parent="spells"]
+margin_left = 16.1608
+margin_top = 23.1123
+margin_right = 56.1608
+margin_bottom = 63.1123
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move" type="Label" parent="spells/list"]
+margin_right = 120.0
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move2" type="Label" parent="spells/list"]
+margin_top = 16.0
+margin_right = 120.0
+margin_bottom = 32.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move3" type="Label" parent="spells/list"]
+margin_top = 32.0
+margin_right = 120.0
+margin_bottom = 48.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="move4" type="Label" parent="spells/list"]
+margin_top = 48.0
+margin_right = 120.0
+margin_bottom = 64.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="summary_prompt" parent="." instance=ExtResource( 6 )]
+margin_left = 170.264
+margin_top = 228.74
+margin_right = 320.264
+margin_bottom = 287.74
+
+[node name="timer" type="Timer" parent="."]
