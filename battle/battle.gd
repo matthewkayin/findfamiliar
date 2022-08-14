@@ -13,6 +13,7 @@ onready var tween = $tween
 onready var rng = RandomNumberGenerator.new()
 onready var party_menu = $ui/party_menu
 onready var item_menu = $ui/item_menu
+onready var gem_sprite = $gem_sprite
 
 onready var screen_rect = get_viewport_rect()
 
@@ -70,7 +71,7 @@ func begin_enter():
 
     yield(tween, "tween_all_completed")
 
-    dialog.open_and_split("A wild raven appeared!")
+    dialog.open_and_split("A wild " + enemy_familiar.get_name() + " appeared!")
 
     yield(dialog, "finished")
 
@@ -111,6 +112,12 @@ func begin_choose_action():
         yield(item_menu, "finished")
         open_player_healthbar()
         if item_menu.item_used:
+            if item_menu.gem != null:
+                actions.append({
+                    "who": "player",
+                    "what": "item",
+                    "item": item_menu.gem
+                })
             end_choose_action()
         else:
             next_state = State.CHOOSE_ACTION
@@ -225,6 +232,35 @@ func begin_action():
             player_healthbar.visible = false
             party.swap_familiars(0, action.switch_index)
             yield(player_summon(), "completed")
+    elif action.what == "item":
+        if action.item.category == Item.Category.GEM:
+            dialog.open_and_split("You used a " + action.item.name + "!")
+            var health_mod = float(((3.0 * defender.max_health) - (2.0 * defender.health)) / (3.0 * defender.max_health)) # (3max_health - 2health) / 3max_health
+            var gem_mod = 1.0 + (float(1) * 0.5) # 1 + (0.5 * gem_grade)
+            var catch_rate = health_mod * gem_mod * defender.species.catch_rate
+            var catch_value = rng.randf_range(0.0, 1.0)
+
+            var catch_ticks: int = 3
+            var catch_successful = catch_value <= catch_rate
+            if not catch_successful:
+                var tick_zone_size = (1 - catch_rate) / 4
+                for zone in range(0, 4):
+                    if catch_value < catch_rate + (tick_zone_size * (zone + 1)):
+                        catch_ticks = 3 - zone
+                        break
+
+            gem_sprite.animate(action.item, catch_ticks, catch_successful)
+            yield(gem_sprite, "finished")
+
+            if catch_successful:
+                dialog.open_and_split("Gotcha! " + enemy_familiar.get_name() + " was caught!")
+                yield(dialog, "finished")
+                next_state = null
+                party.add_familiar(enemy_familiar)
+                return
+            else:
+                dialog.open_and_split("Oh no! It broke free!")
+                yield(dialog, "finished")
 
     if party.living_familiar_count() == 0:
         next_state = State.PLAYER_LOSS

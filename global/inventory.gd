@@ -7,8 +7,10 @@ func _ready():
         items.append([])
     var potion = load("res://data/items/potion.tres")
     var hipotion = load("res://data/items/hi-potion.tres")
+    var ruby = load("res://data/items/ruby.tres")
     add_item(potion, 2)
     add_item(hipotion, 5)
+    add_item(ruby, 5)
 
 func add_item(item: Item, qty=1):
     for existing_item in items[item.category]:

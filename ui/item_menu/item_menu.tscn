@@ -311,6 +311,7 @@ margin_left = 184.0
 margin_top = 230.0
 margin_right = 320.0
 margin_bottom = 288.0
+allow_back = true
 
 [node name="inventory_prompt_nouse" parent="." instance=ExtResource( 6 )]
 visible = false
@@ -318,3 +319,4 @@ margin_left = 184.0
 margin_top = 256.0
 margin_right = 320.0
 margin_bottom = 288.0
+allow_back = true

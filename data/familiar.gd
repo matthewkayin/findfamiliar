@@ -31,7 +31,7 @@ func _init(as_species: Species, at_level: int):
 
 func get_name() -> String:
     if nickname == "":
-        return species.name
+        return species.name.to_upper()
     else:
         return nickname
 

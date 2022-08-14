@@ -1,17 +1,24 @@
 extends Node
 
+const MAX_PARTY_SIZE = 6
+
 var familiars = []
+var reserves = []
 
 func _ready():
     familiars.append(Familiar.new(load("res://data/species/raven.tres"), 5))
     familiars.append(Familiar.new(load("res://data/species/raven.tres"), 5))
-    familiars[0].nickname = "Maves"
-    familiars[1].nickname = "Poe"
+    familiars[0].nickname = "Poe"
     var firebolt = load("res://data/spells/fire_bolt.tres")
     var witchbolt = load("res://data/spells/witch_bolt.tres")
     familiars[0].spells = [firebolt, witchbolt]
     familiars[1].spells = [firebolt, witchbolt]
-    familiars[0].health = 2
+
+func add_familiar(familiar: Familiar):
+    if familiars.size() == MAX_PARTY_SIZE:
+        reserves.append(familiar)
+    else:
+        familiars.append(familiar)
 
 func swap_familiars(a: int, b: int):
     if a == b:

@@ -29,6 +29,8 @@ var just_opened = false
 var switch_cursor_visible = false
 var in_battle = false
 var item_used = false
+var awaiting_party_menu = false
+var gem = null
 
 func _ready():
     timer.connect("timeout", self, "_on_timeout")
@@ -44,19 +46,30 @@ func _on_inventory_prompt_finished():
     if prompt.choice == "SWITCH":
         begin_switch()
     elif prompt.choice == "USE":
-        party_menu.context = PartyMenu.Context.ITEM
-        party_menu.item = inventory.items[category][list_offset + cursor_index].item
-        party_menu.item_used = false
-        party_menu.item_in_battle = in_battle
-        party_menu.open()
-        visible = false
+        var item = inventory.items[category][list_offset + cursor_index].item
+        if category == Item.Category.GEM:
+            gem = item
+            item_used = true
+            close()
+        else:
+            party_menu.context = PartyMenu.Context.ITEM
+            party_menu.item = item
+            party_menu.item_used = false
+            party_menu.item_in_battle = in_battle
+            party_menu.open()
+            awaiting_party_menu = true
+            visible = false
 
 func _on_inventory_prompt_nouse_finished():
     if prompt_nouse.choice == "SWITCH":
         begin_switch()
 
 func _on_party_menu_finished():
+    if not awaiting_party_menu:
+        return
+
     visible = true
+    awaiting_party_menu = false
     just_opened = true
     if in_battle:
         if party_menu.item_used:
@@ -124,6 +137,7 @@ func open():
     list_offset = 0
     refresh()
     item_used = false
+    gem = null
     just_opened = true
     visible = true
 

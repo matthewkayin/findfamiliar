@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://battle/battle.gd" type="Script" id=1]
 [ext_resource path="res://ui/choose_spell/choose_spell.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://ui/choose_action/choose_action.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ui/familiar_sprite/familiar_sprite.tscn" type="PackedScene" id=7]
 [ext_resource path="res://ui/dialog/dialog.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/gem_sprite/gem_sprite.tscn" type="PackedScene" id=9]
 
 [node name="battle" type="Node2D"]
 script = ExtResource( 1 )
@@ -61,3 +62,6 @@ region_rect = Rect2( 0, 0, 56, 56 )
 flipped = true
 
 [node name="tween" type="Tween" parent="."]
+
+[node name="gem_sprite" parent="." instance=ExtResource( 9 )]
+visible = false
