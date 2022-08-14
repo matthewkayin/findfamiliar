@@ -10,6 +10,7 @@ onready var level = $level
 onready var healthbar = $health/bar
 onready var health_label = $health/value
 onready var manabar = $mana/bar
+onready var expbar = $exp/bar
 onready var mana_label = $mana/value
 onready var exp_label = $exp/value
 onready var attack = $attack/value
@@ -69,7 +70,10 @@ func open(at_index: int):
     manabar.region_rect.size.x = int(mana_percent * manabar.texture.get_width())
     mana_label.text = String(familiar.mana) + " / " + String(familiar.max_mana)
 
+    var exp_percent = float(familiar.get_current_experience()) / float(familiar.get_experience_tnl())
+    expbar.region_rect.size.x = int(exp_percent * expbar.texture.get_width())
     exp_label.text = String(familiar.get_current_experience()) + " / " + String(familiar.get_experience_tnl())
+
     attack.text = String(familiar.attack)
     defense.text = String(familiar.defense)
     speed.text = String(familiar.speed)

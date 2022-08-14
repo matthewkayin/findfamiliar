@@ -55,7 +55,6 @@ func _ready():
     var witchbolt = load("res://data/spells/witch_bolt.tres")
     enemy_familiar = Familiar.new(raven_species, 5)
     enemy_familiar.spells = [firebolt, witchbolt]
-    enemy_familiar.health = 1
 
     next_state = State.ENTER
 
@@ -127,11 +126,17 @@ func begin_choose_action():
             end_choose_action()
         else:
             next_state = State.CHOOSE_ACTION
+    elif choose_action.choice == "REST":
+        actions.append({
+            "who": "player",
+            "what": "rest"
+        })
+        end_choose_action()
     else:
         next_state = State.CHOOSE_ACTION
 
 func begin_choose_spell():
-    choose_spell.open_with(player_familiar.spells)
+    choose_spell.open_with(player_familiar.spells, player_familiar.mana)
 
     yield(choose_spell, "finished")
     if choose_spell.choice == ChoiceDialog.NONE:
@@ -158,9 +163,9 @@ func get_fastest_action():
 
     var action_speeds = []
     for action in actions:
-        if action.what == "spell" and action.who == "player":
+        if (action.what == "spell" or action.what == "rest") and action.who == "player":
             action_speeds.append(player_familiar.speed)
-        elif action.what == "spell" and action.who == "enemy":
+        elif (action.what == "spell" or action.what == "rest") and action.who == "enemy":
             action_speeds.append(enemy_familiar.speed)
         elif action.what == "item":
             action_speeds.append(300)
@@ -230,8 +235,6 @@ func begin_action():
             yield(faint_familiar(defender_name, defender_sprite, defender_healthbar), "completed")
             if action.who == "player":
                 yield(gain_experience(), "completed")
-        if attacker.burnout != 0:
-            yield(burnout_familiar(attacker, attacker_name, attacker_sprite, attacker_healthbar), "completed")
         if attacker.health == 0:
             yield(faint_familiar(attacker_name, attacker_sprite, attacker_healthbar), "completed")
     elif action.what == "summon":
@@ -269,6 +272,13 @@ func begin_action():
             else:
                 dialog.open_and_split("Oh no! It broke free!")
                 yield(dialog, "finished")
+    elif action.what == "rest":
+        dialog.open_and_split(attacker_name + " took a rest.")
+        attacker.change_mana(int(ceil(attacker.max_mana / 2)))
+        attacker_healthbar.update()
+        yield(attacker_healthbar, "finished")
+        if not dialog.is_finished():
+            yield(dialog, "finished")
 
     if party.living_familiar_count() == 0:
         next_state = State.PLAYER_LOSS
@@ -363,24 +373,13 @@ func spell_compute_damage(attacker, defender, spell) -> int:
     return int(base_damage * stab * type_mod * random)
 
 func faint_familiar(familiar_name, familiar_sprite, familiar_healthbar):
+    if familiar_sprite == player_sprite:
+        participants.erase(player_familiar)
     familiar_sprite.animate_death()
     yield(familiar_sprite, "finished")
     familiar_healthbar.visible = false
     dialog.open_and_split(familiar_name + " fainted!")
     yield(dialog, "finished")
-
-func burnout_familiar(familiar, familiar_name, familiar_sprite, familiar_healthbar):
-    var burnout_damage = familiar.burnout * (ceil(familiar.level / 25.0) + 1)
-    familiar.change_health(-burnout_damage)
-    familiar_sprite.animate_hurt()
-    familiar_healthbar.update()
-    dialog.open_and_split(familiar_name + " burned out!")
-
-    yield(dialog, "finished")
-    if not familiar_sprite.is_finished():
-        yield(familiar_sprite, "finished")
-    if not familiar_healthbar.is_finished():
-        yield(familiar_healthbar, "finished")
 
 func open_enemy_healthbar():
     enemy_healthbar.set_familiar(enemy_familiar)

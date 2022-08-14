@@ -13,7 +13,7 @@ font_data = ExtResource( 5 )
 
 [node name="choose_action" type="NinePatchRect"]
 margin_right = 242.0
-margin_bottom = 58.0
+margin_bottom = 82.0
 texture = ExtResource( 2 )
 patch_margin_left = 8
 patch_margin_top = 8
@@ -45,14 +45,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="item" type="Label" parent="choices/col_1"]
+[node name="rest" type="Label" parent="choices/col_1"]
 margin_left = 24.0
 margin_top = 36.0
 margin_right = 104.0
 margin_bottom = 52.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 2 )
-text = "ITEM"
+text = "REST"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -73,11 +73,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="item" type="Label" parent="choices/col_2"]
+margin_left = 132.0
+margin_top = 36.0
+margin_right = 212.0
+margin_bottom = 52.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "ITEM"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="run" type="Label" parent="choices/col_2"]
 margin_left = 132.0
-margin_top = 38.0
+margin_top = 60.0
 margin_right = 212.0
-margin_bottom = 54.0
+margin_bottom = 76.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 2 )
 text = "RUN"

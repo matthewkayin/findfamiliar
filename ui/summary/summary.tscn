@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://ui/summary/summary.gd" type="Script" id=1]
 [ext_resource path="res://ui/frame.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://ui/healthbar/frame.png" type="Texture" id=4]
 [ext_resource path="res://ui/gba.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://ui/summary/summary_prompt.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/healthbar/experience.png" type="Texture" id=7]
 [ext_resource path="res://ui/healthbar/healthbar.png" type="Texture" id=8]
 [ext_resource path="res://battle/familiars/raven.png" type="Texture" id=9]
 [ext_resource path="res://ui/healthbar/manabar.png" type="Texture" id=10]
@@ -166,21 +167,35 @@ margin_right = 120.011
 margin_bottom = 116.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 6 )
-text = "EXP"
+text = "XP"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="bar" type="Sprite" parent="exp"]
+position = Vector2( 105.001, 3 )
+scale = Vector2( 1, 1.5 )
+texture = ExtResource( 7 )
+centered = false
+offset = Vector2( -78, -5 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 156, 10 )
+
+[node name="frame" type="Sprite" parent="exp"]
+position = Vector2( 105.001, 3 )
+scale = Vector2( 1, 1.5 )
+texture = ExtResource( 4 )
+
 [node name="value" type="Label" parent="exp"]
-margin_left = 146.0
-margin_right = 182.0
+margin_left = 63.0
+margin_right = 147.0
 margin_bottom = 12.0
-grow_horizontal = 0
-grow_vertical = 0
+grow_horizontal = 2
+grow_vertical = 2
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 6 )
 text = "200 / 500"
-align = 2
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -281,6 +296,7 @@ texture = ExtResource( 3 )
 offset = Vector2( 5, 7 )
 
 [node name="info" type="NinePatchRect" parent="spells"]
+visible = false
 margin_left = -1.0
 margin_top = -109.0
 margin_right = 297.0

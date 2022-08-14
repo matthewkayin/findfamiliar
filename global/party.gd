@@ -15,6 +15,7 @@ func _ready():
     familiars[1].spells = [firebolt, witchbolt]
     familiars[0].experience += familiars[0].get_experience_tnl() - 42
     familiars[1].experience += familiars[0].get_experience_tnl() - 10
+    familiars[0].mana = 1
 
 func add_familiar(familiar: Familiar):
     if familiars.size() == MAX_PARTY_SIZE:

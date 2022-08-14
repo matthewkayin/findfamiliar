@@ -20,13 +20,13 @@ margin_top = 230.0
 margin_bottom = 288.0
 
 [node name="choose_action" parent="ui" instance=ExtResource( 6 )]
-visible = false
-margin_left = 78.0045
-margin_top = 229.718
-margin_right = 320.004
-margin_bottom = 287.718
+margin_left = 78.0
+margin_top = 206.0
+margin_right = 320.0
+margin_bottom = 288.0
 
 [node name="choose_spell" parent="ui" instance=ExtResource( 2 )]
+visible = false
 margin_left = 127.816
 margin_top = 207.953
 margin_right = 319.816

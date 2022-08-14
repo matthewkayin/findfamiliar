@@ -208,7 +208,12 @@ func _process(_delta):
             end_switch()
             return
 
+        var can_use = true
         if in_battle and not inventory.items[category][list_offset + cursor_index].item.use_in_battle:
+            can_use = false
+        if not in_battle and not inventory.items[category][list_offset + cursor_index].item.use_in_world:
+            can_use = false
+        if not can_use:
             prompt_nouse.open()
         else:
             prompt.open()

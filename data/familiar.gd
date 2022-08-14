@@ -20,8 +20,6 @@ var speed: int
 
 var spells = []
 
-var burnout: int = 0
-
 func _init(as_species: Species, at_level: int):
     species = as_species
     experience = 0
@@ -74,8 +72,6 @@ func change_health(amount: int):
 
 func change_mana(amount: int):
     mana += amount
-    if mana < 0:
-        burnout = mana * -1
     mana = int(clamp(mana, 0, max_mana))
 
 func change_exp(amount: int):

@@ -12,7 +12,7 @@ export var allow_back = true
 export var close_on_choice = true
 
 var choices = []
-var choices_size = Vector2.ZERO
+var choices_size = []
 var cursor_index = Vector2.ZERO
 var choice = NONE
 var just_opened = false
@@ -23,7 +23,7 @@ func _ready():
         for row in column.get_children():
             new_column.append(row)
         choices.append(new_column)
-    choices_size = Vector2(choices.size(), choices[0].size())
+        choices_size.append(new_column.size())
 
 func refresh_cursor():
     cursor.position = choices[cursor_index.x][cursor_index.y].rect_position - Vector2(16, 0)
@@ -35,23 +35,24 @@ func set_cursor_index(to_position: Vector2):
 func move_cursor(direction: Vector2):
     cursor_index += direction
     if cursor_index.y < 0:
-        cursor_index.y = choices_size.y - 1
-    elif cursor_index.y >= choices_size.y:
+        cursor_index.y = choices_size[cursor_index.x] - 1
+    elif cursor_index.y >= choices_size[cursor_index.x]:
         cursor_index.y = 0
     if cursor_index.x < 0:
-        cursor_index.x = choices_size.x - 1
-    elif cursor_index.x >= choices_size.x:
+        cursor_index.x = choices_size.size() - 1
+    elif cursor_index.x >= choices_size.size():
         cursor_index.x = 0
     refresh_cursor()
 
 func set_choice_labels(values):
+    choices_size = []
     for x in range(0, choices.size()):
         for y in range(0, choices[x].size()):
             choices[x][y].text = ""
     for x in range(0, values.size()):
+        choices_size.append(values[x].size())
         for y in range(0, values[x].size()):
             choices[x][y].text = values[x][y]
-    choices_size = Vector2(values.size(), values[0].size())
 
 func open():
     choice = CHOOSING
@@ -62,6 +63,11 @@ func open():
 func close():
     visible = false
     emit_signal("finished")
+
+func choose():
+    choice = choices[cursor_index.x][cursor_index.y].text
+    if close_on_choice:
+        close()
 
 func _process(_delta):
     if just_opened:
@@ -76,9 +82,7 @@ func _process(_delta):
         return
 
     if Input.is_action_just_pressed("action"):
-        choice = choices[cursor_index.x][cursor_index.y].text
-        if close_on_choice:
-            close()
+        choose()
         return
 
     for i in range(0, Direction.NAMES.size()):
