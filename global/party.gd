@@ -13,6 +13,8 @@ func _ready():
     var witchbolt = load("res://data/spells/witch_bolt.tres")
     familiars[0].spells = [firebolt, witchbolt]
     familiars[1].spells = [firebolt, witchbolt]
+    familiars[0].experience += familiars[0].get_experience_tnl() - 42
+    familiars[1].experience += familiars[0].get_experience_tnl() - 10
 
 func add_familiar(familiar: Familiar):
     if familiars.size() == MAX_PARTY_SIZE:

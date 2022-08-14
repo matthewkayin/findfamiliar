@@ -10,6 +10,7 @@ onready var enemy_healthbar = $enemy_healthbar
 onready var player_sprite = $player_sprite
 onready var enemy_sprite = $enemy_sprite
 onready var tween = $tween
+onready var timer = $timer
 onready var rng = RandomNumberGenerator.new()
 onready var party_menu = $ui/party_menu
 onready var item_menu = $ui/item_menu
@@ -21,6 +22,7 @@ var player_familiar = null
 var enemy_familiar = null
 
 var actions = []
+var participants = []
 
 enum State {
     ENTER,
@@ -53,6 +55,7 @@ func _ready():
     var witchbolt = load("res://data/spells/witch_bolt.tres")
     enemy_familiar = Familiar.new(raven_species, 5)
     enemy_familiar.spells = [firebolt, witchbolt]
+    enemy_familiar.health = 1
 
     next_state = State.ENTER
 
@@ -89,6 +92,9 @@ func player_summon():
 
 func begin_choose_action():
     choose_action.open()
+
+    if not participants.has(player_familiar):
+        participants.append(player_familiar)
 
     yield(choose_action, "finished")
     if choose_action.choice == "SPELL":
@@ -222,6 +228,8 @@ func begin_action():
 
         if defender.health == 0:
             yield(faint_familiar(defender_name, defender_sprite, defender_healthbar), "completed")
+            if action.who == "player":
+                yield(gain_experience(), "completed")
         if attacker.burnout != 0:
             yield(burnout_familiar(attacker, attacker_name, attacker_sprite, attacker_healthbar), "completed")
         if attacker.health == 0:
@@ -279,6 +287,61 @@ func begin_action():
         next_state = State.CHOOSE_ACTION
     else:
         next_state = State.ACTION
+
+func gain_experience():
+    # Calculate gained experience
+    var trainer_battle_mod = 1 # TODO equals 1.5 on trainer battle
+    var exp_gained = int((enemy_familiar.species.base_exp_yield * enemy_familiar.level * trainer_battle_mod) / 7.0)
+    dialog.open_and_split("Gained " + String(exp_gained) + " experience!")
+    var was_level_up = false
+
+    var other_level_up_messages = []
+    for familiar in participants:
+        if familiar == player_familiar:
+            continue
+        var familiar_level = familiar.level
+        familiar.change_exp(exp_gained)
+        for i in range(0, familiar.level - familiar_level):
+            var level_gained = familiar_level + 1 + i
+            other_level_up_messages.append(familiar.get_name() + " grew to level " + String(level_gained) + "!")
+            was_level_up = true
+
+    # Give exp to player's first familiar for the fancy bar effect
+    var exp_left = exp_gained
+    var TIME_PER_EXP = 0.01
+    player_healthbar.set_exp_mode(true)
+    while exp_left != 0:
+        var exp_this_loop = 0
+        if exp_left >= player_familiar.get_experience_left_for_level():
+            exp_this_loop = player_familiar.get_experience_left_for_level()
+        else:
+            exp_this_loop = exp_left
+        exp_left -= exp_this_loop
+
+        tween.interpolate_property(player_familiar, "experience", player_familiar.experience, player_familiar.experience + exp_this_loop, exp_this_loop * TIME_PER_EXP)
+        tween.start()
+        yield(tween, "tween_all_completed")
+
+        if player_familiar.get_experience_left_for_level() == 0:
+            if not dialog.is_finished():
+                yield(dialog, "finished")
+            dialog.open_and_split(player_familiar.get_name() + " grew to level " + String(player_familiar.level) + "!")
+            yield(dialog, "finished")
+            player_familiar.level += 1
+            was_level_up = true
+        elif was_level_up and other_level_up_messages.size() == 0:
+            dialog.open("")
+            yield(dialog, "finished")
+
+    for message in other_level_up_messages:
+        dialog.open_and_split(message)
+        yield(dialog, "finished")
+    if not was_level_up:
+        yield(dialog, "finished")
+
+    participants = []
+    player_healthbar.set_exp_mode(false)
+    player_healthbar.refresh()
 
 func spell_compute_damage(attacker, defender, spell) -> int:
     # Compute base damage

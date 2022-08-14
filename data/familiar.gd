@@ -65,6 +65,9 @@ func get_current_experience() -> int:
 func get_experience_tnl() -> int:
     return get_experience_at_level(level + 1) - get_experience_at_level(level)
 
+func get_experience_left_for_level() -> int:
+    return get_experience_tnl() - get_current_experience()
+
 func change_health(amount: int):
     health += amount
     health = int(clamp(health, 0, max_health))
@@ -74,3 +77,14 @@ func change_mana(amount: int):
     if mana < 0:
         burnout = mana * -1
     mana = int(clamp(mana, 0, max_mana))
+
+func change_exp(amount: int):
+    var exp_left = amount
+    while exp_left != 0:
+        if exp_left >= get_experience_left_for_level():
+            experience += get_experience_left_for_level()
+            exp_left -= get_experience_left_for_level()
+            level += 1
+        else:
+            experience += exp_left
+            exp_left = 0
