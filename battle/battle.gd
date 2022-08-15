@@ -16,6 +16,7 @@ onready var rng = RandomNumberGenerator.new()
 onready var party_menu = $ui/party_menu
 onready var item_menu = $ui/item_menu
 onready var gem_sprite = $gem_sprite
+onready var nickname = $ui/nickname
 
 onready var screen_rect = get_viewport_rect()
 
@@ -279,6 +280,7 @@ func begin_action():
 
             var catch_ticks: int = 3
             var catch_successful = catch_value <= catch_rate
+            catch_successful = true
             if not catch_successful:
                 var tick_zone_size = (1 - catch_rate) / 4
                 for zone in range(0, 4):
@@ -293,6 +295,8 @@ func begin_action():
                 dialog.open_and_split("Gotcha! " + enemy_familiar.get_name() + " was caught!")
                 yield(dialog, "finished")
                 next_state = null
+                nickname.open(enemy_familiar)
+                yield(nickname, "finished")
                 party.add_familiar(enemy_familiar)
                 return
             else:
