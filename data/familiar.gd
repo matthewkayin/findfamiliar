@@ -19,6 +19,7 @@ var defense: int
 var speed: int
 
 var spells = []
+var conditions = []
 
 func _init(as_species: Species, at_level: int):
     species = as_species
@@ -43,6 +44,30 @@ func set_level(value: int):
     experience = get_experience_at_level(value)
     level = value
     update_stats()
+
+func get_attack() -> int:
+    for condition in conditions:
+        if condition.type == Conditions.Condition.ATTACK_UP:
+            return int(ceil(attack * 2.0))
+        elif condition.type == Conditions.Condition.ATTACK_DOWN:
+            return int(ceil(attack / 2.0))
+    return attack
+
+func get_defense() -> int:
+    for condition in conditions:
+        if condition.type == Conditions.Condition.DEFENSE_UP:
+            return int(ceil(defense * 2.0))
+        elif condition.type == Conditions.Condition.DEFENSE_DOWN:
+            return int(ceil(defense / 2.0))
+    return defense
+
+func get_speed() -> int:
+    for condition in conditions:
+        if condition.type == Conditions.Condition.SPEED_UP:
+            return int(ceil(speed * 2.0))
+        elif condition.type == Conditions.Condition.SPEED_DOWN:
+            return int(ceil(speed / 2.0))
+    return speed
 
 func update_stats():
     max_health = int((species.base_health * 2.0 * level) / 100) + level + 10
@@ -84,3 +109,37 @@ func change_exp(amount: int):
         else:
             experience += exp_left
             exp_left = 0
+
+func do_post_battle_stuff():
+    if is_living():
+        mana = max_mana
+    clear_temp_conditions()
+
+func clear_temp_conditions():
+    for condition in conditions:
+        if Conditions.INFO[condition.type].duration == Conditions.DURATION_INDEFINITE:
+            continue
+        conditions.erase(condition)
+
+func add_condition(condition_type) -> String:
+    for condition in conditions:
+        # If familiar has condition already, do nothing
+        if condition.type == condition_type:
+            return Conditions.INFO[condition.type].noeffect_message
+        # If familiar has this condition's opposite, don't add the condition but cancel out the opposite
+        elif Conditions.INFO[condition.type].opposite == condition_type:
+            conditions.erase(condition)
+            return Conditions.INFO[condition.type].remove_message
+    # Otherwise add the condition
+    conditions.append({
+        "type": condition_type,
+        "ttl": Conditions.INFO[condition_type].duration
+    })
+    return Conditions.INFO[condition_type].apply_message
+
+func remove_condition(condition_type) -> String:
+    for condition in conditions:
+        if condition.type == condition_type:
+            conditions.erase(condition)
+            return Conditions.INFO[condition_type].remove_message
+    return ""

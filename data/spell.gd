@@ -9,3 +9,5 @@ export var cast_cost: int
 export var learn_cost: int
 
 export var power: int
+export(Array, Conditions.Condition) var conditions
+export(Array, float) var condition_rates

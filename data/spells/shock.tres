@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://data/spell.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+name = "SHOCK"
+type = 4
+desc = ""
+cast_cost = 1
+learn_cost = 120
+power = 0
+conditions = [ 6 ]
+condition_rates = [ 1.0 ]

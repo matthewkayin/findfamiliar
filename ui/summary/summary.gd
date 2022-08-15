@@ -24,6 +24,7 @@ onready var cursor = $spells/cursor
 onready var switch_cursor = $spells/switch_cursor
 onready var timer = $timer
 onready var prompt = $summary_prompt
+onready var conditions = $conditions
 
 var familiar_index = -1
 var familiar = null
@@ -77,6 +78,24 @@ func open(at_index: int):
     attack.text = String(familiar.attack)
     defense.text = String(familiar.defense)
     speed.text = String(familiar.speed)
+
+    for child in conditions.get_children():
+        child.visible = false
+    for i in range(0, familiar.conditions.size()):
+        var condition = familiar.conditions[i]
+        var condition_name = Conditions.Condition.keys()[condition.type].to_lower()
+        var existing_condition_icon = conditions.get_node_or_null(condition_name)
+        if existing_condition_icon != null:
+            existing_condition_icon.position = Vector2(i * 24, 0)
+            existing_condition_icon.visible = true
+        else:
+            var new_icon = Sprite.new()
+            new_icon.texture = load("res://ui/healthbar/status_icons/" + condition_name + ".png")
+            conditions.add_child(new_icon)
+            new_icon.position = Vector2(i * 24, 0)
+    for child in conditions.get_children():
+        if not child.visible:
+            child.queue_free()
 
     update_spell_list()
 

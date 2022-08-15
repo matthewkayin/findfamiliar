@@ -1,6 +1,7 @@
 extends Node2D
 
 onready var party = get_node("/root/Party")
+onready var inventory = get_node("/root/Inventory")
 
 onready var dialog = $ui/dialog
 onready var choose_action = $ui/choose_action
@@ -51,10 +52,11 @@ func _ready():
     rng.randomize()
 
     var raven_species = load("res://data/species/raven.tres")
+    var growl = load("res://data/spells/growl.tres")
     var firebolt = load("res://data/spells/fire_bolt.tres")
     var witchbolt = load("res://data/spells/witch_bolt.tres")
     enemy_familiar = Familiar.new(raven_species, 5)
-    enemy_familiar.spells = [firebolt, witchbolt]
+    enemy_familiar.spells = [firebolt, growl, witchbolt]
 
     next_state = State.ENTER
 
@@ -150,6 +152,13 @@ func begin_choose_spell():
         end_choose_action()
 
 func end_choose_action():
+    # If the player has no declared action, such as in the case where they used an item from the item menu
+    if actions.size() == 0:
+        # Then add a "none" action to the list. This allows player familiar to still be affected by status conditions
+        actions.append({
+            "who": "player",
+            "what": "none"
+        })
     actions.append({
         "who": "enemy",
         "what": "spell",
@@ -164,15 +173,17 @@ func get_fastest_action():
     var action_speeds = []
     for action in actions:
         if (action.what == "spell" or action.what == "rest") and action.who == "player":
-            action_speeds.append(player_familiar.speed)
+            action_speeds.append(player_familiar.get_speed())
         elif (action.what == "spell" or action.what == "rest") and action.who == "enemy":
-            action_speeds.append(enemy_familiar.speed)
+            action_speeds.append(enemy_familiar.get_speed())
         elif action.what == "item":
             action_speeds.append(300)
         elif action.what == "summon":
             action_speeds.append(301)
         elif action.what == "run":
             action_speeds.append(302)
+        elif action.what == "none":
+            action_speeds.append(303)
     # Note that the user of >= means that if both have equal speed, player goes first
     if action_speeds[0] >= action_speeds[1]:
         return 0
@@ -218,8 +229,9 @@ func begin_action():
         attacker_sprite.animate_attack()
         yield(attacker_sprite, "finished")
 
-        var damage = spell_compute_damage(attacker, defender, action.spell)
-        defender.change_health(-damage)
+        if action.spell.power != 0:
+            var damage = spell_compute_damage(attacker, defender, action.spell)
+            defender.change_health(-damage)
         attacker.change_mana(-action.spell.cast_cost)
 
         defender_sprite.animate_hurt()
@@ -231,6 +243,16 @@ func begin_action():
         if not defender_healthbar.is_finished():
             yield(defender_healthbar, "finished")
 
+        for i in range(0, action.spell.conditions.size()):
+            var condition_apply_value = rng.randf_range(0.0, 1.0)
+            if condition_apply_value > action.spell.condition_rates[i]:
+                continue
+            var message = defender.add_condition(action.spell.conditions[i])
+            defender_healthbar.refresh()
+            if message != Conditions.INFO[action.spell.conditions[i]].noeffect_message or action.spell.power == 0:
+                dialog.open_and_split(defender.get_name() + message)
+                yield(dialog, "finished")
+
         if defender.health == 0:
             yield(faint_familiar(defender_name, defender_sprite, defender_healthbar), "completed")
             if action.who == "player":
@@ -241,9 +263,13 @@ func begin_action():
         if action.who == "player":
             player_sprite.visible = false
             player_healthbar.visible = false
+            player_familiar.clear_temp_conditions()
             party.swap_familiars(0, action.switch_index)
             yield(player_summon(), "completed")
+            attacker = player_familiar
     elif action.what == "item":
+        if action.who == "player":
+            inventory.remove_item(action.item)
         if action.item.category == Item.Category.GEM:
             dialog.open_and_split("You used a " + action.item.name + "!")
             var health_mod = float(((3.0 * defender.max_health) - (2.0 * defender.health)) / (3.0 * defender.max_health)) # (3max_health - 2health) / 3max_health
@@ -279,6 +305,17 @@ func begin_action():
         yield(attacker_healthbar, "finished")
         if not dialog.is_finished():
             yield(dialog, "finished")
+    
+    # Tick conditions
+    for condition in attacker.conditions:
+        if condition.ttl != Conditions.DURATION_INDEFINITE:
+            condition.ttl -= 1
+            if condition.ttl <= 0:
+                var message = attacker.remove_condition(condition.type)
+                attacker_healthbar.refresh()
+                dialog.open_and_split(attacker.get_name() + message)
+                yield(dialog, "finished")
+                continue
 
     if party.living_familiar_count() == 0:
         next_state = State.PLAYER_LOSS
@@ -355,7 +392,7 @@ func gain_experience():
 
 func spell_compute_damage(attacker, defender, spell) -> int:
     # Compute base damage
-    var base_damage = (((((2 * attacker.level) / 5) + 2) * spell.power * (attacker.attack / defender.defense)) / 50) + 2
+    var base_damage = (((((2 * attacker.level) / 5) + 2) * spell.power * (attacker.get_attack() / defender.get_defense())) / 50) + 2
 
     # Compute STAB
     var stab = 1

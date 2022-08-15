@@ -13,8 +13,11 @@ onready var expbar = $experience/bar
 onready var exp_label = $experience/value
 onready var name_label = $name
 onready var level = $level
+onready var conditions = $conditions
 
 const INTERPOLATE_DURATION = 1.0
+
+export var condition_icon_scale = 1.0
 
 var familiar = null
 
@@ -79,6 +82,25 @@ func refresh():
         mana_percent = displayed_mana / displayed_max_mana
     manabar.region_rect.size.x = int(mana_percent * manabar.texture.get_width())
     mana_label.text = String(int(displayed_mana)) + " / " + String(int(displayed_max_mana))
+
+    for child in conditions.get_children():
+        child.visible = false
+    for i in range(0, familiar.conditions.size()):
+        var condition = familiar.conditions[i]
+        var condition_name = Conditions.Condition.keys()[condition.type].to_lower()
+        var existing_condition_icon = conditions.get_node_or_null(condition_name)
+        if existing_condition_icon != null:
+            existing_condition_icon.position = Vector2(i * 24, 0)
+            existing_condition_icon.visible = true
+        else:
+            var new_icon = Sprite.new()
+            new_icon.texture = load("res://ui/healthbar/status_icons/" + condition_name + ".png")
+            new_icon.scale = Vector2(condition_icon_scale, condition_icon_scale)
+            conditions.add_child(new_icon)
+            new_icon.position = Vector2(i * 24, 0)
+    for child in conditions.get_children():
+        if not child.visible:
+            child.queue_free()
 
 func update():
     if displayed_health != familiar.health or displayed_mana != familiar.mana:

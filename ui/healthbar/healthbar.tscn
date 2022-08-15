@@ -156,3 +156,12 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="conditions" type="Control" parent="."]
+margin_left = 8.0
+margin_top = 46.0
+margin_right = 48.0
+margin_bottom = 86.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

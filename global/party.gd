@@ -11,11 +11,12 @@ func _ready():
     familiars[0].nickname = "Poe"
     var firebolt = load("res://data/spells/fire_bolt.tres")
     var witchbolt = load("res://data/spells/witch_bolt.tres")
-    familiars[0].spells = [firebolt, witchbolt]
+    var growl = load("res://data/spells/growl.tres")
+    var shock = load("res://data/spells/shock.tres")
+    familiars[0].spells = [firebolt, witchbolt, growl, shock]
     familiars[1].spells = [firebolt, witchbolt]
     familiars[0].experience += familiars[0].get_experience_tnl() - 42
     familiars[1].experience += familiars[0].get_experience_tnl() - 10
-    familiars[0].mana = 1
 
 func add_familiar(familiar: Familiar):
     if familiars.size() == MAX_PARTY_SIZE:
