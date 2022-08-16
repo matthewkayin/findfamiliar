@@ -28,9 +28,9 @@ margin_right = 290.0
 margin_bottom = 80.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 7 )
-text = "APPLEFIGHT
-TYPE: NATURE
-POWER: 100 COST: 20
+text = "APPLEFIGHT (NATURE)
+COST 20 MP
+POWER 100 ACCURACY 255
 
 Creates a ward that raises party defense"
 autowrap = true

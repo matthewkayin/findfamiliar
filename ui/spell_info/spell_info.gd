@@ -12,5 +12,5 @@ func open(spell):
     if spell == null:
         label.text = ""
     else:
-        label.text = Types.NAME[spell.type] + "\nPOWER: " + String(spell.power) + "\nCOST: " + String(spell.cast_cost)
+        label.text = Types.NAME[spell.type] + String(spell.cast_cost) + " MP\nPOWER " + String(spell.power) 
     visible = true

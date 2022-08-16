@@ -30,8 +30,8 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_constants/line_spacing = 8
 custom_fonts/font = SubResource( 1 )
 text = "NATURE
-POWER: 100
-COST: 40"
+40 MP
+POWER 100"
 max_lines_visible = 3
 __meta__ = {
 "_edit_use_anchors_": false

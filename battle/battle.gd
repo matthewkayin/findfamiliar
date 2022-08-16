@@ -227,53 +227,65 @@ func begin_action():
     if action.what == "spell":
         dialog.open_and_split(attacker_name + " used " + action.spell.name + "!")
         yield(dialog, "finished")
-        attacker_sprite.animate_attack()
-        yield(attacker_sprite, "finished")
 
-        attacker.change_mana(-action.spell.cast_cost)
-        attacker_healthbar.update()
+        var attack_accuracy_value = rng.randi_range(1, 100)
+        var attack_hit = attack_accuracy_value <= action.spell.accuracy or action.spell.accuracy == -1
 
-        if action.spell.power != 0:
-            var result = spell_compute_damage(attacker, defender, action.spell)
-            defender.change_health(-result.damage)
-            defender_sprite.animate_hurt()
-            defender_healthbar.update()
+        if attack_hit:
+            attacker_sprite.animate_attack()
+            yield(attacker_sprite, "finished")
 
-            if result.crit > 1.0:
-                dialog.open_and_split("A critical hit!")
-                yield(dialog, "finished")
+            attacker.change_mana(-action.spell.cast_cost)
+            attacker_healthbar.update()
 
-            if result.effectiveness > 1.0:
-                dialog.open_and_split("It's super effective!")
-                yield(dialog, "finished")
-            elif result.effectiveness < 1.0:
-                dialog.open_and_split("It's not very effective...")
-                yield(dialog, "finished")
+            if action.spell.power != 0:
+                var result = spell_compute_damage(attacker, defender, action.spell)
+                defender.change_health(-result.damage)
+                defender_sprite.animate_hurt()
+                defender_healthbar.update()
 
-            if not defender_sprite.is_finished():
-                yield(defender_sprite, "finished")
-            if not defender_healthbar.is_finished():
-                yield(defender_healthbar, "finished")
+                if result.crit > 1.0:
+                    dialog.open_and_split("A critical hit!")
+                    yield(dialog, "finished")
 
-        if not attacker_healthbar.is_finished():
+                if result.effectiveness > 1.0:
+                    dialog.open_and_split("It's super effective!")
+                    yield(dialog, "finished")
+                elif result.effectiveness < 1.0:
+                    dialog.open_and_split("It's not very effective...")
+                    yield(dialog, "finished")
+
+                if not defender_sprite.is_finished():
+                    yield(defender_sprite, "finished")
+                if not defender_healthbar.is_finished():
+                    yield(defender_healthbar, "finished")
+
+            if not attacker_healthbar.is_finished():
+                yield(attacker_healthbar, "finished")
+
+            for i in range(0, action.spell.conditions.size()):
+                var condition_apply_value = rng.randf_range(0.0, 1.0)
+                if condition_apply_value > action.spell.condition_rates[i]:
+                    continue
+                var message = defender.add_condition(action.spell.conditions[i])
+                defender_healthbar.refresh()
+                if message != Conditions.INFO[action.spell.conditions[i]].noeffect_message or action.spell.power == 0:
+                    dialog.open_and_split(defender.get_name() + message)
+                    yield(dialog, "finished")
+
+            if defender.health == 0:
+                yield(faint_familiar(defender_name, defender_sprite, defender_healthbar), "completed")
+                if action.who == "player":
+                    yield(gain_experience(), "completed")
+            if attacker.health == 0:
+                yield(faint_familiar(attacker_name, attacker_sprite, attacker_healthbar), "completed")
+        # elif not attack hit
+        else:
+            dialog.open_and_split(attacker_name + "'s attack missed!")
+            yield(dialog, "finished")
+            attacker.change_mana(-action.spell.cast_cost)
+            attacker_healthbar.update()
             yield(attacker_healthbar, "finished")
-
-        for i in range(0, action.spell.conditions.size()):
-            var condition_apply_value = rng.randf_range(0.0, 1.0)
-            if condition_apply_value > action.spell.condition_rates[i]:
-                continue
-            var message = defender.add_condition(action.spell.conditions[i])
-            defender_healthbar.refresh()
-            if message != Conditions.INFO[action.spell.conditions[i]].noeffect_message or action.spell.power == 0:
-                dialog.open_and_split(defender.get_name() + message)
-                yield(dialog, "finished")
-
-        if defender.health == 0:
-            yield(faint_familiar(defender_name, defender_sprite, defender_healthbar), "completed")
-            if action.who == "player":
-                yield(gain_experience(), "completed")
-        if attacker.health == 0:
-            yield(faint_familiar(attacker_name, attacker_sprite, attacker_healthbar), "completed")
     elif action.what == "summon":
         if action.who == "player":
             player_sprite.visible = false

@@ -49,7 +49,7 @@ func refresh_cursor():
     if spell == null:
         spell_info_label.text = ""
     else:
-        spell_info_label.text = Types.NAME[spell.type] + "\nPOWER: " + String(spell.power) + "\nCOST: " + String(spell.cast_cost)
+        spell_info_label.text = Types.NAME[spell.type] + "\n" + String(spell.cast_cost) + " MP\nPOWER " + String(spell.power) 
 
 func close():
     spell_info.visible = false

@@ -9,7 +9,7 @@ func open(spell):
     if spell == null:
         label.text = ""
     else:
-        label.text = spell.name + "\nTYPE: " + Types.NAME[spell.type] + "\nPOWER: " + String(spell.power) + " COST: " + String(spell.cast_cost) + "\n\n" + spell.desc
+        label.text = spell.name + " (" + Types.NAME[spell.type] + ")\nCOST " + String(spell.cast_cost) + " MP\nPOWER " + String(spell.power) + " ACCURACY " + String(spell.accuracy) + "\n\n" + spell.desc
     visible = true
 
 func close():
