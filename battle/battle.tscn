@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://battle/battle.gd" type="Script" id=1]
 [ext_resource path="res://ui/choose_spell/choose_spell.tscn" type="PackedScene" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://ui/dialog/dialog.tscn" type="PackedScene" id=8]
 [ext_resource path="res://ui/gem_sprite/gem_sprite.tscn" type="PackedScene" id=9]
 [ext_resource path="res://ui/nickname/nickname.tscn" type="PackedScene" id=10]
+[ext_resource path="res://ui/library/library.tscn" type="PackedScene" id=11]
 
 [node name="battle" type="Node2D"]
 script = ExtResource( 1 )
@@ -41,6 +42,9 @@ visible = false
 visible = false
 
 [node name="nickname" parent="ui" instance=ExtResource( 10 )]
+visible = false
+
+[node name="library" parent="ui" instance=ExtResource( 11 )]
 visible = false
 
 [node name="player_healthbar" parent="." instance=ExtResource( 4 )]

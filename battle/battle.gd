@@ -230,19 +230,33 @@ func begin_action():
         attacker_sprite.animate_attack()
         yield(attacker_sprite, "finished")
 
-        if action.spell.power != 0:
-            var damage = spell_compute_damage(attacker, defender, action.spell)
-            defender.change_health(-damage)
         attacker.change_mana(-action.spell.cast_cost)
-
-        defender_sprite.animate_hurt()
         attacker_healthbar.update()
-        defender_healthbar.update()
-        yield(defender_sprite, "finished")
+
+        if action.spell.power != 0:
+            var result = spell_compute_damage(attacker, defender, action.spell)
+            defender.change_health(-result.damage)
+            defender_sprite.animate_hurt()
+            defender_healthbar.update()
+
+            if result.crit > 1.0:
+                dialog.open_and_split("A critical hit!")
+                yield(dialog, "finished")
+
+            if result.effectiveness > 1.0:
+                dialog.open_and_split("It's super effective!")
+                yield(dialog, "finished")
+            elif result.effectiveness < 1.0:
+                dialog.open_and_split("It's not very effective...")
+                yield(dialog, "finished")
+
+            if not defender_sprite.is_finished():
+                yield(defender_sprite, "finished")
+            if not defender_healthbar.is_finished():
+                yield(defender_healthbar, "finished")
+
         if not attacker_healthbar.is_finished():
             yield(attacker_healthbar, "finished")
-        if not defender_healthbar.is_finished():
-            yield(defender_healthbar, "finished")
 
         for i in range(0, action.spell.conditions.size()):
             var condition_apply_value = rng.randf_range(0.0, 1.0)
@@ -394,7 +408,7 @@ func gain_experience():
     player_healthbar.set_exp_mode(false)
     player_healthbar.refresh()
 
-func spell_compute_damage(attacker, defender, spell) -> int:
+func spell_compute_damage(attacker, defender, spell):
     # Compute base damage
     var base_damage = (((((2 * attacker.level) / 5) + 2) * spell.power * (attacker.get_attack() / defender.get_defense())) / 50) + 2
 
@@ -410,8 +424,19 @@ func spell_compute_damage(attacker, defender, spell) -> int:
     elif Types.INFO[defender.species.type].resistances.has(spell.type):
         type_mod = 0.5
 
+    # Compute crit
+    var crit_mod = 1.0
+    var crit_chance = attacker.speed / 2
+    var crit_value = rng.randi_range(0, 255)
+    if crit_value <= crit_chance:
+        crit_mod = 2.0
+
     var random = rng.randf_range(0.85, 1.0)
-    return int(base_damage * stab * type_mod * random)
+    return {
+        "damage": int(base_damage * stab * type_mod * crit_mod * random),
+        "effectiveness": type_mod,
+        "crit": crit_mod
+    }
 
 func faint_familiar(familiar_name, familiar_sprite, familiar_healthbar):
     if familiar_sprite == player_sprite:

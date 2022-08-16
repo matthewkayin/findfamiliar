@@ -82,6 +82,7 @@ const INFO = {
     },
     Type.VOIDT: {
         "weaknesses": [
+            Type.FIRE
         ],
         "resistances": [
         ]
