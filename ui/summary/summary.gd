@@ -21,7 +21,8 @@ onready var spell_info = $spells/info
 onready var cursor = $spells/cursor
 onready var switch_cursor = $spells/switch_cursor
 onready var timer = $timer
-onready var prompt = $summary_prompt
+onready var prompt = $prompt
+onready var move_order_prompt = $move_order_prompt
 onready var conditions = $conditions
 onready var spells_known_list = $spells/spells_known_list
 onready var spells_known_cursor = $spells/spells_known_list/cursor
@@ -29,6 +30,7 @@ onready var spells_known_nav_up_cursor = $spells/spells_known_list/nav_up
 onready var spells_known_nav_down_cursor = $spells/spells_known_list/nav_down
 onready var spells_known_list_list = $spells/spells_known_list/list
 onready var spells_known_labels = $spells/spells_known_list/list.get_children()
+onready var library = get_parent().get_parent().get_node("library")
 
 var familiar_index = -1
 var familiar = null
@@ -42,7 +44,15 @@ var spells_known_list_offset = 0
 func _ready():
     timer.connect("timeout", self, "_on_timeout")
     prompt.connect("finished", self, "_on_prompt_finished")
+    move_order_prompt.connect("finished", self, "_on_move_order_prompt_finished")
+    library.connect("finished", self, "_on_library_finished")
     visible = false
+
+func _on_library_finished():
+    if not visible:
+        return
+    just_opened = true
+    prompt.open()
 
 func _on_timeout():
     switch_cursor.visible = not switch_cursor.visible
@@ -50,12 +60,22 @@ func _on_timeout():
 func _on_prompt_finished():
     if prompt.choice == ChoiceDialog.NONE:
         cursor_index = -1
-    elif prompt.choice == "SWITCH":
+    elif prompt.choice == "SET":
+        cursor_index = 0
+        refresh_cursor()
+        open_spell_info()
+    elif prompt.choice == "LEARN":
+        library.open(LibraryMenu.Mode.LEARN, familiar)
+
+func _on_move_order_prompt_finished():
+    if move_order_prompt.choice == ChoiceDialog.NONE:
+        prompt.open()
+    elif move_order_prompt.choice == "SWITCH":
         switch_index = cursor_index
         switch_cursor.position = cursor.position
         switch_cursor.visible = true
         timer.start(0.3)
-    elif prompt.choice == "SET":
+    elif move_order_prompt.choice == "SET":
         open_spells_known()
 
 func open_spells_known():
@@ -159,6 +179,8 @@ func close():
     emit_signal("finished")
 
 func _process(_delta):
+    if library.visible:
+        return
     if just_opened:
         just_opened = false
         return
@@ -194,6 +216,8 @@ func _process(_delta):
         return
 
     if cursor_index == -1:
+        if prompt.visible:
+            return
         if Input.is_action_just_pressed("back"):
             close()
         elif Input.is_action_just_pressed("left"):
@@ -208,12 +232,10 @@ func _process(_delta):
             open(familiar_index)
         elif Input.is_action_just_pressed("action"):
             if allow_move_prompt:
-                cursor_index = 0
-                refresh_cursor()
-                open_spell_info()
+                prompt.open()
         return
     else:
-        if prompt.visible:
+        if move_order_prompt.visible:
             return
         if Input.is_action_just_pressed("back"):
             if switch_index != -1:
@@ -222,6 +244,7 @@ func _process(_delta):
                 cursor_index = -1
                 cursor.visible = false
                 spell_info.visible = false
+                prompt.open()
         elif Input.is_action_just_pressed("up"):
             cursor_index -= 1
             if cursor_index < 0:
@@ -239,7 +262,7 @@ func _process(_delta):
                 perform_switch()
                 end_switch()
             else:
-                prompt.open()
+                move_order_prompt.open()
 
 func perform_switch():
     var temp = familiar.spells[switch_index]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://ui/summary/summary.gd" type="Script" id=1]
 [ext_resource path="res://ui/frame.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://battle/familiars/raven.png" type="Texture" id=9]
 [ext_resource path="res://ui/healthbar/manabar.png" type="Texture" id=10]
 [ext_resource path="res://ui/spell_info_detailed/spell_info_detailed.tscn" type="PackedScene" id=11]
+[ext_resource path="res://ui/summary/summary_prompt1.tscn" type="PackedScene" id=12]
 
 [sub_resource type="DynamicFont" id=2]
 font_data = ExtResource( 5 )
@@ -479,12 +480,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="summary_prompt" parent="." instance=ExtResource( 6 )]
+[node name="timer" type="Timer" parent="."]
+
+[node name="move_order_prompt" parent="." instance=ExtResource( 6 )]
 visible = false
-margin_left = 170.264
-margin_top = 228.74
-margin_right = 320.264
-margin_bottom = 287.74
+margin_left = 170.0
+margin_top = 230.0
+margin_right = 320.0
+margin_bottom = 288.0
 allow_back = true
 
-[node name="timer" type="Timer" parent="."]
+[node name="prompt" parent="." instance=ExtResource( 12 )]
+visible = false
+margin_left = 170.0
+margin_top = 230.0
+margin_right = 320.0
+margin_bottom = 288.0
+allow_back = true

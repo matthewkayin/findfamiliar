@@ -45,6 +45,7 @@ func _ready():
     prompt_noswitch.connect("finished", self, "_on_prompt_noswitch_finish")
     timer.connect("timeout", self, "_on_timer_timeout")
     summary.connect("finished", self, "_on_summary_finish")
+    summary.visible = false
 
 func _on_timer_timeout():
     switch_cursor.visible = not switch_cursor.visible
@@ -107,6 +108,7 @@ func open():
     just_opened = true
     state = State.CHOOSING
     dialog.visible = false
+    summary.visible = false
 
 func close(should_emit_signal=true):
     visible = false

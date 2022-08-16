@@ -10,6 +10,7 @@ onready var header_kp_label = $header/kp_label
 onready var cursor = $list/cursor
 onready var cursor_nav_up = $list/nav_up
 onready var cursor_nav_down = $list/nav_down
+onready var items_box = $list/items
 onready var items = $list/items.get_children()
 onready var prompt = $prompt
 onready var yesno_prompt = $yesno_prompt
@@ -25,7 +26,6 @@ enum Mode {
 var mode = Mode.LIST
 var spells = []
 var familiar = null
-var familiar_spell_index = 0
 var cursor_index = 0
 var list_offset = 0
 var just_opened = false
@@ -36,28 +36,33 @@ func _ready():
     yesno_prompt.connect("finished", self, "_on_yesno_prompt_finished")
 
 func _on_prompt_finished():
+    just_opened = true
     var spell = spells[list_offset + cursor_index]
-    if prompt.choice == "SET":
-        familiar.spells[familiar_spell_index] = spell
-        close()
-    elif prompt.choice == "LEARN":
+    if prompt.choice == "LEARN":
         learn_prompt.visible = true
         learn_prompt_label.text = "Spend " + String(spell.learn_cost) + " KP to learn " + spell.name + "?"
         yesno_prompt.open()
+    else:
+        info.visible = false
 
 func _on_yesno_prompt_finished():
+    learn_prompt.visible = false
+    just_opened = true
+
     var spell = spells[list_offset + cursor_index]
     if yesno_prompt.choice == "YES":
         familiar.spells_known.append(spell)
-    learn_prompt.visible = false
-    open_prompt()
+        info.visible = false
+        refresh_header()
+        refresh_list()
+    elif yesno_prompt.choice == "NO":
+        open_prompt()
 
-func open(in_mode, with_familiar=null, spell_index=0):
+func open(in_mode, with_familiar=null):
     mode = in_mode
 
     cursor_index = 0
     list_offset = 0
-    familiar_spell_index = spell_index
     just_opened = true
     prompt.visible = false
     yesno_prompt.visible = false
@@ -91,15 +96,23 @@ func refresh_list():
     for item in items:
         item.visible = false
     for i in range(0, min(10, spells.size())):
-        var index = list_offset + cursor_index
+        var index = list_offset + i
         items[i].text = spells[index].name
-        if mode == Mode.LEARN and familiar.spells_known.has(spells[index]):
-            items[i].get_child(0).text = "KNOWN"
+        if mode == Mode.LEARN:
+            if familiar.spells_known.has(spells[index]):
+                items[i].get_child(0).text = "KNOWN"
+                items[i].get_child(0).set("custom_colors/font_color", Color("#000000"))
+            else:
+                items[i].get_child(0).text = String(spells[index].learn_cost) + " KP"
+                if familiar.get_kp() < spells[index].learn_cost:
+                    items[i].get_child(0).set("custom_colors/font_color", Color("#ac3232"))
         else:
             items[i].get_child(0).text = String(spells[index].learn_cost) + " KP"
         items[i].visible = true
     cursor_nav_up.visible = list_offset != 0
     cursor_nav_down.visible = spells.size() > (list_offset + items.size())
+    cursor.position.y = items_box.rect_position.y + items[cursor_index].rect_position.y - 2.5
+    cursor.visible = true
 
 func close():
     visible = false
@@ -111,20 +124,23 @@ func open_spell_info():
         open_prompt()
 
 func open_prompt():
-    if familiar.spells_known.has(spells[list_offset + cursor_index]):
-        prompt.get_child(0).text = "SET"
-    else:
-        prompt.get_child(0).text = "LEARN"
+    if not familiar.spells_known.has(spells[list_offset + cursor_index]) and familiar.get_kp() >= spells[list_offset + cursor_index].learn_cost:
+        prompt.open()
 
 func _process(_delta):
     if just_opened:
         just_opened = false
         return
-    if prompt.visible:
+    if prompt.visible or yesno_prompt.visible:
+        return
+    if not visible:
         return
 
     if Input.is_action_just_pressed("back"):
-        close()
+        if info.visible:
+            info.visible = false
+        else:
+            close()
         return
     
     if Input.is_action_just_pressed("up"):

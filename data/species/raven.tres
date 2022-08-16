@@ -1,6 +1,10 @@
-[gd_resource type="Resource" load_steps=2 format=2]
+[gd_resource type="Resource" load_steps=6 format=2]
 
 [ext_resource path="res://data/species.gd" type="Script" id=1]
+[ext_resource path="res://data/spells/witch_bolt.tres" type="Resource" id=2]
+[ext_resource path="res://data/spells/fire_bolt.tres" type="Resource" id=3]
+[ext_resource path="res://data/spells/shock.tres" type="Resource" id=4]
+[ext_resource path="res://data/spells/growl.tres" type="Resource" id=5]
 
 [resource]
 script = ExtResource( 1 )
@@ -13,3 +17,4 @@ base_defense = 75
 base_speed = 40
 catch_rate = 0.5
 base_exp_yield = 60.0
+spells = [ ExtResource( 3 ), ExtResource( 5 ), ExtResource( 4 ), ExtResource( 2 ) ]

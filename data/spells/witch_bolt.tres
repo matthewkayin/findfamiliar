@@ -6,6 +6,9 @@
 script = ExtResource( 1 )
 name = "WITCH BOLT"
 type = 6
+desc = ""
 cast_cost = 3
-learn_cost = 120
+learn_cost = 2
 power = 50
+conditions = [  ]
+condition_rates = [  ]

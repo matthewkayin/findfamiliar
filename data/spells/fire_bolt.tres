@@ -6,6 +6,9 @@
 script = ExtResource( 1 )
 name = "FIRE BOLT"
 type = 0
+desc = ""
 cast_cost = 2
-learn_cost = 100
+learn_cost = 2
 power = 40
+conditions = [  ]
+condition_rates = [  ]

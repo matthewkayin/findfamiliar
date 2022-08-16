@@ -13,7 +13,7 @@ func _ready():
     var witchbolt = load("res://data/spells/witch_bolt.tres")
     var growl = load("res://data/spells/growl.tres")
     var shock = load("res://data/spells/shock.tres")
-    familiars[0].spells_known = [firebolt, witchbolt, growl, shock]
+    familiars[0].spells_known = [firebolt, witchbolt]
     familiars[0].spells[0] = firebolt
     familiars[0].spells[2] = witchbolt
     familiars[1].spells[0] = firebolt

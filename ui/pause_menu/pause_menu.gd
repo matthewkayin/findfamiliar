@@ -2,6 +2,7 @@ extends ChoiceDialog
 
 onready var party_menu = get_parent().get_node("party_menu")
 onready var item_menu = get_parent().get_node("item_menu")
+onready var library = get_parent().get_node("library")
 
 var in_submenu = false
 
@@ -25,6 +26,13 @@ func _process(_delta):
         item_menu.open()
         in_submenu = true
         yield(item_menu, "finished")
+        choice = ChoiceDialog.CHOOSING
+        in_submenu = false
+        just_opened = true
+    elif choice == "LIBRARY":
+        library.open(LibraryMenu.Mode.LIST)
+        in_submenu = true
+        yield(library, "finished")
         choice = ChoiceDialog.CHOOSING
         in_submenu = false
         just_opened = true
