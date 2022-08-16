@@ -12,19 +12,23 @@ onready var health_label = $health/value
 onready var manabar = $mana/bar
 onready var expbar = $exp/bar
 onready var mana_label = $mana/value
-onready var exp_label = $exp/value
 onready var attack = $attack/value
 onready var defense = $defense/value
 onready var speed = $speed/value
 onready var spell_list = $spells/list
 onready var spell_labels = $spells/list.get_children()
 onready var spell_info = $spells/info
-onready var spell_info_label = $spells/info/label
 onready var cursor = $spells/cursor
 onready var switch_cursor = $spells/switch_cursor
 onready var timer = $timer
 onready var prompt = $summary_prompt
 onready var conditions = $conditions
+onready var spells_known_list = $spells/spells_known_list
+onready var spells_known_cursor = $spells/spells_known_list/cursor
+onready var spells_known_nav_up_cursor = $spells/spells_known_list/nav_up
+onready var spells_known_nav_down_cursor = $spells/spells_known_list/nav_down
+onready var spells_known_list_list = $spells/spells_known_list/list
+onready var spells_known_labels = $spells/spells_known_list/list.get_children()
 
 var familiar_index = -1
 var familiar = null
@@ -32,6 +36,8 @@ var cursor_index = -1
 var switch_index = -1
 var allow_move_prompt = true
 var just_opened = false
+var spells_known_cursor_index = 0
+var spells_known_list_offset = 0
 
 func _ready():
     timer.connect("timeout", self, "_on_timeout")
@@ -49,6 +55,33 @@ func _on_prompt_finished():
         switch_cursor.position = cursor.position
         switch_cursor.visible = true
         timer.start(0.3)
+    elif prompt.choice == "SET":
+        open_spells_known()
+
+func open_spells_known():
+    spells_known_cursor_index = 0
+    spells_known_list_offset = 0
+    refresh_spells_known()
+
+func refresh_spells_known():
+    for child in spells_known_labels:
+        child.visible = false
+    if spells_known_list_offset + spells_known_labels.size() > familiar.spells_known.size():
+        spells_known_list_offset = 0
+    for i in range(0, min(familiar.spells_known.size(), spells_known_labels.size())):
+        spells_known_labels[i].text = familiar.spells_known[spells_known_list_offset + i].name
+        spells_known_labels[i].visible = true
+    spells_known_cursor.position.y = spells_known_list_list.rect_position.y + spells_known_labels[spells_known_cursor_index].rect_position.y - 2.5
+    spells_known_cursor.visible = true
+    spells_known_nav_up_cursor.visible = spells_known_list_offset != 0
+    spells_known_nav_down_cursor.visible = spells_known_list_offset + spells_known_labels.size() < familiar.spells_known.size()
+    spell_info.open(familiar.spells_known[spells_known_list_offset + spells_known_cursor_index])
+    spells_known_list.visible = true
+
+func close_spells_known():
+    spells_known_list.visible = false
+    update_spell_list()
+    open_spell_info()
 
 func open(at_index: int):
     familiar_index = at_index
@@ -58,6 +91,7 @@ func open(at_index: int):
     switch_cursor.visible = false
     spell_info.visible = false
     prompt.visible = false
+    spells_known_list.visible = false
 
     sprite.texture = load("res://battle/familiars/" + familiar.species.name.to_lower() + ".png")
     name_label.text = familiar.get_name()
@@ -73,7 +107,6 @@ func open(at_index: int):
 
     var exp_percent = float(familiar.get_current_experience()) / float(familiar.get_experience_tnl())
     expbar.region_rect.size.x = int(exp_percent * expbar.texture.get_width())
-    exp_label.text = String(familiar.get_current_experience()) + " / " + String(familiar.get_experience_tnl())
 
     attack.text = String(familiar.attack)
     defense.text = String(familiar.defense)
@@ -103,17 +136,19 @@ func open(at_index: int):
     visible = true
 
 func update_spell_list():
-    for spell_label in spell_labels:
-        spell_label.visible = false
     for i in range(0, familiar.spells.size()):
-        spell_labels[i].text = familiar.spells[i].name
-        spell_labels[i].visible = true
+        if familiar.spells[i] == null:
+            spell_labels[i].text = ""
+        else:
+            spell_labels[i].text = familiar.spells[i].name
 
 func open_spell_info():
-    var spell = familiar.spells[cursor_index]
-
-    spell_info_label.text = Types.NAME[spell.type] + "\nPOWER: " + String(spell.power) + " COST: " + String(spell.cast_cost) + "\n\n" + spell.desc
-    spell_info.visible = true
+    var spell
+    if cursor_index >= familiar.spells.size():
+        spell = null
+    else:
+        spell = familiar.spells[cursor_index]
+    spell_info.open(spell)
 
 func refresh_cursor():
     cursor.position.y = spell_list.rect_position.y + spell_labels[cursor_index].rect_position.y - 4
@@ -128,6 +163,34 @@ func _process(_delta):
         just_opened = false
         return
     if not visible:
+        return
+
+    if spells_known_list.visible:
+        if Input.is_action_just_pressed("back"):
+            close_spells_known()
+            return
+        if Input.is_action_just_pressed("up"):
+            if spells_known_cursor_index > 0:
+                spells_known_cursor_index -= 1
+            elif spells_known_list_offset > 0:
+                spells_known_list_offset -= 1
+            refresh_spells_known()
+            return
+        if Input.is_action_just_pressed("down"):
+            if spells_known_cursor_index < spells_known_labels.size() - 1:
+                spells_known_cursor_index += 1
+            elif spells_known_list_offset + spells_known_labels.size() - 1 < familiar.spells_known.size() - 1:
+                spells_known_list_offset += 1
+            refresh_spells_known()
+            return
+        if Input.is_action_just_pressed("action"):
+            var set_spell = familiar.spells_known[spells_known_list_offset + spells_known_cursor_index]
+            var set_spell_index = familiar.spells.find(set_spell)
+            if set_spell_index != -1:
+                familiar.spells[set_spell_index] = null
+            familiar.spells[cursor_index] = set_spell
+            close_spells_known()
+            return
         return
 
     if cursor_index == -1:
@@ -167,7 +230,7 @@ func _process(_delta):
             open_spell_info()
         elif Input.is_action_just_pressed("down"):
             cursor_index += 1
-            if cursor_index >= familiar.spells.size():
+            if cursor_index >= 4:
                 cursor_index = 0
             refresh_cursor()
             open_spell_info()

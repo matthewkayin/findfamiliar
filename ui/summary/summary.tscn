@@ -10,6 +10,7 @@
 [ext_resource path="res://ui/healthbar/healthbar.png" type="Texture" id=8]
 [ext_resource path="res://battle/familiars/raven.png" type="Texture" id=9]
 [ext_resource path="res://ui/healthbar/manabar.png" type="Texture" id=10]
+[ext_resource path="res://ui/spell_info_detailed/spell_info_detailed.tscn" type="PackedScene" id=11]
 
 [sub_resource type="DynamicFont" id=2]
 font_data = ExtResource( 5 )
@@ -30,10 +31,6 @@ size = 12
 font_data = ExtResource( 5 )
 
 [sub_resource type="DynamicFont" id=1]
-size = 12
-font_data = ExtResource( 5 )
-
-[sub_resource type="DynamicFont" id=7]
 size = 12
 font_data = ExtResource( 5 )
 
@@ -195,25 +192,11 @@ position = Vector2( 105.001, 3 )
 scale = Vector2( 1, 1.5 )
 texture = ExtResource( 4 )
 
-[node name="value" type="Label" parent="exp"]
-margin_left = 63.0
-margin_right = 147.0
-margin_bottom = 12.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 6 )
-text = "200 / 500"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="attack" type="Label" parent="."]
 margin_left = 12.0113
-margin_top = 123.771
+margin_top = 137.276
 margin_right = 120.011
-margin_bottom = 139.771
+margin_bottom = 153.276
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 6 )
 text = "ATTACK"
@@ -235,9 +218,9 @@ __meta__ = {
 
 [node name="defense" type="Label" parent="."]
 margin_left = 12.011
-margin_top = 139.771
+margin_top = 153.276
 margin_right = 120.011
-margin_bottom = 155.771
+margin_bottom = 169.276
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 6 )
 text = "DEFENSE"
@@ -259,9 +242,9 @@ __meta__ = {
 
 [node name="speed" type="Label" parent="."]
 margin_left = 12.011
-margin_top = 155.771
+margin_top = 169.276
 margin_right = 120.011
-margin_bottom = 171.771
+margin_bottom = 185.276
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 6 )
 text = "SPEED"
@@ -283,9 +266,9 @@ __meta__ = {
 
 [node name="spells" type="Label" parent="."]
 margin_left = 11.8142
-margin_top = 184.263
+margin_top = 192.906
 margin_right = 83.8142
-margin_bottom = 200.263
+margin_bottom = 208.906
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 1 )
 text = "SPELLS"
@@ -304,36 +287,9 @@ position = Vector2( 0.185839, -124.263 )
 texture = ExtResource( 3 )
 offset = Vector2( 5, 7 )
 
-[node name="info" type="NinePatchRect" parent="spells"]
-visible = false
-margin_left = -1.0
-margin_top = -109.0
-margin_right = 297.0
-margin_bottom = -25.0
-texture = ExtResource( 2 )
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="label" type="Label" parent="spells/info"]
-margin_left = 7.0
-margin_top = 8.0
-margin_right = 290.0
-margin_bottom = 80.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 7 )
-text = "NATURE
-POWER: 100 COST: 20
-
-Creates a ward that raises party defense"
-autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="info" parent="spells" instance=ExtResource( 11 )]
+margin_top = -192.906
+margin_bottom = -90.906
 
 [node name="list" type="Control" parent="spells"]
 margin_left = 16.1608
@@ -387,10 +343,148 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="spells_known_list" type="NinePatchRect" parent="spells"]
+margin_left = 143.0
+margin_top = -91.0
+margin_right = 298.0
+margin_bottom = 96.0
+texture = ExtResource( 2 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cursor" type="Sprite" parent="spells/spells_known_list"]
+position = Vector2( 7.25114, 16.594 )
+texture = ExtResource( 3 )
+offset = Vector2( 5, 7 )
+
+[node name="nav_up" type="Sprite" parent="spells/spells_known_list"]
+position = Vector2( 77, 11.1765 )
+rotation = -1.5708
+texture = ExtResource( 3 )
+
+[node name="nav_down" type="Sprite" parent="spells/spells_known_list"]
+position = Vector2( 77, 175.924 )
+rotation = 1.5708
+texture = ExtResource( 3 )
+
+[node name="list" type="VBoxContainer" parent="spells/spells_known_list"]
+margin_left = 23.4498
+margin_top = 25.3865
+margin_right = 143.45
+margin_bottom = 181.386
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="spell" type="Label" parent="spells/spells_known_list/list"]
+margin_right = 120.0
+margin_bottom = 12.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="spell2" type="Label" parent="spells/spells_known_list/list"]
+margin_top = 16.0
+margin_right = 120.0
+margin_bottom = 28.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="spell3" type="Label" parent="spells/spells_known_list/list"]
+margin_top = 32.0
+margin_right = 120.0
+margin_bottom = 44.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="spell4" type="Label" parent="spells/spells_known_list/list"]
+margin_top = 48.0
+margin_right = 120.0
+margin_bottom = 60.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="spell5" type="Label" parent="spells/spells_known_list/list"]
+margin_top = 64.0
+margin_right = 120.0
+margin_bottom = 76.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="spell6" type="Label" parent="spells/spells_known_list/list"]
+margin_top = 80.0
+margin_right = 120.0
+margin_bottom = 92.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="spell7" type="Label" parent="spells/spells_known_list/list"]
+margin_top = 96.0
+margin_right = 120.0
+margin_bottom = 108.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="spell8" type="Label" parent="spells/spells_known_list/list"]
+margin_top = 112.0
+margin_right = 120.0
+margin_bottom = 124.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="spell9" type="Label" parent="spells/spells_known_list/list"]
+margin_top = 128.0
+margin_right = 120.0
+margin_bottom = 140.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="summary_prompt" parent="." instance=ExtResource( 6 )]
+visible = false
 margin_left = 170.264
 margin_top = 228.74
 margin_right = 320.264
 margin_bottom = 287.74
+allow_back = true
 
 [node name="timer" type="Timer" parent="."]

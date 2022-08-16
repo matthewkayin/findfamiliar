@@ -13,8 +13,11 @@ func _ready():
     var witchbolt = load("res://data/spells/witch_bolt.tres")
     var growl = load("res://data/spells/growl.tres")
     var shock = load("res://data/spells/shock.tres")
-    familiars[0].spells = [firebolt, witchbolt, growl, shock]
-    familiars[1].spells = [firebolt, witchbolt]
+    familiars[0].spells_known = [firebolt, witchbolt, growl, shock]
+    familiars[0].spells[0] = firebolt
+    familiars[0].spells[2] = witchbolt
+    familiars[1].spells[0] = firebolt
+    familiars[1].spells[1] = witchbolt
     familiars[0].experience += familiars[0].get_experience_tnl() - 42
     familiars[1].experience += familiars[0].get_experience_tnl() - 10
 

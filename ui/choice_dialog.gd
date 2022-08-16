@@ -27,6 +27,7 @@ func _ready():
 
 func refresh_cursor():
     cursor.position = choices[cursor_index.x][cursor_index.y].rect_position - Vector2(16, 0)
+    cursor.visible = true
 
 func set_cursor_index(to_position: Vector2):
     cursor_index = to_position

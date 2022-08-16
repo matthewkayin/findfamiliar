@@ -6,6 +6,7 @@ const MAX_LEVEL = 100
 var species: Species
 var nickname: String = ""
 var experience: int = 0
+var knowledge: int = 0
 var level: int = 1
 
 var health: int
@@ -18,7 +19,8 @@ var attack: int
 var defense: int
 var speed: int
 
-var spells = []
+var spells_known = []
+var spells = [null, null, null, null]
 var conditions = []
 
 func _init(as_species: Species, at_level: int):
@@ -42,6 +44,7 @@ func get_exp_yield() -> int:
 
 func set_level(value: int):
     experience = get_experience_at_level(value)
+    knowledge = get_knowledge_at_level(value)
     level = value
     update_stats()
 
@@ -77,7 +80,7 @@ func update_stats():
     speed = int((species.base_speed * 2.0 * level) / 100) + 5
 
 func get_experience_at_level(value: int) -> int:
-    return int(pow((value), 3))
+    return int(pow(value, 3))
 
 func get_current_experience() -> int:
     if level == 1:
@@ -90,6 +93,18 @@ func get_experience_tnl() -> int:
 
 func get_experience_left_for_level() -> int:
     return get_experience_tnl() - get_current_experience()
+
+func get_knowledge_at_level(value: int) -> int:
+    return int(3 * pow(value, 1.33))
+
+func get_kp_spent() -> int:
+    var spent = 0
+    for spell in spells_known:
+        spent += spell.learn_cost
+    return spent
+
+func get_kp() -> int:
+    return knowledge - get_kp_spent()
 
 func change_health(amount: int):
     health += amount

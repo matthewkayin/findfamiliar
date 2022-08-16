@@ -35,6 +35,11 @@ _global_script_classes=[ {
 "path": "res://data/item.gd"
 }, {
 "base": "NinePatchRect",
+"class": "LibraryMenu",
+"language": "GDScript",
+"path": "res://ui/library/library.gd"
+}, {
+"base": "NinePatchRect",
 "class": "PartyMenu",
 "language": "GDScript",
 "path": "res://ui/party_menu/party_menu.gd"
@@ -60,6 +65,7 @@ _global_script_class_icons={
 "Direction": "",
 "Familiar": "",
 "Item": "",
+"LibraryMenu": "",
 "PartyMenu": "",
 "Species": "",
 "Spell": "",
@@ -75,6 +81,7 @@ config/icon="res://icon.png"
 
 Party="*res://global/party.gd"
 Inventory="*res://global/inventory.gd"
+Library="*res://global/library.gd"
 
 [display]
 

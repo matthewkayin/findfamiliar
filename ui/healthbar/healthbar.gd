@@ -10,7 +10,6 @@ onready var manabar = $mana/bar
 onready var health_label = $health/value
 onready var mana_label = $mana/value
 onready var expbar = $experience/bar
-onready var exp_label = $experience/value
 onready var name_label = $name
 onready var level = $level
 onready var conditions = $conditions
@@ -67,7 +66,6 @@ func refresh():
         if displayed_max_exp != 0:
             exp_percent = displayed_exp / displayed_max_exp
         expbar.region_rect.size.x = int(exp_percent * expbar.texture.get_width())
-        exp_label.text = String(int(displayed_exp)) + " / " + String(int(displayed_max_exp))
 
         return
 

@@ -1,0 +1,349 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://ui/frame.png" type="Texture" id=1]
+[ext_resource path="res://ui/gba.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://ui/library/library.gd" type="Script" id=3]
+[ext_resource path="res://ui/library/library_prompt.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/cursor.png" type="Texture" id=5]
+[ext_resource path="res://ui/nickname/nickname_prompt.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/spell_info_detailed/spell_info_detailed.tscn" type="PackedScene" id=7]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 2 )
+
+[node name="library" type="NinePatchRect"]
+margin_right = 320.0
+margin_bottom = 288.0
+texture = ExtResource( 1 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="header" type="NinePatchRect" parent="."]
+margin_right = 320.0
+margin_bottom = 47.0
+texture = ExtResource( 1 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="label" type="Label" parent="header"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 309.0
+margin_bottom = 43.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "RAVEN   
+72 spells known"
+autowrap = true
+max_lines_visible = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="kp_label" type="Label" parent="header"]
+margin_left = 12.0
+margin_top = 8.0
+margin_right = 309.0
+margin_bottom = 43.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "20 KP"
+align = 2
+autowrap = true
+max_lines_visible = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="list" type="NinePatchRect" parent="."]
+margin_top = 47.0
+margin_right = 320.0
+margin_bottom = 288.0
+texture = ExtResource( 1 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cursor" type="Sprite" parent="list"]
+position = Vector2( 8, 24 )
+texture = ExtResource( 5 )
+offset = Vector2( 5, 7 )
+
+[node name="nav_up" type="Sprite" parent="list"]
+position = Vector2( 160, 11 )
+rotation = -1.5708
+texture = ExtResource( 5 )
+
+[node name="nav_down" type="Sprite" parent="list"]
+position = Vector2( 160, 229 )
+rotation = 1.5708
+texture = ExtResource( 5 )
+
+[node name="items" type="VBoxContainer" parent="list"]
+margin_left = 24.0
+margin_top = 26.0
+margin_right = 280.0
+margin_bottom = 222.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item" type="Label" parent="list/items"]
+margin_right = 256.0
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item"]
+margin_left = 31.813
+margin_right = 287.813
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "100 KP"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item2" type="Label" parent="list/items"]
+margin_top = 20.0
+margin_right = 256.0
+margin_bottom = 36.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item2"]
+margin_left = 31.813
+margin_right = 287.813
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "KNOWN"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item3" type="Label" parent="list/items"]
+margin_top = 40.0
+margin_right = 256.0
+margin_bottom = 56.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item3"]
+margin_left = 31.813
+margin_right = 287.813
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "100 KP"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item4" type="Label" parent="list/items"]
+margin_top = 60.0
+margin_right = 256.0
+margin_bottom = 76.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item4"]
+margin_left = 31.813
+margin_right = 287.813
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "100 KP"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item5" type="Label" parent="list/items"]
+margin_top = 80.0
+margin_right = 256.0
+margin_bottom = 96.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item5"]
+margin_left = 31.813
+margin_right = 287.813
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "100 KP"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item6" type="Label" parent="list/items"]
+margin_top = 100.0
+margin_right = 256.0
+margin_bottom = 116.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item6"]
+margin_left = 31.813
+margin_right = 287.813
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "100 KP"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item7" type="Label" parent="list/items"]
+margin_top = 120.0
+margin_right = 256.0
+margin_bottom = 136.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item7"]
+margin_left = 31.813
+margin_right = 287.813
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "100 KP"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item8" type="Label" parent="list/items"]
+margin_top = 140.0
+margin_right = 256.0
+margin_bottom = 156.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item8"]
+margin_left = 31.813
+margin_right = 287.813
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "100 KP"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item9" type="Label" parent="list/items"]
+margin_top = 160.0
+margin_right = 256.0
+margin_bottom = 176.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item9"]
+margin_left = 31.813
+margin_right = 287.813
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "100 KP"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item10" type="Label" parent="list/items"]
+margin_top = 180.0
+margin_right = 256.0
+margin_bottom = 196.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "APPLEFIGHT"
+
+[node name="qty" type="Label" parent="list/items/item10"]
+margin_left = 31.813
+margin_right = 287.813
+margin_bottom = 16.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "100 KP"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="prompt" parent="." instance=ExtResource( 4 )]
+margin_left = 192.0
+margin_top = 197.0
+margin_right = 309.0
+margin_bottom = 231.0
+
+[node name="info" parent="." instance=ExtResource( 7 )]
+margin_left = 11.0
+margin_top = 48.0
+margin_right = 309.0
+margin_bottom = 150.0
+
+[node name="learn_prompt" type="NinePatchRect" parent="."]
+margin_left = 11.0
+margin_top = 150.0
+margin_right = 309.0
+margin_bottom = 197.0
+texture = ExtResource( 1 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="label" type="Label" parent="learn_prompt"]
+margin_left = 8.0
+margin_top = 7.0
+margin_right = 305.0
+margin_bottom = 42.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Spend 100 KP to learn APPLEFIGHT?"
+autowrap = true
+max_lines_visible = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="yesno_prompt" parent="." instance=ExtResource( 6 )]
+margin_left = 224.0
+margin_top = 197.0
+margin_right = 309.0
+margin_bottom = 255.0

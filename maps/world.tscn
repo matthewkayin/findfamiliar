@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://maps/tiles.png" type="Texture" id=1]
 [ext_resource path="res://maps/map.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://ui/pause_menu/pause_menu.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/party_menu/party_menu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://ui/item_menu/item_menu.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/library/library.tscn" type="PackedScene" id=7]
 
 [sub_resource type="TileSet" id=1]
 0/name = "tiles.png 0"
@@ -59,4 +60,7 @@ visible = false
 visible = false
 
 [node name="item_menu" parent="ui" instance=ExtResource( 6 )]
+visible = false
+
+[node name="library" parent="ui" instance=ExtResource( 7 )]
 visible = false
