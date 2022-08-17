@@ -1,7 +1,10 @@
 extends Node2D
 
+signal finished
+
 onready var party = get_node("/root/Party")
 onready var inventory = get_node("/root/Inventory")
+onready var random = get_node("/root/Random")
 
 onready var dialog = $ui/dialog
 onready var choose_action = $ui/choose_action
@@ -12,7 +15,6 @@ onready var player_sprite = $player_sprite
 onready var enemy_sprite = $enemy_sprite
 onready var tween = $tween
 onready var timer = $timer
-onready var rng = RandomNumberGenerator.new()
 onready var party_menu = $ui/party_menu
 onready var item_menu = $ui/item_menu
 onready var gem_sprite = $gem_sprite
@@ -30,9 +32,7 @@ enum State {
     ENTER,
     CHOOSE_ACTION,
     CHOOSE_SPELL,
-    ACTION,
-    PLAYER_LOSS,
-    PLAYER_WIN,
+    ACTION
 }
 
 var next_state = null
@@ -50,14 +50,14 @@ func _ready():
 
     party_menu.close(false)
     item_menu.close(false)
-    rng.randomize()
 
-    var raven_species = load("res://data/species/raven.tres")
-    var growl = load("res://data/spells/growl.tres")
-    var firebolt = load("res://data/spells/fire_bolt.tres")
-    var witchbolt = load("res://data/spells/witch_bolt.tres")
-    enemy_familiar = Familiar.new(raven_species, 5)
-    enemy_familiar.spells = [firebolt, growl, witchbolt]
+    if enemy_familiar == null:
+        var raven_species = load("res://data/species/raven.tres")
+        var growl = load("res://data/spells/growl.tres")
+        var firebolt = load("res://data/spells/fire_bolt.tres")
+        var witchbolt = load("res://data/spells/witch_bolt.tres")
+        enemy_familiar = Familiar.new(raven_species, 5)
+        enemy_familiar.spells = [firebolt, growl, witchbolt, null]
 
     next_state = State.ENTER
 
@@ -228,7 +228,7 @@ func begin_action():
         dialog.open_and_split(attacker_name + " used " + action.spell.name + "!")
         yield(dialog, "finished")
 
-        var attack_accuracy_value = rng.randi_range(1, 100)
+        var attack_accuracy_value = random.rng.randi_range(1, 100)
         var attack_hit = attack_accuracy_value <= action.spell.accuracy or action.spell.accuracy == -1
 
         if attack_hit:
@@ -264,7 +264,7 @@ func begin_action():
                 yield(attacker_healthbar, "finished")
 
             for i in range(0, action.spell.conditions.size()):
-                var condition_apply_value = rng.randf_range(0.0, 1.0)
+                var condition_apply_value = random.rng.randf_range(0.0, 1.0)
                 if condition_apply_value > action.spell.condition_rates[i]:
                     continue
                 var message = defender.add_condition(action.spell.conditions[i])
@@ -302,7 +302,7 @@ func begin_action():
             var health_mod = float(((3.0 * defender.max_health) - (2.0 * defender.health)) / (3.0 * defender.max_health)) # (3max_health - 2health) / 3max_health
             var gem_mod = 1.0 + (float(1) * 0.5) # 1 + (0.5 * gem_grade)
             var catch_rate = health_mod * gem_mod * defender.species.catch_rate
-            var catch_value = rng.randf_range(0.0, 1.0)
+            var catch_value = random.rng.randf_range(0.0, 1.0)
 
             var catch_ticks: int = 3
             var catch_successful = catch_value <= catch_rate
@@ -324,6 +324,7 @@ func begin_action():
                 nickname.open(enemy_familiar)
                 yield(nickname, "finished")
                 party.add_familiar(enemy_familiar)
+                exit()
                 return
             else:
                 dialog.open_and_split("Oh no! It broke free!")
@@ -335,9 +336,13 @@ func begin_action():
         yield(attacker_healthbar, "finished")
         if not dialog.is_finished():
             yield(dialog, "finished")
+
+    var is_battle_over = party.living_familiar_count() == 0 or not enemy_familiar.is_living()
     
     # Tick conditions
     for condition in attacker.conditions:
+        if is_battle_over or not attacker.is_living():
+            break
         if condition.ttl != Conditions.DURATION_INDEFINITE:
             condition.ttl -= 1
             if condition.ttl <= 0:
@@ -348,9 +353,9 @@ func begin_action():
                 continue
 
     if party.living_familiar_count() == 0:
-        next_state = State.PLAYER_LOSS
+        exit()
     elif not enemy_familiar.is_living():
-        next_state = State.PLAYER_WIN
+        exit()
     elif not player_familiar.is_living():
         party_menu.context = PartyMenu.Context.SUMMON
         party_menu.allow_back = false
@@ -402,9 +407,10 @@ func gain_experience():
         if player_familiar.get_experience_left_for_level() == 0:
             if not dialog.is_finished():
                 yield(dialog, "finished")
+            player_familiar.level += 1
+            player_healthbar.update()
             dialog.open_and_split(player_familiar.get_name() + " grew to level " + String(player_familiar.level) + "!")
             yield(dialog, "finished")
-            player_familiar.level += 1
             was_level_up = true
         elif was_level_up and other_level_up_messages.size() == 0:
             dialog.open("")
@@ -439,13 +445,13 @@ func spell_compute_damage(attacker, defender, spell):
     # Compute crit
     var crit_mod = 1.0
     var crit_chance = attacker.speed / 2
-    var crit_value = rng.randi_range(0, 255)
+    var crit_value = random.rng.randi_range(0, 255)
     if crit_value <= crit_chance:
         crit_mod = 2.0
 
-    var random = rng.randf_range(0.85, 1.0)
+    var random_mod = random.rng.randf_range(0.85, 1.0)
     return {
-        "damage": int(base_damage * stab * type_mod * crit_mod * random),
+        "damage": int(base_damage * stab * type_mod * crit_mod * random_mod),
         "effectiveness": type_mod,
         "crit": crit_mod
     }
@@ -467,12 +473,8 @@ func open_player_healthbar():
     player_healthbar.set_familiar(player_familiar)
     player_healthbar.visible = true
 
-func begin_player_loss():
-    dialog.open_and_split("You lose!")
-    yield(dialog, "finished")
+func exit():
     next_state = null
-
-func begin_player_win():
-    dialog.open_and_split("You win!")
-    yield(dialog, "finished")
-    next_state = null
+    for familiar in party.familiars:
+        familiar.do_post_battle_stuff()
+    emit_signal("finished")

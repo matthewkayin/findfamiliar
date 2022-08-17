@@ -1,5 +1,7 @@
 extends Area2D
 
+signal took_step
+
 onready var sprite = $sprite
 onready var map = get_parent().get_node("tilemap")
 onready var pause_menu = get_parent().get_node("ui/pause_menu")
@@ -61,6 +63,7 @@ func move():
             var old_position = position - (facing_direction * TILE_SIZE)
             map.free_tile(old_position)
             target_position = Vector2.ZERO
+            emit_signal("took_step")
     if not is_moving() and input_direction != Vector2.ZERO:
         var desired_target = position + (input_direction * TILE_SIZE)
         if map.is_tile_free(desired_target):

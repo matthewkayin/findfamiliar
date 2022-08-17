@@ -51,25 +51,25 @@ func set_level(value: int):
 func get_attack() -> int:
     for condition in conditions:
         if condition.type == Conditions.Condition.ATTACK_UP:
-            return int(ceil(attack * 2.0))
+            return int(ceil(attack * 1.5))
         elif condition.type == Conditions.Condition.ATTACK_DOWN:
-            return int(ceil(attack / 2.0))
+            return int(ceil(attack / 1.5))
     return attack
 
 func get_defense() -> int:
     for condition in conditions:
         if condition.type == Conditions.Condition.DEFENSE_UP:
-            return int(ceil(defense * 2.0))
+            return int(ceil(defense * 1.5))
         elif condition.type == Conditions.Condition.DEFENSE_DOWN:
-            return int(ceil(defense / 2.0))
+            return int(ceil(defense / 1.5))
     return defense
 
 func get_speed() -> int:
     for condition in conditions:
         if condition.type == Conditions.Condition.SPEED_UP:
-            return int(ceil(speed * 2.0))
+            return int(ceil(speed * 1.5))
         elif condition.type == Conditions.Condition.SPEED_DOWN:
-            return int(ceil(speed / 2.0))
+            return int(ceil(speed / 1.5))
     return speed
 
 func update_stats():
@@ -109,6 +109,8 @@ func get_kp() -> int:
 func change_health(amount: int):
     health += amount
     health = int(clamp(health, 0, max_health))
+    if health == 0:
+        mana = 0
 
 func change_mana(amount: int):
     mana += amount

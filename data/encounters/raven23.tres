@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=5 format=2]
+
+[ext_resource path="res://data/encounter.gd" type="Script" id=1]
+[ext_resource path="res://data/spells/witch_bolt.tres" type="Resource" id=2]
+[ext_resource path="res://data/species/raven.tres" type="Resource" id=3]
+[ext_resource path="res://data/spells/growl.tres" type="Resource" id=4]
+
+[resource]
+script = ExtResource( 1 )
+species = ExtResource( 3 )
+low_level = 2
+high_level = 3
+spells = [ ExtResource( 2 ), ExtResource( 4 ) ]

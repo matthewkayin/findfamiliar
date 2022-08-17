@@ -10,5 +10,6 @@ desc = ""
 cast_cost = 3
 learn_cost = 2
 power = 50
+accuracy = 75
 conditions = [  ]
 condition_rates = [  ]
