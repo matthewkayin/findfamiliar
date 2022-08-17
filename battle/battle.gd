@@ -27,6 +27,7 @@ var enemy_familiar = null
 
 var actions = []
 var participants = []
+var escape_attempts = 0
 
 enum State {
     ENTER,
@@ -135,6 +136,12 @@ func begin_choose_action():
             "what": "rest"
         })
         end_choose_action()
+    elif choose_action.choice == "RUN":
+        actions.append({
+            "who": "player",
+            "what": "run"
+        })
+        end_choose_action()
     else:
         next_state = State.CHOOSE_ACTION
 
@@ -225,6 +232,9 @@ func begin_action():
         defender_name = defender.get_name()
 
     if action.what == "spell":
+        if action.who == "player":
+            escape_attempts = 0
+
         dialog.open_and_split(attacker_name + " used " + action.spell.name + "!")
         yield(dialog, "finished")
 
@@ -335,6 +345,18 @@ func begin_action():
         attacker_healthbar.update()
         yield(attacker_healthbar, "finished")
         if not dialog.is_finished():
+            yield(dialog, "finished")
+    elif action.what == "run":
+        var escape_odds = int((attacker.speed * 32) / (int(float(defender.speed) / 4.0) % 256)) + (30 * escape_attempts)
+        var escape_value = random.rng.randi_range(0, 255)
+        if escape_value <= escape_odds:
+            dialog.open_and_split("Got away safely!")
+            yield(dialog, "finished")
+            exit()
+            return
+        else:
+            escape_attempts += 1
+            dialog.open_and_split("Can't escape!")
             yield(dialog, "finished")
 
     var is_battle_over = party.living_familiar_count() == 0 or not enemy_familiar.is_living()
