@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://maps/objects/house/house.png" type="Texture" id=1]
+[ext_resource path="res://maps/objects/object.gd" type="Script" id=2]
+
+[node name="house" type="Sprite"]
+scale = Vector2( 2, 2 )
+texture = ExtResource( 1 )
+centered = false
+script = ExtResource( 2 )
+exempt_tiles = [ Vector2( 1, 3 ) ]

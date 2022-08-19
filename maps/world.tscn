@@ -74,6 +74,7 @@ visible = false
 visible = false
 
 [node name="encounter_area" type="Area2D" parent="."]
+visible = false
 position = Vector2( 16, 80 )
 script = ExtResource( 8 )
 encounters = [ ExtResource( 9 ) ]
