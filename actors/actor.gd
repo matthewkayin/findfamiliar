@@ -1,19 +1,17 @@
 extends Area2D
+class_name Actor
 
 signal took_step
 
 onready var map = get_parent().get_node("tilemap")
-onready var pause_menu = get_parent().get_node("ui/pause_menu")
 onready var sprite = $sprite
-onready var move_input_timer = $move_input_timer
 
 const TILE_SIZE = Vector2(32, 32)
 
-var input_direction: Vector2 = Vector2.ZERO
 var facing_direction: Vector2 = Vector2.DOWN
 var target_position = null
 var paused: bool = false
-var speed: int = 2.0
+var speed: int = 96
 
 func _ready():
     add_to_group("actors")
@@ -22,63 +20,34 @@ func _ready():
 func is_moving():
     return target_position != null
 
-func handle_input():
-    var previous_input_direction = input_direction
-    for direction in range(0, Direction.NAMES.size()):
-        if Input.is_action_just_pressed(Direction.NAMES[direction]):
-            input_direction = Direction.VECTORS[direction]
-        if Input.is_action_just_released(Direction.NAMES[direction]):
-            input_direction = Vector2.ZERO
-            for other_direction in range(0, Direction.NAMES.size()):
-                if other_direction == direction:
-                    continue
-                if Input.is_action_pressed(Direction.NAMES[other_direction]):
-                    input_direction = Direction.VECTORS[other_direction]
-                    break
+func _physics_process(delta):
+    _update(delta)
 
-    if input_direction != Vector2.ZERO:
-        facing_direction = input_direction
-    if previous_input_direction == Vector2.ZERO and previous_input_direction != input_direction:
-        move_input_timer.start(0.1)
-    if input_direction == Vector2.ZERO and not move_input_timer.is_stopped():
-        move_input_timer.stop()
-    
-    if Input.is_action_just_pressed("menu"):
-        if not paused:
-            for actor in get_tree().get_nodes_in_group("actors"):
-                actor.pause()
-            pause_menu.open()
-        else:
-            for actor in get_tree().get_nodes_in_group("actors"):
-                actor.resume()
-            pause_menu.close()
-
-func _process(_delta):
-    if paused and pause_menu.choice == ChoiceDialog.NONE:
-        for actor in get_tree().get_nodes_in_group("actors"):
-            actor.resume()
-    handle_input()
-    move()
+func _update(delta):
+    move(delta)
     update_sprite()
 
-func move():
+func move(delta):
     if paused:
         return
     if is_moving():
         facing_direction = position.direction_to(target_position)
-        if position.distance_to(target_position) <= speed:
+        var step_distance = speed * delta
+        if position.distance_to(target_position) <= step_distance * 1.5:
             position = target_position
         else:
-            position += facing_direction * speed
+            position += facing_direction * step_distance
         if position == target_position:
             var old_position = position - (facing_direction * TILE_SIZE)
             map.free_tile(old_position)
             target_position = null
-    if not is_moving() and move_input_timer.is_stopped() and input_direction != Vector2.ZERO:
-        var desired_target = position + (input_direction * TILE_SIZE)
-        if map.is_tile_free(desired_target):
-            target_position = desired_target
-            map.reserve_tile(target_position)
+            emit_signal("took_step")
+
+func try_move(direction: Vector2):
+    var desired_target = position + (direction * TILE_SIZE)
+    if map.is_tile_free(desired_target):
+        target_position = desired_target
+        map.reserve_tile(target_position)
 
 func update_sprite():
     if paused:
@@ -94,11 +63,11 @@ func update_sprite():
         sprite.frame = 1
 
     sprite.flip_h = facing_direction == Vector2.LEFT
-    if input_direction == Vector2.ZERO:
+    if not is_moving(): 
         sprite.stop()
         sprite.frame = 0
 
-    sprite.speed_scale = 1.0
+    sprite.speed_scale = 96.0 / speed
     if sprite.is_playing() and not is_moving():
         sprite.speed_scale = 0.5
 

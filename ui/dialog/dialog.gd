@@ -11,6 +11,7 @@ const DEFAULT_CHAR_SPEED = 0.05
 var speed = DEFAULT_CHAR_SPEED
 var hide_on_close = true
 var clear_on_finish = true
+var just_opened = false
 
 func _ready():
     timer.connect("timeout", self, "_on_char_timeout")
@@ -40,6 +41,7 @@ func open(with_text: String):
     label.visible_characters = 0
     visible = true
     timer.start(speed)
+    just_opened = true
 
 func close():
     if hide_on_close:
@@ -58,6 +60,9 @@ func progress():
         emit_signal("finished")
     
 func _process(_delta):
+    if just_opened:
+        just_opened = false
+        return
     if Input.is_action_just_pressed("action"):
         progress()
 

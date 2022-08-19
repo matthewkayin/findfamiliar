@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Area2D",
+"class": "Actor",
+"language": "GDScript",
+"path": "res://actors/actor.gd"
+}, {
 "base": "NinePatchRect",
 "class": "ChoiceDialog",
 "language": "GDScript",
@@ -65,6 +70,7 @@ _global_script_classes=[ {
 "path": "res://data/type.gd"
 } ]
 _global_script_class_icons={
+"Actor": "",
 "ChoiceDialog": "",
 "Conditions": "",
 "Direction": "",
