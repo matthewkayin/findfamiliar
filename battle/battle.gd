@@ -11,6 +11,8 @@ onready var choose_action = $ui/choose_action
 onready var choose_spell = $ui/choose_spell
 onready var player_healthbar = $player_healthbar
 onready var enemy_healthbar = $enemy_healthbar
+onready var player_gembar = $player_gembar
+onready var enemy_gembar = $enemy_gembar
 onready var player_sprite = $player_sprite
 onready var enemy_sprite = $enemy_sprite
 onready var tween = $tween
@@ -23,8 +25,10 @@ onready var nickname = $ui/nickname
 onready var screen_rect = get_viewport_rect()
 
 var player_familiar = null
+var enemy_summoner = null
 var enemy_familiar = null
-
+var enemy_familiars = []
+var is_summoner_battle = false
 var actions = []
 var participants = []
 var escape_attempts = 0
@@ -52,7 +56,16 @@ func _ready():
     party_menu.close(false)
     item_menu.close(false)
 
-    if enemy_familiar == null:
+    is_summoner_battle = enemy_summoner != null
+    if is_summoner_battle:
+        # Generate familiars from summoner party info
+        for i in range(0, enemy_summoner.party_species.size()):
+            var next_familiar = Familiar.new(enemy_summoner.party_species[i], enemy_summoner.party_level[i])
+            for j in range(0, enemy_summoner.party_spells[i].size()):
+                next_familiar.spells[j] = enemy_summoner.party_spells[i][j]
+            enemy_familiars.append(next_familiar)
+        enemy_familiar = enemy_familiars[0]
+    elif enemy_familiar == null:
         var raven_species = load("res://data/species/raven.tres")
         var growl = load("res://data/spells/growl.tres")
         var firebolt = load("res://data/spells/fire_bolt.tres")
@@ -69,29 +82,73 @@ func _process(_delta):
         var state_function = "begin_" + State.keys()[state].to_lower()
         call(state_function)
 
+func start_sprite_movement(sprite, from, duration):
+    var old_pos = sprite.position
+    sprite.position = from
+    sprite.offset = Vector2.ZERO
+    sprite.region_rect.size = Vector2(56, 56)
+    sprite.visible = true
+    tween.interpolate_property(sprite, "position", from, old_pos, duration)
+
 func begin_enter():
-    tween.interpolate_property(player_sprite, "position", Vector2(screen_rect.size.x + 56, player_sprite.position.y), player_sprite.position, 1.0)
-    tween.interpolate_property(enemy_sprite, "position", Vector2(-56, enemy_sprite.position.y), enemy_sprite.position, 1.0)
+    player_sprite.texture = load("res://battle/summoners/player.png")
+    player_sprite.visible = true
+
+    if is_summoner_battle:
+        enemy_sprite.texture = enemy_summoner.texture
+        enemy_sprite.visible = true
+        enemy_healthbar.visible = false
+    else:
+        enemy_sprite.set_familiar(enemy_familiar)
+
+    start_sprite_movement(player_sprite, Vector2(screen_rect.size.x + 56, player_sprite.position.y), 1.0)
+    start_sprite_movement(enemy_sprite, Vector2(-56, enemy_sprite.position.y), 1.0)
     tween.start()
-    enemy_sprite.set_familiar(enemy_familiar)
 
     yield(tween, "tween_all_completed")
 
-    dialog.open_and_split("A wild " + enemy_familiar.get_name() + " appeared!")
+    player_gembar.open(party.familiars)
+    if is_summoner_battle:
+        enemy_gembar.open(enemy_familiars)
+        dialog.open_and_split(enemy_summoner.name + " wants to battle!")
+    else:
+        dialog.open_and_split("A wild " + enemy_familiar.get_name() + " appeared!")
 
     yield(dialog, "finished")
 
-    open_enemy_healthbar()
+    if is_summoner_battle:
+        yield(enemy_summon(), "completed")
+    else:
+        open_enemy_healthbar()
     yield(player_summon(), "completed")
     next_state = State.CHOOSE_ACTION
 
 func player_summon():
+    player_gembar.visible = false
     player_familiar = party.familiars[0]
     dialog.open_and_split("You summon " + player_familiar.get_name() + "!")
 
     yield(dialog, "finished")
     player_sprite.set_familiar(player_familiar)
     open_player_healthbar()
+
+func enemy_summon():
+    enemy_gembar.visible = false
+    enemy_familiar = enemy_familiars[0]
+    dialog.open_and_split(enemy_summoner.name + " summoned " + enemy_familiar.get_name() + "!")
+
+    yield(dialog, "finished")
+    enemy_sprite.set_familiar(enemy_familiar)
+    open_enemy_healthbar()
+
+func is_enemy_wiped():
+    if is_summoner_battle:
+        var living_familiar_count = 0
+        for familiar in enemy_familiars:
+            if familiar.is_living():
+                living_familiar_count += 1
+        return living_familiar_count == 0
+    return not enemy_familiar.is_living()
 
 func begin_choose_action():
     choose_action.open()
@@ -376,7 +433,25 @@ func begin_action():
 
     if party.living_familiar_count() == 0:
         exit()
-    elif not enemy_familiar.is_living():
+    elif is_enemy_wiped():
+        # Announce enemy lost
+        dialog.open_and_split(enemy_summoner.name + " was defeated!")
+        yield(dialog, "finished")
+
+        # Pull enemy sprite into view
+        enemy_sprite.texture = enemy_summoner.texture
+        start_sprite_movement(enemy_sprite, Vector2(screen_rect.size.x + 56, enemy_sprite.position.y), 0.7)
+        tween.start()
+        yield(tween, "tween_all_completed")
+
+        # Run enemy closer
+        dialog.open_and_split(enemy_summoner.closer)
+        yield(dialog, "finished")
+
+        # Give player money
+        dialog.open_and_split("A hundred bucks? Gee thanks!")
+        yield(dialog, "finished")
+
         exit()
     elif not player_familiar.is_living():
         party_menu.context = PartyMenu.Context.SUMMON
@@ -386,6 +461,15 @@ func begin_action():
         party_menu.allow_back = true
         party.swap_familiars(0, party_menu.switch_index)
         yield(player_summon(), "completed")
+        next_state = State.CHOOSE_ACTION
+    elif not enemy_familiar.is_living():
+        var next_familiar = 1
+        while not enemy_familiars[next_familiar].is_living():
+            next_familiar += 1
+        var temp = enemy_familiars[0]
+        enemy_familiars[0] = enemy_familiars[next_familiar]
+        enemy_familiars[next_familiar] = temp
+        yield(enemy_summon(), "completed")
         next_state = State.CHOOSE_ACTION
     elif actions.size() == 0:
         next_state = State.CHOOSE_ACTION

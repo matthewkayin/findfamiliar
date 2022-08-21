@@ -20,6 +20,9 @@ func _ready():
 func is_moving():
     return target_position != null
 
+func is_on_tile():
+    return int(position.x) % 32 == 0 and int(position.y) % 32 == 0
+
 func _physics_process(delta):
     _update(delta)
 
@@ -48,6 +51,13 @@ func try_move(direction: Vector2):
     if map.is_tile_free(desired_target):
         target_position = desired_target
         map.reserve_tile(target_position)
+
+func try_move_to(new_target_position: Vector2):
+    if map.is_tile_free(new_target_position):
+        target_position = new_target_position
+        map.reserve_tile(new_target_position)
+    else:
+        print("try move to failed")
 
 func update_sprite():
     if paused:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://battle/battle.gd" type="Script" id=1]
 [ext_resource path="res://ui/choose_spell/choose_spell.tscn" type="PackedScene" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://ui/gem_sprite/gem_sprite.tscn" type="PackedScene" id=9]
 [ext_resource path="res://ui/nickname/nickname.tscn" type="PackedScene" id=10]
 [ext_resource path="res://ui/library/library.tscn" type="PackedScene" id=11]
+[ext_resource path="res://ui/gembar/gembar.tscn" type="PackedScene" id=12]
 
 [node name="battle" type="Node2D"]
 script = ExtResource( 1 )
@@ -58,6 +59,21 @@ margin_left = 8.0
 margin_top = 16.0
 margin_right = 8.0
 margin_bottom = 16.0
+
+[node name="player_gembar" parent="." instance=ExtResource( 12 )]
+visible = false
+margin_left = 135.723
+margin_top = 168.293
+margin_right = 135.723
+margin_bottom = 168.293
+
+[node name="enemy_gembar" parent="." instance=ExtResource( 12 )]
+visible = false
+margin_left = 9.85422
+margin_top = 11.6791
+margin_right = 9.85422
+margin_bottom = 11.6791
+flipped = true
 
 [node name="player_sprite" parent="." instance=ExtResource( 7 )]
 position = Vector2( 56, 176 )

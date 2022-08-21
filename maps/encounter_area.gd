@@ -32,4 +32,7 @@ func _on_player_took_step():
                 familiar.spells[i] = encounters[species_index].spells[i]
                 familiar.spells_known.append(familiar.spells[i])
 
-            director.start_battle(familiar)
+            director.start_battle({
+                "type": "wild",
+                "familiar": familiar
+            })

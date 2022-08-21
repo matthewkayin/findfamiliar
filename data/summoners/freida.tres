@@ -1,0 +1,18 @@
+[gd_resource type="Resource" load_steps=6 format=2]
+
+[ext_resource path="res://data/summonder.gd" type="Script" id=1]
+[ext_resource path="res://data/species/raven.tres" type="Resource" id=2]
+[ext_resource path="res://battle/summoners/player.png" type="Texture" id=3]
+[ext_resource path="res://data/spells/fire_bolt.tres" type="Resource" id=4]
+[ext_resource path="res://data/spells/growl.tres" type="Resource" id=5]
+
+[resource]
+script = ExtResource( 1 )
+name = "Freida"
+texture = ExtResource( 3 )
+opener = "Alright, loser! Let's battle!"
+closer = "Oh? Have I really lost?"
+post_battle_dialog = "Hmm. I'm sad."
+party_species = [ ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ) ]
+party_level = [ 3, 3, 3 ]
+party_spells = [ [ ExtResource( 4 ), ExtResource( 5 ) ], [ ExtResource( 4 ), ExtResource( 5 ) ], [ ExtResource( 4 ), ExtResource( 5 ) ] ]

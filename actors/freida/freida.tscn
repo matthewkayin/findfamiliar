@@ -83,7 +83,7 @@ shape = SubResource( 1 )
 [node name="sprite" type="AnimatedSprite" parent="."]
 position = Vector2( 8, 8 )
 frames = SubResource( 17 )
-animation = "side"
+animation = "front"
 
 [node name="timer" type="Timer" parent="."]
 one_shot = true

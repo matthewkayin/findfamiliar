@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://maps/tiles.png" type="Texture" id=1]
 [ext_resource path="res://maps/map.gd" type="Script" id=2]
@@ -10,7 +10,8 @@
 [ext_resource path="res://maps/objects/house/house.tscn" type="PackedScene" id=8]
 [ext_resource path="res://actors/freida/freida.tscn" type="PackedScene" id=9]
 [ext_resource path="res://ui/dialog/dialog.tscn" type="PackedScene" id=10]
-[ext_resource path="res://events/dialog_event.gd" type="Script" id=11]
+[ext_resource path="res://events/summoner_battle_event/summoner_event.tscn" type="PackedScene" id=11]
+[ext_resource path="res://data/summoners/freida.tres" type="Resource" id=12]
 
 [sub_resource type="ConvexPolygonShape2D" id=2]
 points = PoolVector2Array( 0, 0, 16, 0, 16, 32, 0, 32 )
@@ -176,6 +177,5 @@ margin_bottom = 288.0
 position = Vector2( 128, 64 )
 path = [ "face,down", "wait,1", "move,left,2", "move,right,2", "wait,3" ]
 
-[node name="interact_event" type="Node2D" parent="freida"]
-script = ExtResource( 11 )
-lines = [ "I'm searching for wild mushrooms!", "Have you seen any around here? Hmm I guess not." ]
+[node name="interact_event" parent="freida" instance=ExtResource( 11 )]
+summoner = ExtResource( 12 )

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://events/dialog_event/dialog_event.gd" type="Script" id=1]
+
+[node name="interact_event" type="Node2D"]
+script = ExtResource( 1 )
