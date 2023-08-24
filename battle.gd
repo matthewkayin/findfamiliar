@@ -122,10 +122,6 @@ func do_action(action):
         attacker_party.mana -= action.spell.cost
         attacker_healthbar.update()
 
-        # check if move hits or misses
-        var accuracy_dc: int = action.spell.accuracy + (float(attacker.get_agility() - defender.get_agility()) / 1.5)
-        var spell_hit: bool = randi_range(0, 100) <= accuracy_dc
-
         # display spell message
         var message = ""
         if action.actor == ActionActor.ENEMY:
@@ -138,6 +134,11 @@ func do_action(action):
         # animate spell
         await attacker_sprite.animate_attack()
 
+        # check if move hits or misses
+        var spell_hit: bool = false
+        if action.spell.damage_type != Spell.DamageType.NONE:
+            var accuracy_dc: int = action.spell.accuracy + (float(attacker.get_agility() - defender.get_agility()) / 1.5)
+            spell_hit = randi_range(0, 100) <= accuracy_dc
         if spell_hit:
             # Compute base damage
             var attacker_attack: float = attacker.get_strength() if action.spell.damage_type == Spell.DamageType.PHYSICAL else attacker.get_intellect()
@@ -185,7 +186,7 @@ func do_action(action):
                 await defender_healthbar.finished
 
             # check if defender is dead
-            if defender.health == 0:
+            if not defender.is_living():
                 var faint_message = ""
                 if action.actor == ActionActor.PLAYER:
                     faint_message += "Enemy "
@@ -199,7 +200,7 @@ func do_action(action):
                 defender_healthbar.close()
                 dialog.clear()
         # else if not spell hit
-        else:
+        elif action.spell.damage_type != Spell.DamageType.NONE:
             var miss_message = ""
             if action.actor == ActionActor.ENEMY:
                 miss_message += "Enemy "
@@ -207,6 +208,61 @@ func do_action(action):
             dialog.open(miss_message)
             await dialog.finished
             dialog.clear()
+
+        # determine if condition hit
+        var condition_hit: bool = false
+        var condition_dc: int = action.spell.condition_accuracy
+        if defender.is_living() and action.spell.condition_target == Condition.Target.OPPONENT:
+            condition_dc += int(float(attacker.get_intelligence() - defender.get_intelligence()) / 1.5)
+            condition_hit = randi_range(0, 100) <= condition_dc
+        elif action.spell.condition_target == Condition.Target.SELF or action.spell.condition_target == Condition.Target.PARTY:
+            condition_hit = true
+
+        # handle spell conditions
+        if condition_hit:
+            for condition in action.spell.conditions:
+                # apply condition
+                var use_apply_message: bool = false
+                if condition.target == Condition.Target.SELF:
+                    use_apply_message = attacker.add_condition(condition.type)
+                elif condition.target == Condition.Target.PARTY:
+                    for familiar in attacker_party.familiars:
+                        familiar.add_condition(condition.type)
+                    use_apply_message = true
+                elif condition.target == Condition.Target.OPPONENT:
+                    use_apply_message = defender.add_condition(condition.type)
+
+                # display condition message
+                # set condition message name
+                var condition_message = ""
+                if condition.target == Condition.Target.PARTY:
+                    condition_message = "Your party" if action.actor == ActionActor.PLAYER else "Enemy party"
+                elif condition.target == Condition.Target.SELF:
+                    if action.actor == ActionActor.ENEMY:
+                        condition_message += "Enemy "
+                    condition_message = attacker.get_display_name()
+                elif condition.target == Condition.Target.OPPONENT:
+                    if action.actor == ActionActor.PLAYER:
+                        condition_message += "Enemy "
+                    condition_message = defender.get_display_name()
+                # set condition message content
+                if use_apply_message: 
+                    condition_message += Condition.INFO[condition.type].apply_message
+                elif action.spell.damage_type == Spell.DamageType.NONE:
+                    condition_message += Condition.INFO[condition.type].reapply_message
+                else:
+                    condition_message = ""
+                # open dialog box
+                if condition_message != "":
+                    dialog.open(condition_message)
+                    attacker_healthbar.refresh()
+                    defender_healthbar.refresh()
+                    await dialog.finished
+        # if not condition hit
+        else:
+            if action.spell.damage_type == Spell.DamageType.NONE:
+                dialog.open("But it failed!")
+                await dialog.finished
 
         # update battle flag
         attacker.has_attacked = true

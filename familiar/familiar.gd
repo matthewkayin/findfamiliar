@@ -17,6 +17,9 @@ var agility: int = 5
 # spells
 var spells: Array[Spell] = []
 
+# conditions
+var conditions: Array[Dictionary] = []
+
 # in battle flags
 var has_attacked: bool = false
 var has_switched: bool = false
@@ -38,16 +41,36 @@ func is_living() -> bool:
     return health > 0
 
 func get_strength() -> int:
-    return strength
+    var mod = 1.0
+    if has_condition(Condition.Type.STR_UP):
+        mod = 1.5
+    elif has_condition(Condition.Type.STR_DOWN):
+        mod = 0.75
+    return strength * mod
 
 func get_intellect() -> int:
-    return intellect
+    var mod = 1.0
+    if has_condition(Condition.Type.INT_UP):
+        mod = 1.5
+    elif has_condition(Condition.Type.INT_DOWN):
+        mod = 0.75
+    return intellect * mod
 
 func get_defense() -> int:
-    return defense
+    var mod = 1.0
+    if has_condition(Condition.Type.DEF_UP):
+        mod = 1.5
+    elif has_condition(Condition.Type.DEF_DOWN):
+        mod = 0.75
+    return defense * mod
 
 func get_agility() -> int:
-    return agility
+    var mod = 1.0
+    if has_condition(Condition.Type.AGI_UP):
+        mod = 1.5
+    elif has_condition(Condition.Type.AGI_DOWN):
+        mod = 0.75
+    return agility * mod
 
 # level, stats, and experience
 
@@ -84,3 +107,41 @@ func update_stats():
     intellect = int((species.base_intellect * 2.0 * level) / 100) + 5
     defense = int((species.base_defense * 2.0 * level) / 100) + 5
     agility = int((species.base_agility * 2.0 * level) / 100) + 5
+
+# conditions
+
+func has_condition(type: Condition.Type):
+    for condition in conditions:
+        if condition.type == type:
+            return true
+    return false
+
+func add_condition(type: Condition.Type) -> bool:
+    var remove_indices = []
+    for i in range(0, conditions.size()):
+        if conditions[i].type == type:
+            conditions[i].ttl = Condition.INFO[type].ttl
+            return false
+        if Condition.INFO[type].opposites.has(conditions[i].type):
+            remove_indices.append(i)
+            if not Condition.INFO[type].apply_anyway:
+                return true
+    for index in remove_indices:
+        conditions.remove_at(index)
+
+    conditions.append({
+        "type": type,
+        "ttl": Condition.INFO[type].ttl
+    })
+    return true
+
+func tick_conditions():
+    var remove_indices = []
+    for i in range(0, conditions.size()):
+        if conditions[i].ttl == Condition.TTL_INDEFINITE:
+            continue
+        conditions[i].ttl -= 1
+        if conditions[i].ttl == 0:
+            remove_indices.append(i)
+    for index in remove_indices:
+        conditions.remove_at(index)

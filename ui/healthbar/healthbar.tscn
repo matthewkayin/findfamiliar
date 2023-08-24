@@ -139,12 +139,16 @@ offset = Vector2(-4, -4)
 region_enabled = true
 region_rect = Rect2(16, 0, 8, 8)
 
-[node name="conditions" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
+[node name="conditions" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 96.0
 offset_bottom = 40.0
 
-[node name="Sprite2D" type="Sprite2D" parent="conditions"]
+[node name="Control" type="Control" parent="conditions"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="conditions/Control"]
 position = Vector2(10, -17)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_6bdwr")

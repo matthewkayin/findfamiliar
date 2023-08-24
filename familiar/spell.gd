@@ -15,3 +15,7 @@ enum DamageType {
 @export var damage_type: DamageType
 @export var accuracy: int
 @export var cost: int
+
+@export var conditions: Array[Condition.Type]
+@export var condition_target: Condition.Target
+@export var condition_accuracy: int
