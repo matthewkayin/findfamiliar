@@ -1,0 +1,95 @@
+[gd_scene load_steps=9 format=3 uid="uid://d3s1nxt7qpaqm"]
+
+[ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_rketr"]
+[ext_resource type="Script" path="res://ui/choicebox/choicebox.gd" id="2_60bfs"]
+[ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="3_8xq13"]
+[ext_resource type="Texture2D" uid="uid://cqve3mnfvk083" path="res://ui/cursor.png" id="4_svyio"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_64ttc"]
+font = ExtResource("3_8xq13")
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_lfj34"]
+font = ExtResource("3_8xq13")
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_3rw2h"]
+font = ExtResource("3_8xq13")
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mfdjd"]
+font = ExtResource("3_8xq13")
+font_color = Color(0, 0, 0, 1)
+
+[node name="spell_chooser" type="NinePatchRect"]
+texture_filter = 1
+offset_right = 188.0
+offset_bottom = 73.0
+texture = ExtResource("1_rketr")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource("2_60bfs")
+allow_back = true
+
+[node name="options" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="col1" type="Control" parent="options"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="label" type="Label" parent="options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 9.0
+offset_right = 278.0
+offset_bottom = 47.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_64ttc")
+
+[node name="label2" type="Label" parent="options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 24.0
+offset_right = 278.0
+offset_bottom = 62.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_8xq13")
+theme_override_font_sizes/font_size = 16
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_lfj34")
+
+[node name="label3" type="Label" parent="options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 39.0
+offset_right = 278.0
+offset_bottom = 77.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_8xq13")
+theme_override_font_sizes/font_size = 16
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_3rw2h")
+
+[node name="label4" type="Label" parent="options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 54.0
+offset_right = 278.0
+offset_bottom = 92.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_mfdjd")
+
+[node name="cursor" type="Sprite2D" parent="."]
+position = Vector2(12, 14)
+scale = Vector2(2, 2)
+texture = ExtResource("4_svyio")

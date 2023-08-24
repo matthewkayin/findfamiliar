@@ -1,0 +1,141 @@
+[gd_scene load_steps=7 format=3 uid="uid://q4cruliyg6x4"]
+
+[ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_d6e4j"]
+[ext_resource type="Script" path="res://ui/choicebox/item_chooser.gd" id="2_vtkab"]
+[ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="3_g8pxs"]
+[ext_resource type="Texture2D" uid="uid://cqve3mnfvk083" path="res://ui/cursor.png" id="4_818nb"]
+[ext_resource type="PackedScene" uid="uid://b7mpjknucy1aa" path="res://ui/item_info/item_info.tscn" id="5_ou7m1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_64ttc"]
+font = ExtResource("3_g8pxs")
+font_color = Color(0, 0, 0, 1)
+
+[node name="item_chooser" type="NinePatchRect"]
+texture_filter = 1
+offset_right = 188.0
+offset_bottom = 161.0
+texture = ExtResource("1_d6e4j")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource("2_vtkab")
+allow_back = true
+
+[node name="options" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="col1" type="Control" parent="options"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="label" type="Label" parent="options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 19.0
+offset_right = 278.0
+offset_bottom = 57.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_64ttc")
+
+[node name="quantity" type="Label" parent="options/col1/label"]
+texture_filter = 1
+layout_mode = 0
+offset_left = -96.0
+offset_top = 16.0
+offset_right = 160.0
+offset_bottom = 54.0
+text = "x2"
+label_settings = SubResource("LabelSettings_64ttc")
+horizontal_alignment = 2
+
+[node name="label2" type="Label" parent="options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 51.0
+offset_right = 278.0
+offset_bottom = 89.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_64ttc")
+
+[node name="quantity" type="Label" parent="options/col1/label2"]
+texture_filter = 1
+layout_mode = 0
+offset_left = -96.0
+offset_top = 16.0
+offset_right = 160.0
+offset_bottom = 54.0
+text = "x2"
+label_settings = SubResource("LabelSettings_64ttc")
+horizontal_alignment = 2
+
+[node name="label3" type="Label" parent="options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 83.0
+offset_right = 278.0
+offset_bottom = 121.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_64ttc")
+
+[node name="quantity" type="Label" parent="options/col1/label3"]
+texture_filter = 1
+layout_mode = 0
+offset_left = -96.0
+offset_top = 16.0
+offset_right = 160.0
+offset_bottom = 54.0
+text = "x2"
+label_settings = SubResource("LabelSettings_64ttc")
+horizontal_alignment = 2
+
+[node name="label4" type="Label" parent="options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 115.0
+offset_right = 278.0
+offset_bottom = 153.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_64ttc")
+
+[node name="quantity" type="Label" parent="options/col1/label4"]
+texture_filter = 1
+layout_mode = 0
+offset_left = -96.0
+offset_top = 16.0
+offset_right = 160.0
+offset_bottom = 54.0
+text = "x2"
+label_settings = SubResource("LabelSettings_64ttc")
+horizontal_alignment = 2
+
+[node name="cursor" type="Sprite2D" parent="."]
+position = Vector2(12, 42)
+scale = Vector2(2, 2)
+texture = ExtResource("4_818nb")
+
+[node name="up_arrow" type="Sprite2D" parent="."]
+position = Vector2(97, 10)
+rotation = -1.5708
+scale = Vector2(2, 2)
+texture = ExtResource("4_818nb")
+
+[node name="down_arrow" type="Sprite2D" parent="."]
+position = Vector2(97, 150)
+rotation = 1.5708
+scale = Vector2(2, 2)
+texture = ExtResource("4_818nb")
+
+[node name="item_info" parent="." instance=ExtResource("5_ou7m1")]
+layout_mode = 0
+offset_left = -132.0
+offset_top = 97.0
+offset_right = 0.0
+offset_bottom = 161.0

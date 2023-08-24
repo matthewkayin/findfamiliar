@@ -1,0 +1,87 @@
+[gd_scene load_steps=6 format=3 uid="uid://dht3x47llx8nr"]
+
+[ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_c12ct"]
+[ext_resource type="Script" path="res://ui/choicebox/choicebox.gd" id="2_33rxv"]
+[ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="2_skhsr"]
+[ext_resource type="Texture2D" uid="uid://cqve3mnfvk083" path="res://ui/cursor.png" id="3_0k37p"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_c6tjp"]
+line_spacing = 0.0
+font = ExtResource("2_skhsr")
+font_color = Color(0, 0, 0, 1)
+
+[node name="battle_actions" type="NinePatchRect"]
+texture_filter = 1
+offset_right = 128.0
+offset_bottom = 86.0
+texture = ExtResource("1_c12ct")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource("2_33rxv")
+
+[node name="options" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="col1" type="Control" parent="options"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="label" type="Label" parent="options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 8.0
+offset_right = 278.0
+offset_bottom = 46.0
+text = "SPELL"
+label_settings = SubResource("LabelSettings_c6tjp")
+
+[node name="label3" type="Label" parent="options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 23.0
+offset_right = 278.0
+offset_bottom = 61.0
+text = "SWITCH"
+label_settings = SubResource("LabelSettings_c6tjp")
+
+[node name="label4" type="Label" parent="options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 38.0
+offset_right = 278.0
+offset_bottom = 76.0
+text = "ITEM"
+label_settings = SubResource("LabelSettings_c6tjp")
+
+[node name="label5" type="Label" parent="options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 53.0
+offset_right = 278.0
+offset_bottom = 91.0
+text = "END"
+label_settings = SubResource("LabelSettings_c6tjp")
+
+[node name="label6" type="Label" parent="options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 68.0
+offset_right = 278.0
+offset_bottom = 106.0
+text = "RUN"
+label_settings = SubResource("LabelSettings_c6tjp")
+
+[node name="cursor" type="Sprite2D" parent="."]
+position = Vector2(12, 14)
+scale = Vector2(2, 2)
+texture = ExtResource("3_0k37p")

@@ -1,0 +1,288 @@
+[gd_scene load_steps=34 format=3 uid="uid://c82fmyo8tooq2"]
+
+[ext_resource type="Script" path="res://battle.gd" id="1_fkyrb"]
+[ext_resource type="Texture2D" uid="uid://4nfivuyyr34l" path="res://familiar/sprites/back/cat-sith.png" id="2_5cbjt"]
+[ext_resource type="Script" path="res://familiar_sprite.gd" id="3_chsc5"]
+[ext_resource type="PackedScene" uid="uid://e8xfwq5j4g1b" path="res://ui/healthbar/healthbar.tscn" id="3_fwexg"]
+[ext_resource type="PackedScene" uid="uid://dichyeix0c5g3" path="res://ui/dialog/dialog.tscn" id="3_ngrtx"]
+[ext_resource type="Texture2D" uid="uid://wms1mx2tepno" path="res://familiar/sprites/front/cat-sith.png" id="4_jy5vo"]
+[ext_resource type="Texture2D" uid="uid://dchi32cbk6v8i" path="res://battle/summon.png" id="4_lbf3j"]
+[ext_resource type="Texture2D" uid="uid://c7cs7ff0rekkt" path="res://battle/gem.png" id="5_i3qn4"]
+[ext_resource type="Script" path="res://gem_sprite.gd" id="6_qgu3n"]
+[ext_resource type="PackedScene" uid="uid://dht3x47llx8nr" path="res://ui/choicebox/battle_actions.tscn" id="6_ug4s5"]
+[ext_resource type="PackedScene" uid="uid://d3s1nxt7qpaqm" path="res://ui/choicebox/spell_chooser.tscn" id="7_p5s2c"]
+[ext_resource type="PackedScene" uid="uid://5ol8rm2tnr16" path="res://ui/spell_info/spell_info.tscn" id="9_8hqbq"]
+[ext_resource type="PackedScene" uid="uid://dyketwway3ubu" path="res://ui/popup/popup.tscn" id="10_cb1ib"]
+[ext_resource type="PackedScene" uid="uid://wphpyoii23gm" path="res://ui/party_menu/party_menu.tscn" id="11_j640b"]
+[ext_resource type="PackedScene" uid="uid://q4cruliyg6x4" path="res://ui/choicebox/item_chooser.tscn" id="13_w03tv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3r0mu"]
+atlas = ExtResource("4_lbf3j")
+region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yixou"]
+atlas = ExtResource("4_lbf3j")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lny8s"]
+atlas = ExtResource("4_lbf3j")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ysv81"]
+atlas = ExtResource("4_lbf3j")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yq7w6"]
+atlas = ExtResource("4_lbf3j")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4bjno"]
+atlas = ExtResource("4_lbf3j")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yfq6l"]
+atlas = ExtResource("4_lbf3j")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y0qjt"]
+atlas = ExtResource("4_lbf3j")
+region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lfuqd"]
+atlas = ExtResource("4_lbf3j")
+region = Rect2(160, 0, 40, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_t2tca"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3r0mu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yixou")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lny8s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ysv81")
+}],
+"loop": false,
+"name": &"summon",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yq7w6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4bjno")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yfq6l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y0qjt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lfuqd")
+}],
+"loop": false,
+"name": &"unsummon",
+"speed": 12.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nf1md"]
+atlas = ExtResource("5_i3qn4")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bihw8"]
+atlas = ExtResource("5_i3qn4")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ft22"]
+atlas = ExtResource("5_i3qn4")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4hyh8"]
+atlas = ExtResource("5_i3qn4")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ld7ei"]
+atlas = ExtResource("5_i3qn4")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fi71w"]
+atlas = ExtResource("5_i3qn4")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1tgyl"]
+atlas = ExtResource("5_i3qn4")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2ked5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nf1md")
+}],
+"loop": false,
+"name": &"catch",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bihw8")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ft22")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4hyh8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ld7ei")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fi71w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1tgyl")
+}],
+"loop": false,
+"name": &"flash",
+"speed": 7.0
+}]
+
+[node name="battle" type="Node2D"]
+texture_filter = 1
+script = ExtResource("1_fkyrb")
+
+[node name="bg" type="ColorRect" parent="."]
+offset_right = 320.0
+offset_bottom = 288.0
+
+[node name="enemy_sprite" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(256, 64)
+scale = Vector2(2, 2)
+texture = ExtResource("4_jy5vo")
+region_enabled = true
+region_rect = Rect2(0, 0, 40, 40)
+script = ExtResource("3_chsc5")
+is_enemy = true
+
+[node name="animation" type="AnimatedSprite2D" parent="enemy_sprite"]
+visible = false
+sprite_frames = SubResource("SpriteFrames_t2tca")
+animation = &"summon"
+
+[node name="player_sprite" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(48, 192)
+scale = Vector2(2, 2)
+texture = ExtResource("2_5cbjt")
+script = ExtResource("3_chsc5")
+
+[node name="animation" type="AnimatedSprite2D" parent="player_sprite"]
+visible = false
+sprite_frames = SubResource("SpriteFrames_t2tca")
+animation = &"unsummon"
+
+[node name="enemy_healthbar" parent="." instance=ExtResource("3_fwexg")]
+offset_left = 4.0
+offset_top = 28.0
+offset_right = 44.0
+offset_bottom = 68.0
+is_enemy = true
+
+[node name="player_healthbar" parent="." instance=ExtResource("3_fwexg")]
+offset_left = 120.0
+offset_top = 176.0
+offset_right = 160.0
+offset_bottom = 216.0
+
+[node name="gem_sprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(256, 108)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_2ked5")
+animation = &"flash"
+frame = 4
+frame_progress = 1.0
+centered = false
+offset = Vector2(-8, -16)
+script = ExtResource("6_qgu3n")
+
+[node name="dialog" parent="." instance=ExtResource("3_ngrtx")]
+offset_top = 232.0
+offset_bottom = 288.0
+
+[node name="spell_chooser" parent="." instance=ExtResource("7_p5s2c")]
+offset_left = 132.0
+offset_top = 215.0
+offset_right = 320.0
+offset_bottom = 288.0
+
+[node name="battle_actions" parent="." instance=ExtResource("6_ug4s5")]
+visible = false
+offset_left = 192.0
+offset_top = 202.0
+offset_right = 320.0
+offset_bottom = 288.0
+
+[node name="spell_info" parent="." instance=ExtResource("9_8hqbq")]
+offset_top = 215.0
+offset_bottom = 288.0
+
+[node name="spell_warning" parent="." instance=ExtResource("10_cb1ib")]
+visible = false
+offset_top = 184.0
+offset_bottom = 215.0
+timeout_duration = 1.5
+y_align = 1
+
+[node name="party_menu" parent="." instance=ExtResource("11_j640b")]
+offset_left = 72.0
+offset_top = 150.0
+offset_right = 320.0
+offset_bottom = 288.0
+
+[node name="party_warning" parent="." instance=ExtResource("10_cb1ib")]
+visible = false
+offset_left = 134.0
+offset_top = 119.0
+offset_right = 320.0
+offset_bottom = 150.0
+timeout_duration = 1.5
+x_align = 1
+y_align = 1
+
+[node name="item_chooser" parent="." instance=ExtResource("13_w03tv")]
+visible = false
+offset_left = 132.0
+offset_top = 127.0
+offset_right = 320.0
+offset_bottom = 288.0
+
+[node name="item_warning" parent="." instance=ExtResource("10_cb1ib")]
+visible = false
+offset_top = 205.0
+offset_bottom = 224.0
+timeout_duration = 1.5
+y_align = 1
+
+[node name="turn_popup" parent="." instance=ExtResource("10_cb1ib")]
+offset_left = 113.0
+offset_top = 105.0
+offset_right = 211.0
+offset_bottom = 124.0
+x_align = 2
+y_align = 2
+
+[node name="exp_timer" type="Timer" parent="."]
+one_shot = true

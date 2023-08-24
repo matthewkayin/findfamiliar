@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Spell" load_steps=2 format=3 uid="uid://brrs3jj51ffh5"]
+
+[ext_resource type="Script" path="res://familiar/spell.gd" id="1_au4w0"]
+
+[resource]
+script = ExtResource("1_au4w0")
+name = "TACKLE"
+element = 0
+desc = "Attack the
+boi"
+power = 30
+damage_type = 0
+accuracy = 100
+cost = 1

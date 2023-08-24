@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Item" load_steps=2 format=3 uid="uid://ci0qsgq1jcuoy"]
+
+[ext_resource type="Script" path="res://familiar/item.gd" id="1_kisne"]
+
+[resource]
+script = ExtResource("1_kisne")
+name = "POTION"
+type = 1
+desc = "Heal 20 HP"
+value = 20

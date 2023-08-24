@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Spell" load_steps=2 format=3 uid="uid://byq3580xa6bwe"]
+
+[ext_resource type="Script" path="res://familiar/spell.gd" id="1_8a2c0"]
+
+[resource]
+script = ExtResource("1_8a2c0")
+name = "SCRATCH"
+element = 0
+desc = "Scratch the
+boi"
+power = 50
+damage_type = 1
+accuracy = 70
+cost = 1

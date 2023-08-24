@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://dyketwway3ubu"]
+
+[ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_1ajel"]
+[ext_resource type="Script" path="res://ui/popup/popup.gd" id="2_jyc2j"]
+[ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="3_rs1ys"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_cjndi"]
+font = ExtResource("3_rs1ys")
+font_size = 8
+font_color = Color(0, 0, 0, 1)
+
+[node name="popup" type="NinePatchRect"]
+texture_filter = 1
+offset_right = 98.0
+offset_bottom = 19.0
+texture = ExtResource("1_1ajel")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource("2_jyc2j")
+
+[node name="label" type="Label" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 262.0
+offset_bottom = 70.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 8
+theme_override_fonts/font = ExtResource("3_rs1ys")
+theme_override_font_sizes/font_size = 16
+text = "Enemy turn!"
+label_settings = SubResource("LabelSettings_cjndi")
+
+[node name="timer" type="Timer" parent="."]
+one_shot = true

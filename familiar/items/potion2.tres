@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Item" load_steps=2 format=3 uid="uid://cnb7o35fo7nob"]
+
+[ext_resource type="Script" path="res://familiar/item.gd" id="1_unchm"]
+
+[resource]
+script = ExtResource("1_unchm")
+name = "POTION2"
+type = 1
+desc = "Heal 20 HP"
+value = 20

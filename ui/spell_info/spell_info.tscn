@@ -1,0 +1,71 @@
+[gd_scene load_steps=7 format=3 uid="uid://5ol8rm2tnr16"]
+
+[ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_8x34e"]
+[ext_resource type="Script" path="res://ui/spell_info/spell_info.gd" id="2_ducfw"]
+[ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="2_yoq52"]
+[ext_resource type="Texture2D" uid="uid://bdrmyw0jddcr6" path="res://ui/healthbar/mana.png" id="3_fbfjg"]
+[ext_resource type="Script" path="res://ui/manabar.gd" id="4_decdu"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_cq2lv"]
+line_spacing = 2.0
+font = ExtResource("2_yoq52")
+font_size = 8
+font_color = Color(0, 0, 0, 1)
+
+[node name="spell_info" type="NinePatchRect"]
+texture_filter = 1
+offset_right = 132.0
+offset_bottom = 73.0
+texture = ExtResource("1_8x34e")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource("2_ducfw")
+
+[node name="label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 7.0
+offset_right = 126.0
+offset_bottom = 72.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_yoq52")
+theme_override_font_sizes/font_size = 8
+text = "TYPE: SPIRIT
+COST:
+POW:100 ACC:100
+NO DAMAGE
+Attack very 
+quickly"
+label_settings = SubResource("LabelSettings_cq2lv")
+
+[node name="manabar" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 48.0
+offset_top = 36.0
+offset_right = 88.0
+offset_bottom = 76.0
+script = ExtResource("4_decdu")
+
+[node name="0" type="Sprite2D" parent="manabar"]
+position = Vector2(10, -16)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3_fbfjg")
+hframes = 3
+frame = 2
+
+[node name="1" type="Sprite2D" parent="manabar"]
+position = Vector2(24, -16)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3_fbfjg")
+hframes = 3
+frame = 2
+
+[node name="2" type="Sprite2D" parent="manabar"]
+position = Vector2(38, -16)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3_fbfjg")
+hframes = 3
+frame = 2
