@@ -43,33 +43,33 @@ func is_living() -> bool:
 func get_strength() -> int:
     var mod = 1.0
     if has_condition(Condition.Type.STR_UP):
-        mod = 1.5
+        mod = 2.0
     elif has_condition(Condition.Type.STR_DOWN):
-        mod = 0.75
+        mod = 0.5
     return strength * mod
 
 func get_intellect() -> int:
     var mod = 1.0
     if has_condition(Condition.Type.INT_UP):
-        mod = 1.5
+        mod = 2.0
     elif has_condition(Condition.Type.INT_DOWN):
-        mod = 0.75
+        mod = 0.5
     return intellect * mod
 
 func get_defense() -> int:
     var mod = 1.0
     if has_condition(Condition.Type.DEF_UP):
-        mod = 1.5
+        mod = 2.0
     elif has_condition(Condition.Type.DEF_DOWN):
-        mod = 0.75
+        mod = 0.5
     return defense * mod
 
 func get_agility() -> int:
     var mod = 1.0
     if has_condition(Condition.Type.AGI_UP):
-        mod = 1.5
+        mod = 2.0
     elif has_condition(Condition.Type.AGI_DOWN):
-        mod = 0.75
+        mod = 0.5
     return agility * mod
 
 # level, stats, and experience
@@ -124,24 +124,23 @@ func add_condition(type: Condition.Type) -> bool:
             return false
         if Condition.INFO[type].opposites.has(conditions[i].type):
             remove_indices.append(i)
-            if not Condition.INFO[type].apply_anyway:
-                return true
     for index in remove_indices:
         conditions.remove_at(index)
 
-    conditions.append({
-        "type": type,
-        "ttl": Condition.INFO[type].ttl
-    })
+    if remove_indices.is_empty() or Condition.INFO[type].apply_anyway:
+        conditions.append({
+            "type": type,
+            "ttl": Condition.INFO[type].ttl
+        })
     return true
 
-func tick_conditions():
-    var remove_indices = []
+func tick_conditions() -> Array[int]:
+    var remove_indices: Array[int] = []
     for i in range(0, conditions.size()):
         if conditions[i].ttl == Condition.TTL_INDEFINITE:
             continue
-        conditions[i].ttl -= 1
         if conditions[i].ttl == 0:
             remove_indices.append(i)
-    for index in remove_indices:
-        conditions.remove_at(index)
+        else:
+            conditions[i].ttl -= 1
+    return remove_indices

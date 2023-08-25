@@ -4,11 +4,14 @@
 
 [resource]
 script = ExtResource("1_8a2c0")
-name = "SCRATCH"
-element = 0
-desc = "Scratch the
+name = "EMBER"
+type = 0
+desc = "Burn the 
 boi"
-power = 50
+power = 30
 damage_type = 1
-accuracy = 70
+accuracy = 100
 cost = 1
+conditions = Array[int]([8])
+condition_target = 2
+condition_accuracy = 100

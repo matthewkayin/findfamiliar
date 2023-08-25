@@ -31,7 +31,8 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_constants/line_spacing = 8
 theme_override_fonts/font = ExtResource("3_rs1ys")
 theme_override_font_sizes/font_size = 16
-text = "Enemy turn!"
+text = "Can't use that
+in a duel!"
 label_settings = SubResource("LabelSettings_cjndi")
 
 [node name="timer" type="Timer" parent="."]

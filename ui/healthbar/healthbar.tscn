@@ -3,7 +3,7 @@
 [ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="1_dao1w"]
 [ext_resource type="Script" path="res://ui/healthbar/healthbar.gd" id="1_jbg1p"]
 [ext_resource type="Texture2D" uid="uid://bdrmyw0jddcr6" path="res://ui/healthbar/mana.png" id="3_o6sy8"]
-[ext_resource type="Texture2D" uid="uid://cu5vektr5u0ow" path="res://ui/damage_types.png" id="4_6bdwr"]
+[ext_resource type="Texture2D" uid="uid://cxodxb0h3532l" path="res://ui/conditions.png" id="4_wpgfn"]
 
 [node name="healthbar" type="Control"]
 texture_filter = 1
@@ -141,15 +141,56 @@ region_rect = Rect2(16, 0, 8, 8)
 
 [node name="conditions" type="HBoxContainer" parent="."]
 layout_mode = 0
+offset_top = -26.0
 offset_right = 96.0
-offset_bottom = 40.0
+offset_bottom = 14.0
 
-[node name="Control" type="Control" parent="conditions"]
+[node name="0" type="Control" parent="conditions"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Sprite2D" type="Sprite2D" parent="conditions/Control"]
-position = Vector2(10, -17)
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("4_6bdwr")
-hframes = 3
+[node name="sprite" type="Sprite2D" parent="conditions/0"]
+texture = ExtResource("4_wpgfn")
+centered = false
+hframes = 15
+
+[node name="1" type="Control" parent="conditions"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="sprite" type="Sprite2D" parent="conditions/1"]
+texture = ExtResource("4_wpgfn")
+centered = false
+hframes = 15
+frame = 1
+
+[node name="2" type="Control" parent="conditions"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="sprite" type="Sprite2D" parent="conditions/2"]
+texture = ExtResource("4_wpgfn")
+centered = false
+hframes = 15
+frame = 1
+
+[node name="3" type="Control" parent="conditions"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="sprite" type="Sprite2D" parent="conditions/3"]
+texture = ExtResource("4_wpgfn")
+centered = false
+hframes = 15
+frame = 1
+
+[node name="4" type="Control" parent="conditions"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="sprite" type="Sprite2D" parent="conditions/4"]
+texture = ExtResource("4_wpgfn")
+centered = false
+hframes = 15
+frame = 1

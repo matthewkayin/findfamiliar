@@ -19,7 +19,9 @@ extends Node2D
 
 @onready var species_cat = preload("res://familiar/species/catsith.tres")
 @onready var spell_tackle = preload("res://familiar/spells/tackle.tres")
-@onready var spell_scratch = preload("res://familiar/spells/scratch.tres")
+@onready var spell_growl = preload("res://familiar/spells/growl.tres")
+@onready var spell_bulk_up = preload("res://familiar/spells/bulk_up.tres")
+@onready var spell_ember = preload("res://familiar/spells/ember.tres")
 @onready var item_gem = preload("res://familiar/items/gem.tres")
 @onready var item_potion = preload("res://familiar/items/potion.tres")
 @onready var item_potion2 = preload("res://familiar/items/potion2.tres")
@@ -68,13 +70,16 @@ func battle_start():
     player_party.familiars.append(Familiar.new(species_cat, 5))
     player_party.familiars[0].nickname = "Jiji"
     player_party.familiars[0].spells.append(spell_tackle)
-    player_party.familiars[0].spells.append(spell_scratch)
+    player_party.familiars[0].spells.append(spell_ember)
+    player_party.familiars[0].spells.append(spell_growl)
+    player_party.familiars[0].spells.append(spell_bulk_up)
     player_party.familiars.append(Familiar.new(species_cat, 3))
     player_party.familiars[1].nickname = "Meowth"
-    player_party.familiars[1].spells.append(spell_scratch)
+    player_party.familiars[1].spells.append(spell_tackle)
+    player_party.familiars[1].spells.append(spell_growl)
     enemy_party.familiars.append(Familiar.new(species_cat, 5))
     enemy_party.familiars[0].spells.append(spell_tackle)
-    enemy_party.familiars[0].spells.append(spell_scratch)
+    # enemy_party.familiars[0].spells.append(spell_growl)
 
     player_party.add_item(item_gem, 5)
     player_party.add_item(item_potion, 10)
@@ -185,20 +190,6 @@ func do_action(action):
             if defender_healthbar.is_interpolating:
                 await defender_healthbar.finished
 
-            # check if defender is dead
-            if not defender.is_living():
-                var faint_message = ""
-                if action.actor == ActionActor.PLAYER:
-                    faint_message += "Enemy "
-                faint_message += defender.get_display_name() + "\nwas defeated!"
-                dialog.open(faint_message)
-
-                await defender_sprite.animate_faint()
-
-                if not dialog.is_finished:
-                    await dialog.finished
-                defender_healthbar.close()
-                dialog.clear()
         # else if not spell hit
         elif action.spell.damage_type != Spell.DamageType.NONE:
             var miss_message = ""
@@ -213,7 +204,7 @@ func do_action(action):
         var condition_hit: bool = false
         var condition_dc: int = action.spell.condition_accuracy
         if defender.is_living() and action.spell.condition_target == Condition.Target.OPPONENT:
-            condition_dc += int(float(attacker.get_intelligence() - defender.get_intelligence()) / 1.5)
+            condition_dc += int(float(attacker.get_intellect() - defender.get_intellect()) / 1.5)
             condition_hit = randi_range(0, 100) <= condition_dc
         elif action.spell.condition_target == Condition.Target.SELF or action.spell.condition_target == Condition.Target.PARTY:
             condition_hit = true
@@ -223,33 +214,33 @@ func do_action(action):
             for condition in action.spell.conditions:
                 # apply condition
                 var use_apply_message: bool = false
-                if condition.target == Condition.Target.SELF:
-                    use_apply_message = attacker.add_condition(condition.type)
-                elif condition.target == Condition.Target.PARTY:
+                if action.spell.condition_target == Condition.Target.SELF:
+                    use_apply_message = attacker.add_condition(condition)
+                elif action.spell.condition_target == Condition.Target.PARTY:
                     for familiar in attacker_party.familiars:
-                        familiar.add_condition(condition.type)
+                        familiar.add_condition(condition)
                     use_apply_message = true
-                elif condition.target == Condition.Target.OPPONENT:
-                    use_apply_message = defender.add_condition(condition.type)
+                elif action.spell.condition_target == Condition.Target.OPPONENT:
+                    use_apply_message = defender.add_condition(condition)
 
                 # display condition message
                 # set condition message name
                 var condition_message = ""
-                if condition.target == Condition.Target.PARTY:
+                if action.spell.condition_target == Condition.Target.PARTY:
                     condition_message = "Your party" if action.actor == ActionActor.PLAYER else "Enemy party"
-                elif condition.target == Condition.Target.SELF:
+                elif action.spell.condition_target == Condition.Target.SELF:
                     if action.actor == ActionActor.ENEMY:
                         condition_message += "Enemy "
                     condition_message = attacker.get_display_name()
-                elif condition.target == Condition.Target.OPPONENT:
+                elif action.spell.condition_target == Condition.Target.OPPONENT:
                     if action.actor == ActionActor.PLAYER:
                         condition_message += "Enemy "
                     condition_message = defender.get_display_name()
                 # set condition message content
                 if use_apply_message: 
-                    condition_message += Condition.INFO[condition.type].apply_message
+                    condition_message += Condition.INFO[condition].apply_message
                 elif action.spell.damage_type == Spell.DamageType.NONE:
-                    condition_message += Condition.INFO[condition.type].reapply_message
+                    condition_message += Condition.INFO[condition].reapply_message
                 else:
                     condition_message = ""
                 # open dialog box
@@ -258,11 +249,13 @@ func do_action(action):
                     attacker_healthbar.refresh()
                     defender_healthbar.refresh()
                     await dialog.finished
+                    dialog.clear()
         # if not condition hit
         else:
             if action.spell.damage_type == Spell.DamageType.NONE:
                 dialog.open("But it failed!")
                 await dialog.finished
+                dialog.clear()
 
         # update battle flag
         attacker.has_attacked = true
@@ -324,13 +317,7 @@ func do_action(action):
                 player_healthbar.update()
             gem_sprite.visible = false
             await enemy_sprite.animate_summon(familiar.species.name)
-        # END
-    elif action.type == ActionType.END:
-        if action.actor == ActionActor.PLAYER:
-            begin_enemy_turn()
-        else:
-            begin_player_turn()
-        return
+    # RUN
     elif action.type == ActionType.RUN:
         player_escape_attempts += 1
         var escape_successful = player_party.familiars[0].get_agility() >= enemy_party.familiars[0].get_agility()
@@ -351,78 +338,171 @@ func do_action(action):
                 await dialog.finished
             dialog.clear()
 
+    # reset escape attempts
     if action.type != ActionType.RUN:
         player_escape_attempts = 0
 
-    # determine next state
-    if player_party.is_defeated():
-        dialog.open("All of your lads have\nbeen knocked out!")
-    elif not player_party.familiars[0].is_living():
-        party_menu.open(true, false)
-    elif enemy_party.is_defeated():
-        # calculate exp gained
-        var exp_yield: float = 0.0
-        for i in range(0, enemy_party.familiars.size()):
-            exp_yield += float(enemy_party.familiars[i].species.exp_yield * enemy_party.familiars[i].level) / 7.0
-        if is_witch_battle:
-            exp_yield *= 1.5
+    var actor_mana = player_party.mana if current_turn == ActionActor.PLAYER else enemy_party.mana
+    var should_end_turn = actor_mana == 0 or action.type == ActionType.END
 
-        # divide it up among party familiars
-        var divided_exp_yield: int = int(exp_yield / player_party.get_living_familiar_count())
-        var exp_yield_remainder: int = int(exp_yield) % player_party.get_living_familiar_count()
-        var exp_each: Array[int] = []
-        for i in range(0, player_party.familiars.size()):
-            if not player_party.familiars[i].is_living():
-                exp_each.append(0)
-                continue
-            exp_each.append(divided_exp_yield)
-            if i == 0:
-                exp_each[i] += exp_yield_remainder
+    # apply burn damage
+    if should_end_turn:
+        var familiar = player_party.familiars[0] if current_turn == ActionActor.PLAYER else enemy_party.familiars[0]
+        if familiar.has_condition(Condition.Type.BURN):
+            var healthbar = player_healthbar if action.actor == ActionActor.PLAYER else enemy_healthbar
+            familiar.health = max(familiar.health - int(familiar.max_health / 8.0), 0)
+            healthbar.update()
 
-        dialog.open("You gained\n" + str(int(exp_yield)) + " EXP. Points!")
-        party_menu.open(true, false, true)
+            var burn_message = ""
+            if action.actor == ActionActor.ENEMY:
+                burn_message += "Enemy "
+            burn_message += familiar.get_display_name() + "\ntook burn damage!"
+            dialog.open(burn_message)
+            await dialog.finished
+            dialog.clear()
 
-        var exp_finished = false
-        while not exp_finished:
-            exp_timer.start(0.025)
-            await exp_timer.timeout
-            exp_finished = true
+    # check if player familiar is dead
+    if not player_party.familiars[0].is_living():
+        dialog.open(player_party.familiars[0].get_display_name() + "\nwas defeated!")
+        await player_sprite.animate_faint()
+        if not dialog.is_finished:
+            await dialog.finished
+        player_healthbar.close()
+        dialog.clear()
+
+        if player_party.is_defeated():
+            dialog.open("All of your lads have\nbeen knocked out!")
+            return
+        elif not player_party.familiars[0].is_living():
+            party_menu.open(true, false)
+            return
+    # check if enemy familiar is dead
+    if not enemy_party.familiars[0].is_living():
+        dialog.open("Enemy " + enemy_party.familiars[0].get_display_name() + "\nwas defeated!")
+        await enemy_sprite.animate_faint()
+        if not dialog.is_finished:
+            await dialog.finished
+        enemy_healthbar.close()
+        dialog.clear()
+
+        if enemy_party.is_defeated():
+            # calculate exp gained
+            var exp_yield: float = 0.0
+            for i in range(0, enemy_party.familiars.size()):
+                exp_yield += float(enemy_party.familiars[i].species.exp_yield * enemy_party.familiars[i].level) / 7.0
+            if is_witch_battle:
+                exp_yield *= 1.5
+
+            # divide it up among party familiars
+            var divided_exp_yield: int = int(exp_yield / player_party.get_living_familiar_count())
+            var exp_yield_remainder: int = int(exp_yield) % player_party.get_living_familiar_count()
+            var exp_each: Array[int] = []
             for i in range(0, player_party.familiars.size()):
-                if exp_each[i] > 0:
-                    exp_each[i] -= 1
-                    var leveled_up = player_party.familiars[i].give_exp(1)
-                    if leveled_up:
-                        party_menu.announce_level_up(i)
+                if not player_party.familiars[i].is_living():
+                    exp_each.append(0)
+                    continue
+                exp_each.append(divided_exp_yield)
+                if i == 0:
+                    exp_each[i] += exp_yield_remainder
+
+            dialog.open("You gained\n" + str(int(exp_yield)) + " EXP. Points!")
+            party_menu.open(true, false, true)
+
+            var exp_finished = false
+            while not exp_finished:
+                exp_timer.start(0.025)
+                await exp_timer.timeout
+                exp_finished = true
+                for i in range(0, player_party.familiars.size()):
                     if exp_each[i] > 0:
-                        exp_finished = false
-    elif not enemy_party.familiars[0].is_living():
-        pass
-    elif current_turn == ActionActor.PLAYER and player_party.mana > 0:
-        battle_actions.open()
-    elif current_turn == ActionActor.PLAYER and player_party.mana == 0:
-        player_party.burned_out = true
-        begin_enemy_turn()
-    elif current_turn == ActionActor.ENEMY and enemy_party.mana > 0:
-        enemy_turn()
-    elif current_turn == ActionActor.ENEMY and enemy_party.mana == 0:
-        enemy_party.burned_out = true
-        begin_player_turn()
+                        exp_each[i] -= 1
+                        var leveled_up = player_party.familiars[i].give_exp(1)
+                        if leveled_up:
+                            party_menu.announce_level_up(i)
+                        if exp_each[i] > 0:
+                            exp_finished = false
+            return
+        elif not enemy_party.familiars[0].is_living():
+            return
+
+    # determine next state
+    if current_turn == ActionActor.PLAYER:
+        if should_end_turn:
+            if player_party.mana == 0:
+                player_party.burned_out = true
+            begin_enemy_turn()
+        else:
+            battle_actions.open()
+    elif current_turn == ActionActor.ENEMY:
+        if should_end_turn:
+            if enemy_party.mana == 0:
+                enemy_party.burned_out = true
+            begin_player_turn()
+        else:
+            enemy_turn()
 
 func begin_player_turn(is_first_turn: bool = false):
     current_turn = ActionActor.PLAYER
     var skip_turn = player_party.burned_out
     player_party.before_turn()
+
+    if is_first_turn:
+        player_healthbar.update()
+        battle_actions.open()
+        return
+
+    # announce turn
     if skip_turn:
         await turn_popup.open("Your turn!")
         await turn_popup.open("You're burned out!")
-        begin_enemy_turn()
-    elif is_first_turn:
-        player_healthbar.update()
-        battle_actions.open()
     else:
         turn_popup.open("Your turn!")
         await player_healthbar.update()
+
+    # update conditions
+    for familiar in player_party.familiars:
+        var remove_indices = familiar.tick_conditions()
+        for index in remove_indices:
+            var message = familiar.get_display_name() + Condition.INFO[familiar.conditions[index].type].expire_message
+            familiar.conditions.remove_at(index)
+            player_healthbar.refresh()
+            dialog.open(message)
+            await dialog.finished
+            dialog.clear()
+
+    if skip_turn:
+        begin_enemy_turn()
+    else:
         battle_actions.open()
+
+func begin_enemy_turn():
+    current_turn = ActionActor.ENEMY
+    var skip_turn = enemy_party.burned_out
+    enemy_party.before_turn()
+
+    # announce turn
+    if skip_turn:
+        await turn_popup.open("Enemy turn!")
+        await turn_popup.open("Enemy's burned out!")
+    else:
+        turn_popup.open("Enemy turn!")
+        await enemy_healthbar.update()
+
+    # update conditions
+    for familiar in enemy_party.familiars:
+        var remove_indices = familiar.tick_conditions()
+        for index in remove_indices:
+            var message = "Enemy " + familiar.get_display_name() + Condition.INFO[familiar.conditions[index].type].expire_message
+            familiar.conditions.remove_at(index)
+            enemy_healthbar.refresh()
+            dialog.open(message)
+            await dialog.finished
+            dialog.clear()
+
+    if skip_turn:
+        begin_player_turn()
+    else:
+        enemy_turn()
 
 func _process(_delta):
     # handle party menu
@@ -504,6 +584,12 @@ func _process(_delta):
                 await dialog.finished
                 dialog.clear()
                 battle_actions.open()
+            elif player_party.familiars[0].has_condition(Condition.Type.SLEEP):
+                battle_actions.close()
+                dialog.open(player_party.familiars[0].get_display_name() + " is\nasleep! It can't\nmove!")
+                await dialog.finished
+                dialog.clear()
+                battle_actions.open()
             # open spell chooser
             else:
                 var spell_options: Array[String] = []
@@ -512,8 +598,15 @@ func _process(_delta):
                 spell_chooser.open_with(spell_options)
                 battle_actions.close()
         elif battle_actions.choice == "SWITCH":
-            battle_actions.close()
-            party_menu.open()
+            if player_party.familiars[0].has_condition(Condition.Type.TRAPPED):
+                battle_actions.close()
+                dialog.open(player_party.familiars[0].get_display_name() + " is\ntrapped! It can't\nswitch!")
+                await dialog.finished
+                dialog.clear()
+                battle_actions.open()
+            else:
+                battle_actions.close()
+                party_menu.open()
         elif battle_actions.choice == "ITEM":
             battle_actions.close()
             item_chooser.open(player_party.items)
@@ -526,7 +619,7 @@ func _process(_delta):
         elif battle_actions.choice == "RUN":
             if is_witch_battle:
                 battle_actions.close()
-                dialog.open("Can't run away from \na witch battle!")
+                dialog.open("There's no running\nfrom a duel!")
                 await dialog.finished
                 dialog.clear()
                 battle_actions.open(true)
@@ -580,7 +673,7 @@ func _process(_delta):
                 item_chooser.finished = false
             # warn player they can't use gem
             elif chosen_item.type == Item.ItemType.GEM and is_witch_battle:
-                item_warning.open("Can't use\nthat in a\nwitch battle!")
+                item_warning.open("Can't use that\nin a duel!")
                 item_chooser.finished = false
             # use gem
             elif chosen_item.type == Item.ItemType.GEM:
@@ -597,19 +690,6 @@ func _process(_delta):
                 item_chooser.close()
                 choosing_item_target = true
                 party_menu.open(true)
-
-func begin_enemy_turn():
-    current_turn = ActionActor.ENEMY
-    var skip_turn = enemy_party.burned_out
-    enemy_party.before_turn()
-    if skip_turn:
-        await turn_popup.open("Enemy turn!")
-        await turn_popup.open("Enemy's burned out!")
-        begin_player_turn()
-    else:
-        turn_popup.open("Enemy turn!")
-        await enemy_healthbar.update()
-        enemy_turn()
 
 func enemy_turn():
     if enemy_party.familiars[0].has_attacked:

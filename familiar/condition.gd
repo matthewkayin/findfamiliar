@@ -27,77 +27,98 @@ const INFO = {
         "opposites": [Type.STR_DOWN],
         "apply_anyway": false,
         "ttl": 3,
+        "icon_frame": 1,
         "apply_message": "'s\nStrength rose!",
-        "reapply_message": "'s\nStrength buff\nwas extended!"
+        "reapply_message": "'s\nStrength buff\nwas extended!",
+        "expire_message": "'s\nStrength returned\nto normal!"
     },
     Type.STR_DOWN: {
         "opposites": [Type.STR_UP],
         "apply_anyway": false,
         "ttl": 3,
+        "icon_frame": 2,
         "apply_message": "'s\nStrength fell!",
-        "reapply_message": "'s\nStrength debuff\nwas extended!"
+        "reapply_message": "'s\nStrength debuff\nwas extended!",
+        "expire_message": "'s\nStrength returned\nto normal!"
     },
     Type.INT_UP: {
         "opposites": [Type.INT_DOWN],
         "apply_anyway": false,
         "ttl": 3,
-        "apply_message": "'s\nIntelligence rose!",
-        "reapply_message": "'s\nIntelligence buff\nwas extended!"
+        "icon_frame": 4,
+        "apply_message": "'s\nIntellect rose!",
+        "reapply_message": "'s\nIntellect buff\nwas extended!",
+        "expire_message": "'s\nIntellect returned\nto normal!"
     },
     Type.INT_DOWN: {
         "opposites": [Type.INT_UP],
         "apply_anyway": false,
         "ttl": 3,
-        "apply_message": "'s\nIntelligence fell!",
-        "reapply_message": "'s\nIntelligence debuff\nwas extended!"
+        "icon_frame": 5,
+        "apply_message": "'s\nIntellect fell!",
+        "reapply_message": "'s\nIntellect debuff\nwas extended!",
+        "expire_message": "'s\nIntellect returned\nto normal!"
     },
     Type.DEF_UP: {
         "opposites": [Type.DEF_DOWN],
         "apply_anyway": false,
         "ttl": 3,
+        "icon_frame": 7,
         "apply_message": "'s\nDefense rose!",
-        "reapply_message": "'s\nDefense buff\nwas extended!"
+        "reapply_message": "'s\nDefense buff\nwas extended!",
+        "expire_message": "'s\nDefense returned\nto normal!"
     },
     Type.DEF_DOWN: {
         "opposites": [Type.DEF_UP],
         "apply_anyway": false,
         "ttl": 3,
+        "icon_frame": 8,
         "apply_message": "'s\nDefense fell!",
-        "reapply_message": "'s\nDefense debuff\nwas extended!"
+        "reapply_message": "'s\nDefense debuff\nwas extended!",
+        "expire_message": "'s\nDefense returned\nto normal!"
     },
     Type.AGI_UP: {
         "opposites": [Type.AGI_DOWN],
         "apply_anyway": false,
         "ttl": 3,
+        "icon_frame": 10,
         "apply_message": "'s\nAgility rose!",
-        "reapply_message": "'s\nAgility buff\nwas extended!"
+        "reapply_message": "'s\nAgility buff\nwas extended!",
+        "expire_message": "'s\nAgility returned\nto normal!"
     },
     Type.AGI_DOWN: {
         "opposites": [Type.AGI_UP],
         "apply_anyway": false,
         "ttl": 3,
+        "icon_frame": 11,
         "apply_message": "'s\nAgility fell!",
-        "reapply_message": "'s\nAgility debuff\nwas extended!"
+        "reapply_message": "'s\nAgility debuff\nwas extended!",
+        "expire_message": "'s\nAgility returned\nto normal!"
     },
     Type.BURN: {
         "opposites": [Type.SLEEP, Type.TRAPPED],
         "apply_anyway": true,
         "ttl": TTL_INDEFINITE,
-        "apply_message": " was\nburned!",
-        "reapply_message": " is\nalready burned!"
+        "icon_frame": 12,
+        "apply_message": "\nwas burned!",
+        "reapply_message": "\nis already burned!",
+        "expire_message": "'s\nburn was cured!"
     },
     Type.SLEEP: {
         "opposites": [Type.BURN, Type.TRAPPED],
         "apply_anyway": true,
         "ttl": TTL_INDEFINITE,
-        "apply_message": " fell\nasleep!",
-        "reapply_message": " is\nalready asleep!"
+        "icon_frame": 13,
+        "apply_message": "\nfell asleep!",
+        "reapply_message": "\nis already asleep!",
+        "expire_message": "\nwoke up!"
     },
     Type.TRAPPED: {
         "opposites": [Type.BURN, Type.SLEEP],
         "apply_anyway": true,
         "ttl": TTL_INDEFINITE,
-        "apply_message": " was\ntrapped!",
-        "reapply_message": " is\nalready trapped!"
+        "icon_frame": 14,
+        "apply_message": "\nwas trapped!",
+        "reapply_message": "\nescaped its trap!"
     },
 }

@@ -21,10 +21,13 @@ func is_defeated() -> bool:
     return true
 
 func before_turn():
+    # if burned out, skip turn
     if burned_out:
         burned_out = false
     else:
         mana = 3 
+    
+    # reset flags
     for familiar in familiars:
         if not familiar.is_living():
             continue
@@ -53,6 +56,10 @@ func after_battle():
     familiars = []
     for i in range(0, familiars.size()):
         familiars.append(old_familiar_order[i])
+    
+    # clear conditions
+    for familiar in familiars:
+        familiar.conditions.clear()
 
 func get_switch_cost(to_index: int) -> int:
     var current_familiar_affinities = Types.INFO[familiars[0].species.type].affinities

@@ -6,6 +6,7 @@
 
 [node name="dialog" type="NinePatchRect"]
 texture_filter = 1
+clip_contents = true
 offset_right = 320.0
 offset_bottom = 56.0
 texture = ExtResource("1_2fl8d")
@@ -21,12 +22,12 @@ layout_mode = 0
 offset_left = 8.0
 offset_top = 11.0
 offset_right = 264.0
-offset_bottom = 75.0
+offset_bottom = 83.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_constants/line_spacing = 8
 theme_override_fonts/font = ExtResource("2_a1v6o")
 theme_override_font_sizes/font_size = 16
-text = "FRESHBREAD was
-ensnared!"
+text = "FRESHBREAD
+took burn damage!"
 
 [node name="timer" type="Timer" parent="."]

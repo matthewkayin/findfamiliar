@@ -34,7 +34,7 @@ theme_override_fonts/font = ExtResource("2_yoq52")
 theme_override_font_sizes/font_size = 8
 text = "TYPE: SPIRIT
 COST:
-POW:100 ACC:100
+POW:--- ACC:100
 NO DAMAGE
 Attack very 
 quickly"

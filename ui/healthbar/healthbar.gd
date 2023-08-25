@@ -8,6 +8,7 @@ signal finished
 @onready var health_amount = $health/health_amount
 @onready var healthbar = $health/healthbar
 @onready var manabar = $manabar
+@onready var conditions = $conditions
 
 @export var is_enemy = false
 
@@ -27,6 +28,7 @@ func _ready():
     healthbar_max_width = healthbar.size.x
     if is_enemy:
         manabar.position.x = 0
+        conditions.position.x = 96
     for i in range(0, manabar.get_child_count()):
         manabar_spheres.append(manabar.get_child(i).get_child(0))
     visible = false
@@ -41,6 +43,7 @@ func close():
     visible = false
 
 func refresh():
+    # refresh manabar
     var mana_remaining: float = displayed_mana
     var sphere_index: int = 0
     while mana_remaining >= 1:
@@ -58,6 +61,7 @@ func refresh():
     for index in range(sphere_index, 3):
         manabar_spheres[index].visible = false
 
+    # refresh healthbar
     var familiar = party.familiars[0]
     name_label.text = familiar.get_display_name()
     level_label.text = "L" + str(familiar.level)
@@ -71,6 +75,14 @@ func refresh():
         healthbar.color = HEALTHBAR_COLOR_YELLOW
     else:
         healthbar.color = HEALTHBAR_COLOR_RED
+
+    # refresh conditions
+    for i in range(0, conditions.get_child_count()):
+        if i >= familiar.conditions.size():
+            conditions.get_child(i).visible = false
+            continue
+        conditions.get_child(i).visible = true
+        conditions.get_child(i).get_child(0).frame = Condition.INFO[familiar.conditions[i].type].icon_frame
 
 func fast_update():
     displayed_health = party.familiars[0].health

@@ -247,6 +247,7 @@ timeout_duration = 1.5
 y_align = 1
 
 [node name="party_menu" parent="." instance=ExtResource("11_j640b")]
+visible = false
 offset_left = 72.0
 offset_top = 150.0
 offset_right = 320.0
@@ -270,7 +271,6 @@ offset_right = 320.0
 offset_bottom = 288.0
 
 [node name="item_warning" parent="." instance=ExtResource("10_cb1ib")]
-visible = false
 offset_top = 205.0
 offset_bottom = 224.0
 timeout_duration = 1.5
