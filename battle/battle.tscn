@@ -1,8 +1,9 @@
-[gd_scene load_steps=34 format=3 uid="uid://4xaqdp8x46q3"]
+[gd_scene load_steps=41 format=3 uid="uid://4xaqdp8x46q3"]
 
 [ext_resource type="Script" path="res://battle/battle.gd" id="1_62dho"]
 [ext_resource type="Texture2D" uid="uid://wms1mx2tepno" path="res://battle/sprites/front/cat-sith.png" id="2_pp3su"]
 [ext_resource type="Script" path="res://battle/familiar_sprite.gd" id="3_eiwn4"]
+[ext_resource type="Texture2D" uid="uid://bquyv2dvslbeg" path="res://battle/effects/scratch.png" id="4_3r16g"]
 [ext_resource type="Texture2D" uid="uid://dchi32cbk6v8i" path="res://battle/effects/summon.png" id="4_wxfyl"]
 [ext_resource type="Texture2D" uid="uid://4nfivuyyr34l" path="res://battle/sprites/back/cat-sith.png" id="5_cs675"]
 [ext_resource type="PackedScene" uid="uid://e8xfwq5j4g1b" path="res://ui/healthbar/healthbar.tscn" id="6_303qm"]
@@ -15,6 +16,30 @@
 [ext_resource type="PackedScene" uid="uid://dyketwway3ubu" path="res://ui/popup/popup.tscn" id="13_hu1uc"]
 [ext_resource type="PackedScene" uid="uid://wphpyoii23gm" path="res://ui/party_menu/party_menu.tscn" id="14_u5hny"]
 [ext_resource type="PackedScene" uid="uid://q4cruliyg6x4" path="res://ui/choicebox/item_chooser.tscn" id="15_pduf7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3n7re"]
+atlas = ExtResource("4_3r16g")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_55gu4"]
+atlas = ExtResource("4_3r16g")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d6ifr"]
+atlas = ExtResource("4_3r16g")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nkx6p"]
+atlas = ExtResource("4_3r16g")
+region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_61qvo"]
+atlas = ExtResource("4_3r16g")
+region = Rect2(160, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xmacr"]
+atlas = ExtResource("4_3r16g")
+region = Rect2(200, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3r0mu"]
 atlas = ExtResource("4_wxfyl")
@@ -54,6 +79,44 @@ region = Rect2(160, 0, 40, 40)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_t2tca"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3n7re")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_55gu4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d6ifr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nkx6p")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_61qvo")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_xmacr")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_61qvo")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_xmacr")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_61qvo")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_xmacr")
+}, {
+"duration": 5.0,
+"texture": SubResource("AtlasTexture_61qvo")
+}],
+"loop": false,
+"name": &"scratch",
+"speed": 20.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_3r0mu")
@@ -178,9 +241,10 @@ script = ExtResource("3_eiwn4")
 is_enemy = true
 
 [node name="animation" type="AnimatedSprite2D" parent="enemy_sprite"]
-visible = false
 sprite_frames = SubResource("SpriteFrames_t2tca")
-animation = &"summon"
+animation = &"scratch"
+frame = 10
+frame_progress = 1.0
 
 [node name="player_sprite" type="Sprite2D" parent="."]
 texture_filter = 1

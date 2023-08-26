@@ -1,4 +1,10 @@
 extends Sprite2D
+class_name FamiliarSprite
+
+enum SpellAnimation {
+    NONE,
+    SCRATCH
+}
 
 @onready var animation = $animation
 
@@ -94,3 +100,12 @@ func animate_faint():
     var animate_tween2 = get_tree().create_tween()
     animate_tween2.tween_property(self, "region_rect", Rect2(region_rect.position, Vector2(region_rect.size.x, 0)), 0.5)
     await animate_tween2.finished
+
+func animate_spell(spell_animation: SpellAnimation):
+    if spell_animation == SpellAnimation.NONE:
+        return
+    elif spell_animation == SpellAnimation.SCRATCH:
+        animation.visible = true
+        animation.play("scratch")
+        await animation.animation_finished
+        animation.visible = false

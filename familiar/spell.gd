@@ -9,6 +9,7 @@ enum DamageType {
 
 @export var name: String
 @export var type: Types.Type
+@export var animation: FamiliarSprite.SpellAnimation
 @export_multiline var desc: String
 
 @export var power: int

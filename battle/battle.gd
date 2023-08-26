@@ -18,10 +18,8 @@ extends Node2D
 @onready var exp_timer = $exp_timer
 
 @onready var species_cat = preload("res://familiar/species/catsith.tres")
-@onready var spell_tackle = preload("res://familiar/spells/tackle.tres")
+@onready var spell_scratch = preload("res://familiar/spells/scratch.tres")
 @onready var spell_growl = preload("res://familiar/spells/growl.tres")
-@onready var spell_bulk_up = preload("res://familiar/spells/bulk_up.tres")
-@onready var spell_ember = preload("res://familiar/spells/ember.tres")
 @onready var item_gem = preload("res://familiar/items/gem.tres")
 @onready var item_potion = preload("res://familiar/items/potion.tres")
 @onready var item_potion2 = preload("res://familiar/items/potion2.tres")
@@ -69,16 +67,14 @@ func _on_party_menu_clear_warning():
 func battle_start():
     player_party.familiars.append(Familiar.new(species_cat, 5))
     player_party.familiars[0].nickname = "Jiji"
-    player_party.familiars[0].spells.append(spell_tackle)
-    player_party.familiars[0].spells.append(spell_ember)
+    player_party.familiars[0].spells.append(spell_scratch)
     player_party.familiars[0].spells.append(spell_growl)
-    player_party.familiars[0].spells.append(spell_bulk_up)
     player_party.familiars.append(Familiar.new(species_cat, 3))
     player_party.familiars[1].nickname = "Meowth"
-    player_party.familiars[1].spells.append(spell_tackle)
+    player_party.familiars[1].spells.append(spell_scratch)
     player_party.familiars[1].spells.append(spell_growl)
     enemy_party.familiars.append(Familiar.new(species_cat, 5))
-    enemy_party.familiars[0].spells.append(spell_tackle)
+    enemy_party.familiars[0].spells.append(spell_scratch)
     # enemy_party.familiars[0].spells.append(spell_growl)
 
     player_party.add_item(item_gem, 5)
@@ -177,6 +173,7 @@ func do_action(action):
 
             defender.health = max(defender.health - damage, 0)
 
+            await defender_sprite.animate_spell(action.spell.animation)
             defender_healthbar.update()
             defender_sprite.animate_hurt(type_mod)
             if crit_mod == 2.0:

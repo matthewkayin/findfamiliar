@@ -1,6 +1,7 @@
 class_name Types
 
 enum Type {
+    NEUTRAL,
     FIRE,
     WATER,
     EARTH,
@@ -9,6 +10,7 @@ enum Type {
 }
 
 const NAME = {
+    Type.NEUTRAL: "NEUTRAL",
     Type.FIRE: "FIRE",
     Type.WATER: "WATER",
     Type.EARTH: "EARTH",
@@ -17,6 +19,11 @@ const NAME = {
 }
 
 const INFO = {
+    Type.NEUTRAL: {
+        "weaknesses": [],
+        "resistances": [],
+        "affinities": []
+    },
     Type.FIRE: {
         "weaknesses": [
             Type.WATER,
