@@ -8,21 +8,28 @@ func _ready():
     texture = null
     animation.visible = false
 
-func animate_appear(species_name: String):
+func animate_enter(species_name: String):
     var animate_tween = get_tree().create_tween()
 
-    texture = load("res://familiar/sprites/front/" + species_name.to_lower() + ".png")
+    var face = "front" if is_enemy else "back"
+    texture = load("res://battle/sprites/" + face + "/" + species_name.replace(" ", "-").to_lower() + ".png")
     position = Vector2(-64, 64) if is_enemy else Vector2(320, 192)
     visible = true
 
-    animate_tween.tween_property(self, "position", Vector2(256, 64) if is_enemy else Vector2(48, 192), 2.0)
+    animate_tween.tween_property(self, "position", Vector2(256, 64) if is_enemy else Vector2(56, 192), 2.0)
+    await animate_tween.finished
+
+func animate_exit():
+    var animate_tween = get_tree().create_tween()
+
+    animate_tween.tween_property(self, "position", Vector2(376, 64) if is_enemy else Vector2(-56, 192), 0.5)
     await animate_tween.finished
 
 func animate_summon(species_name: String):
     position = Vector2(256, 64) if is_enemy else Vector2(48, 192)
 
     var face = "front" if is_enemy else "back"
-    var species_sprite = load("res://familiar/sprites/" + face + "/" + species_name.to_lower() + ".png")
+    var species_sprite = load("res://battle/sprites/" + face + "/" + species_name.replace(" ", "-").to_lower() + ".png")
     texture = null
     region_enabled = false
     animation.visible = true

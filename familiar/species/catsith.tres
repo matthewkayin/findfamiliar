@@ -4,12 +4,12 @@
 
 [resource]
 script = ExtResource("1_m1gf6")
-name = "CAT-SITH"
-type = 0
-base_health = 5
-base_strength = 5
-base_intellect = 5
-base_defense = 5
-base_agility = 5
+name = "CAT SITH"
+type = 4
+base_health = 35
+base_strength = 45
+base_intellect = 60
+base_defense = 30
+base_agility = 90
 catch_rate = 128
 exp_yield = 128

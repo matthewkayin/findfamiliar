@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="Spell" load_steps=2 format=3 uid="uid://byq3580xa6bwe"]
 
-[ext_resource type="Script" path="res://familiar/spell.gd" id="1_8a2c0"]
+[ext_resource type="Script" path="res://familiar/spell.gd" id="1_ql01r"]
 
 [resource]
-script = ExtResource("1_8a2c0")
+script = ExtResource("1_ql01r")
 name = "EMBER"
 type = 0
 desc = "Burn the 
@@ -12,6 +12,6 @@ power = 30
 damage_type = 1
 accuracy = 100
 cost = 1
-conditions = Array[int]([8])
-condition_target = 2
-condition_accuracy = 100
+conditions = Array[int]([])
+condition_target = 0
+condition_accuracy = 0

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dchi32cbk6v8i"
-path="res://.godot/imported/summon.png-252eb754fc8f80731e633b560025ed91.ctex"
+uid="uid://wms1mx2tepno"
+path="res://.godot/imported/cat-sith.png-5af05cd846949d79682817c7d91fb750.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://battle/summon.png"
-dest_files=["res://.godot/imported/summon.png-252eb754fc8f80731e633b560025ed91.ctex"]
+source_file="res://battle/sprites/front/cat-sith.png"
+dest_files=["res://.godot/imported/cat-sith.png-5af05cd846949d79682817c7d91fb750.ctex"]
 
 [params]
 

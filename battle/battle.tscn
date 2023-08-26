@@ -1,55 +1,55 @@
-[gd_scene load_steps=34 format=3 uid="uid://c82fmyo8tooq2"]
+[gd_scene load_steps=34 format=3 uid="uid://4xaqdp8x46q3"]
 
-[ext_resource type="Script" path="res://battle.gd" id="1_fkyrb"]
-[ext_resource type="Texture2D" uid="uid://4nfivuyyr34l" path="res://familiar/sprites/back/cat-sith.png" id="2_5cbjt"]
-[ext_resource type="Script" path="res://familiar_sprite.gd" id="3_chsc5"]
-[ext_resource type="PackedScene" uid="uid://e8xfwq5j4g1b" path="res://ui/healthbar/healthbar.tscn" id="3_fwexg"]
-[ext_resource type="PackedScene" uid="uid://dichyeix0c5g3" path="res://ui/dialog/dialog.tscn" id="3_ngrtx"]
-[ext_resource type="Texture2D" uid="uid://wms1mx2tepno" path="res://familiar/sprites/front/cat-sith.png" id="4_jy5vo"]
-[ext_resource type="Texture2D" uid="uid://dchi32cbk6v8i" path="res://battle/summon.png" id="4_lbf3j"]
-[ext_resource type="Texture2D" uid="uid://c7cs7ff0rekkt" path="res://battle/gem.png" id="5_i3qn4"]
-[ext_resource type="Script" path="res://gem_sprite.gd" id="6_qgu3n"]
-[ext_resource type="PackedScene" uid="uid://dht3x47llx8nr" path="res://ui/choicebox/battle_actions.tscn" id="6_ug4s5"]
-[ext_resource type="PackedScene" uid="uid://d3s1nxt7qpaqm" path="res://ui/choicebox/spell_chooser.tscn" id="7_p5s2c"]
-[ext_resource type="PackedScene" uid="uid://5ol8rm2tnr16" path="res://ui/spell_info/spell_info.tscn" id="9_8hqbq"]
-[ext_resource type="PackedScene" uid="uid://dyketwway3ubu" path="res://ui/popup/popup.tscn" id="10_cb1ib"]
-[ext_resource type="PackedScene" uid="uid://wphpyoii23gm" path="res://ui/party_menu/party_menu.tscn" id="11_j640b"]
-[ext_resource type="PackedScene" uid="uid://q4cruliyg6x4" path="res://ui/choicebox/item_chooser.tscn" id="13_w03tv"]
+[ext_resource type="Script" path="res://battle/battle.gd" id="1_62dho"]
+[ext_resource type="Texture2D" uid="uid://wms1mx2tepno" path="res://battle/sprites/front/cat-sith.png" id="2_pp3su"]
+[ext_resource type="Script" path="res://battle/familiar_sprite.gd" id="3_eiwn4"]
+[ext_resource type="Texture2D" uid="uid://dchi32cbk6v8i" path="res://battle/effects/summon.png" id="4_wxfyl"]
+[ext_resource type="Texture2D" uid="uid://4nfivuyyr34l" path="res://battle/sprites/back/cat-sith.png" id="5_cs675"]
+[ext_resource type="PackedScene" uid="uid://e8xfwq5j4g1b" path="res://ui/healthbar/healthbar.tscn" id="6_303qm"]
+[ext_resource type="Texture2D" uid="uid://c7cs7ff0rekkt" path="res://battle/effects/gem.png" id="7_nkmn6"]
+[ext_resource type="Script" path="res://battle/gem_sprite.gd" id="8_hx3xp"]
+[ext_resource type="PackedScene" uid="uid://dichyeix0c5g3" path="res://ui/dialog/dialog.tscn" id="9_h1m2m"]
+[ext_resource type="PackedScene" uid="uid://d3s1nxt7qpaqm" path="res://ui/choicebox/spell_chooser.tscn" id="10_24sqf"]
+[ext_resource type="PackedScene" uid="uid://dht3x47llx8nr" path="res://ui/choicebox/battle_actions.tscn" id="11_d80gd"]
+[ext_resource type="PackedScene" uid="uid://5ol8rm2tnr16" path="res://ui/spell_info/spell_info.tscn" id="12_wsb1p"]
+[ext_resource type="PackedScene" uid="uid://dyketwway3ubu" path="res://ui/popup/popup.tscn" id="13_hu1uc"]
+[ext_resource type="PackedScene" uid="uid://wphpyoii23gm" path="res://ui/party_menu/party_menu.tscn" id="14_u5hny"]
+[ext_resource type="PackedScene" uid="uid://q4cruliyg6x4" path="res://ui/choicebox/item_chooser.tscn" id="15_pduf7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3r0mu"]
-atlas = ExtResource("4_lbf3j")
+atlas = ExtResource("4_wxfyl")
 region = Rect2(120, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yixou"]
-atlas = ExtResource("4_lbf3j")
+atlas = ExtResource("4_wxfyl")
 region = Rect2(80, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lny8s"]
-atlas = ExtResource("4_lbf3j")
+atlas = ExtResource("4_wxfyl")
 region = Rect2(40, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ysv81"]
-atlas = ExtResource("4_lbf3j")
+atlas = ExtResource("4_wxfyl")
 region = Rect2(0, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yq7w6"]
-atlas = ExtResource("4_lbf3j")
+atlas = ExtResource("4_wxfyl")
 region = Rect2(0, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4bjno"]
-atlas = ExtResource("4_lbf3j")
+atlas = ExtResource("4_wxfyl")
 region = Rect2(40, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yfq6l"]
-atlas = ExtResource("4_lbf3j")
+atlas = ExtResource("4_wxfyl")
 region = Rect2(80, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_y0qjt"]
-atlas = ExtResource("4_lbf3j")
+atlas = ExtResource("4_wxfyl")
 region = Rect2(120, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lfuqd"]
-atlas = ExtResource("4_lbf3j")
+atlas = ExtResource("4_wxfyl")
 region = Rect2(160, 0, 40, 40)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_t2tca"]
@@ -93,31 +93,31 @@ animations = [{
 }]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nf1md"]
-atlas = ExtResource("5_i3qn4")
+atlas = ExtResource("7_nkmn6")
 region = Rect2(80, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bihw8"]
-atlas = ExtResource("5_i3qn4")
+atlas = ExtResource("7_nkmn6")
 region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2ft22"]
-atlas = ExtResource("5_i3qn4")
+atlas = ExtResource("7_nkmn6")
 region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4hyh8"]
-atlas = ExtResource("5_i3qn4")
+atlas = ExtResource("7_nkmn6")
 region = Rect2(32, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ld7ei"]
-atlas = ExtResource("5_i3qn4")
+atlas = ExtResource("7_nkmn6")
 region = Rect2(48, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fi71w"]
-atlas = ExtResource("5_i3qn4")
+atlas = ExtResource("7_nkmn6")
 region = Rect2(64, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1tgyl"]
-atlas = ExtResource("5_i3qn4")
+atlas = ExtResource("7_nkmn6")
 region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_2ked5"]
@@ -161,7 +161,7 @@ animations = [{
 
 [node name="battle" type="Node2D"]
 texture_filter = 1
-script = ExtResource("1_fkyrb")
+script = ExtResource("1_62dho")
 
 [node name="bg" type="ColorRect" parent="."]
 offset_right = 320.0
@@ -171,10 +171,10 @@ offset_bottom = 288.0
 texture_filter = 1
 position = Vector2(256, 64)
 scale = Vector2(2, 2)
-texture = ExtResource("4_jy5vo")
+texture = ExtResource("2_pp3su")
 region_enabled = true
 region_rect = Rect2(0, 0, 40, 40)
-script = ExtResource("3_chsc5")
+script = ExtResource("3_eiwn4")
 is_enemy = true
 
 [node name="animation" type="AnimatedSprite2D" parent="enemy_sprite"]
@@ -186,22 +186,22 @@ animation = &"summon"
 texture_filter = 1
 position = Vector2(48, 192)
 scale = Vector2(2, 2)
-texture = ExtResource("2_5cbjt")
-script = ExtResource("3_chsc5")
+texture = ExtResource("5_cs675")
+script = ExtResource("3_eiwn4")
 
 [node name="animation" type="AnimatedSprite2D" parent="player_sprite"]
 visible = false
 sprite_frames = SubResource("SpriteFrames_t2tca")
 animation = &"unsummon"
 
-[node name="enemy_healthbar" parent="." instance=ExtResource("3_fwexg")]
+[node name="enemy_healthbar" parent="." instance=ExtResource("6_303qm")]
 offset_left = 4.0
 offset_top = 28.0
 offset_right = 44.0
 offset_bottom = 68.0
 is_enemy = true
 
-[node name="player_healthbar" parent="." instance=ExtResource("3_fwexg")]
+[node name="player_healthbar" parent="." instance=ExtResource("6_303qm")]
 offset_left = 120.0
 offset_top = 176.0
 offset_right = 160.0
@@ -216,44 +216,44 @@ frame = 4
 frame_progress = 1.0
 centered = false
 offset = Vector2(-8, -16)
-script = ExtResource("6_qgu3n")
+script = ExtResource("8_hx3xp")
 
-[node name="dialog" parent="." instance=ExtResource("3_ngrtx")]
+[node name="dialog" parent="." instance=ExtResource("9_h1m2m")]
 offset_top = 232.0
 offset_bottom = 288.0
 
-[node name="spell_chooser" parent="." instance=ExtResource("7_p5s2c")]
+[node name="spell_chooser" parent="." instance=ExtResource("10_24sqf")]
 offset_left = 132.0
 offset_top = 215.0
 offset_right = 320.0
 offset_bottom = 288.0
 
-[node name="battle_actions" parent="." instance=ExtResource("6_ug4s5")]
+[node name="battle_actions" parent="." instance=ExtResource("11_d80gd")]
 visible = false
 offset_left = 192.0
 offset_top = 202.0
 offset_right = 320.0
 offset_bottom = 288.0
 
-[node name="spell_info" parent="." instance=ExtResource("9_8hqbq")]
+[node name="spell_info" parent="." instance=ExtResource("12_wsb1p")]
 offset_top = 215.0
 offset_bottom = 288.0
 
-[node name="spell_warning" parent="." instance=ExtResource("10_cb1ib")]
+[node name="spell_warning" parent="." instance=ExtResource("13_hu1uc")]
 visible = false
 offset_top = 184.0
 offset_bottom = 215.0
 timeout_duration = 1.5
 y_align = 1
 
-[node name="party_menu" parent="." instance=ExtResource("11_j640b")]
+[node name="party_menu" parent="." instance=ExtResource("14_u5hny")]
 visible = false
 offset_left = 72.0
 offset_top = 150.0
 offset_right = 320.0
 offset_bottom = 288.0
 
-[node name="party_warning" parent="." instance=ExtResource("10_cb1ib")]
+[node name="party_warning" parent="." instance=ExtResource("13_hu1uc")]
 visible = false
 offset_left = 134.0
 offset_top = 119.0
@@ -263,20 +263,20 @@ timeout_duration = 1.5
 x_align = 1
 y_align = 1
 
-[node name="item_chooser" parent="." instance=ExtResource("13_w03tv")]
+[node name="item_chooser" parent="." instance=ExtResource("15_pduf7")]
 visible = false
 offset_left = 132.0
 offset_top = 127.0
 offset_right = 320.0
 offset_bottom = 288.0
 
-[node name="item_warning" parent="." instance=ExtResource("10_cb1ib")]
+[node name="item_warning" parent="." instance=ExtResource("13_hu1uc")]
 offset_top = 205.0
 offset_bottom = 224.0
 timeout_duration = 1.5
 y_align = 1
 
-[node name="turn_popup" parent="." instance=ExtResource("10_cb1ib")]
+[node name="turn_popup" parent="." instance=ExtResource("13_hu1uc")]
 offset_left = 113.0
 offset_top = 105.0
 offset_right = 211.0

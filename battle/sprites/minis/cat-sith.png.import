@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4nfivuyyr34l"
-path="res://.godot/imported/cat-sith.png-d3b0cee8c2b47d821726af3682de1dc4.ctex"
+uid="uid://bkbr53n5ty1uc"
+path="res://.godot/imported/cat-sith.png-018ec8c1be320c944b8091e90d29b7c3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://familiar/sprites/back/cat-sith.png"
-dest_files=["res://.godot/imported/cat-sith.png-d3b0cee8c2b47d821726af3682de1dc4.ctex"]
+source_file="res://battle/sprites/minis/cat-sith.png"
+dest_files=["res://.godot/imported/cat-sith.png-018ec8c1be320c944b8091e90d29b7c3.ctex"]
 
 [params]
 

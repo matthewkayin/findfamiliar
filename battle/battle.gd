@@ -91,12 +91,16 @@ func battle_start():
     enemy_healthbar.party = enemy_party
     party_menu.party = player_party
 
-    await enemy_sprite.animate_appear(enemy_party.familiars[0].species.name)
+    dialog.clear()
+    dialog.visible = true
+    player_sprite.animate_enter("player")
+    await enemy_sprite.animate_enter(enemy_party.familiars[0].species.name)
     enemy_healthbar.open()
     dialog.open("A wild " + enemy_party.familiars[0].get_display_name() + "\nappeared!")
     await dialog.finished
     dialog.clear()
 
+    await player_sprite.animate_exit()
     await summon_familiar(true)
     var delay_tween = get_tree().create_tween()
     delay_tween.tween_interval(0.25)
