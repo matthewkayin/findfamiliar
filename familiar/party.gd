@@ -25,7 +25,7 @@ func before_turn():
     if burned_out:
         burned_out = false
     else:
-        mana = 3 
+        mana = familiars.size()
     
     # reset flags
     for familiar in familiars:

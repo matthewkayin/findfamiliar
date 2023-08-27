@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://4xaqdp8x46q3"]
+[gd_scene load_steps=41 format=3 uid="uid://d378k4ss1jlim"]
 
 [ext_resource type="Script" path="res://battle/battle.gd" id="1_62dho"]
 [ext_resource type="Texture2D" uid="uid://wms1mx2tepno" path="res://battle/sprites/front/cat-sith.png" id="2_pp3su"]
@@ -300,13 +300,12 @@ offset_right = 320.0
 offset_bottom = 288.0
 
 [node name="spell_info" parent="." instance=ExtResource("12_wsb1p")]
-offset_top = 215.0
+offset_top = 206.0
 offset_bottom = 288.0
 
 [node name="spell_warning" parent="." instance=ExtResource("13_hu1uc")]
-visible = false
-offset_top = 184.0
-offset_bottom = 215.0
+offset_top = 175.0
+offset_bottom = 206.0
 timeout_duration = 1.5
 y_align = 1
 
@@ -335,12 +334,14 @@ offset_right = 320.0
 offset_bottom = 288.0
 
 [node name="item_warning" parent="." instance=ExtResource("13_hu1uc")]
+visible = false
 offset_top = 205.0
 offset_bottom = 224.0
 timeout_duration = 1.5
 y_align = 1
 
 [node name="turn_popup" parent="." instance=ExtResource("13_hu1uc")]
+visible = false
 offset_left = 113.0
 offset_top = 105.0
 offset_right = 211.0
