@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://wphpyoii23gm"]
+[gd_scene load_steps=7 format=3 uid="uid://wphpyoii23gm"]
 
 [ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_sp5pl"]
 [ext_resource type="Script" path="res://ui/party_menu/party_menu.gd" id="2_7x5pg"]
@@ -6,8 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://bkbr53n5ty1uc" path="res://battle/sprites/minis/cat-sith.png" id="3_m57xe"]
 [ext_resource type="Texture2D" uid="uid://cu5vektr5u0ow" path="res://ui/damage_types.png" id="4_dkdff"]
 [ext_resource type="Texture2D" uid="uid://cqve3mnfvk083" path="res://ui/cursor.png" id="5_c0t82"]
-[ext_resource type="Texture2D" uid="uid://bdrmyw0jddcr6" path="res://ui/healthbar/mana.png" id="6_0kkq6"]
-[ext_resource type="Script" path="res://ui/manabar.gd" id="6_h40ka"]
 
 [node name="party_menu" type="NinePatchRect"]
 texture_filter = 1
@@ -187,36 +185,6 @@ theme_override_font_sizes/font_size = 8
 text = "SWITCH COST:"
 horizontal_alignment = 2
 
-[node name="manabar" type="Control" parent="one"]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 141.0
-offset_top = 56.0
-offset_right = 181.0
-offset_bottom = 96.0
-script = ExtResource("6_h40ka")
-
-[node name="0" type="Sprite2D" parent="one/manabar"]
-position = Vector2(10, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("6_0kkq6")
-hframes = 3
-frame = 2
-
-[node name="1" type="Sprite2D" parent="one/manabar"]
-position = Vector2(24, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("6_0kkq6")
-hframes = 3
-frame = 2
-
-[node name="2" type="Sprite2D" parent="one/manabar"]
-position = Vector2(38, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("6_0kkq6")
-hframes = 3
-frame = 2
-
 [node name="two" type="Control" parent="."]
 anchors_preset = 0
 offset_right = 40.0
@@ -330,36 +298,6 @@ theme_override_fonts/font = ExtResource("3_jwria")
 theme_override_font_sizes/font_size = 8
 text = "SWITCH COST:"
 horizontal_alignment = 2
-
-[node name="manabar" type="Control" parent="two"]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 141.0
-offset_top = 100.0
-offset_right = 181.0
-offset_bottom = 140.0
-script = ExtResource("6_h40ka")
-
-[node name="0" type="Sprite2D" parent="two/manabar"]
-position = Vector2(10, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("6_0kkq6")
-hframes = 3
-frame = 2
-
-[node name="1" type="Sprite2D" parent="two/manabar"]
-position = Vector2(24, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("6_0kkq6")
-hframes = 3
-frame = 2
-
-[node name="2" type="Sprite2D" parent="two/manabar"]
-position = Vector2(38, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("6_0kkq6")
-hframes = 3
-frame = 2
 
 [node name="exp" type="Control" parent="two"]
 visible = false
@@ -526,36 +464,6 @@ theme_override_fonts/font = ExtResource("3_jwria")
 theme_override_font_sizes/font_size = 8
 text = "SWITCH COST:"
 horizontal_alignment = 2
-
-[node name="manabar" type="Control" parent="three"]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 141.0
-offset_top = 142.0
-offset_right = 181.0
-offset_bottom = 182.0
-script = ExtResource("6_h40ka")
-
-[node name="0" type="Sprite2D" parent="three/manabar"]
-position = Vector2(10, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("6_0kkq6")
-hframes = 3
-frame = 2
-
-[node name="1" type="Sprite2D" parent="three/manabar"]
-position = Vector2(24, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("6_0kkq6")
-hframes = 3
-frame = 2
-
-[node name="2" type="Sprite2D" parent="three/manabar"]
-position = Vector2(38, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("6_0kkq6")
-hframes = 3
-frame = 2
 
 [node name="exp" type="Control" parent="three"]
 visible = false

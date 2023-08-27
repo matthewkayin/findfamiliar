@@ -14,6 +14,11 @@ config/name="findfamiliar"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+player_party="*res://familiar/party.gd"
+enemy_party="*res://familiar/party.gd"
+
 [display]
 
 window/size/viewport_width=320

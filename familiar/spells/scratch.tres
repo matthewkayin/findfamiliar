@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Spell" load_steps=2 format=3 uid="uid://byq3580xa6bwe"]
+[gd_resource type="Resource" script_class="Spell" load_steps=2 format=3 uid="uid://brrs3jj51ffh5"]
 
 [ext_resource type="Script" path="res://familiar/spell.gd" id="1_4bku1"]
 

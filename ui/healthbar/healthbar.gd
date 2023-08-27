@@ -7,7 +7,6 @@ signal finished
 @onready var health = $health
 @onready var health_amount = $health/health_amount
 @onready var healthbar = $health/healthbar
-@onready var manabar = $manabar
 @onready var conditions = $conditions
 
 @export var is_enemy = false
@@ -16,26 +15,21 @@ const HEALTHBAR_COLOR_GREEN = Color8(0, 184, 0, 255)
 const HEALTHBAR_COLOR_YELLOW = Color8(248, 168, 0, 255)
 const HEALTHBAR_COLOR_RED = Color8(248, 0, 0, 255)
 
-var party: Party = null
-var manabar_spheres = []
+var party: Party
 
 var healthbar_max_width: int
 var displayed_health: float
-var displayed_mana: float
 var is_interpolating: bool = false
 
 func _ready():
     healthbar_max_width = healthbar.size.x
     if is_enemy:
-        manabar.position.x = 0
         conditions.position.x = 96
-    for i in range(0, manabar.get_child_count()):
-        manabar_spheres.append(manabar.get_child(i).get_child(0))
+    party = get_node("/root/enemy_party") if is_enemy else get_node("/root/player_party")
     visible = false
 
 func open():
     displayed_health = party.familiars[0].health
-    displayed_mana = party.mana
     refresh()
     visible = true
 
@@ -43,24 +37,6 @@ func close():
     visible = false
 
 func refresh():
-    # refresh manabar
-    var mana_remaining: float = displayed_mana
-    var sphere_index: int = 0
-    while mana_remaining >= 1:
-        manabar_spheres[sphere_index].visible = true
-        manabar_spheres[sphere_index].region_rect = Rect2(Vector2(16, 0), Vector2(8, 8))
-        manabar_spheres[sphere_index].offset.y = -4
-        sphere_index += 1
-        mana_remaining -= 1
-    if mana_remaining > 0:
-        var sphere_height = 8 * mana_remaining
-        manabar_spheres[sphere_index].visible = true
-        manabar_spheres[sphere_index].region_rect = Rect2(Vector2(16, 8 - sphere_height), Vector2(8, sphere_height))
-        manabar_spheres[sphere_index].offset.y = -4 + manabar_spheres[sphere_index].region_rect.position.y
-        sphere_index += 1
-    for index in range(sphere_index, 3):
-        manabar_spheres[index].visible = false
-
     # refresh healthbar
     var familiar = party.familiars[0]
     name_label.text = familiar.get_display_name()
@@ -90,8 +66,6 @@ func fast_update():
 
 func update():
     is_interpolating = true
-    var mana_tween = get_tree().create_tween()
-    mana_tween.tween_property(self, "displayed_mana", party.mana, 0.5)
     var health_tween = get_tree().create_tween()
     health_tween.tween_property(self, "displayed_health", party.familiars[0].health, 1.0)
     await health_tween.finished

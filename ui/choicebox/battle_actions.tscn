@@ -13,7 +13,7 @@ font_color = Color(0, 0, 0, 1)
 [node name="battle_actions" type="NinePatchRect"]
 texture_filter = 1
 offset_right = 128.0
-offset_bottom = 86.0
+offset_bottom = 73.0
 texture = ExtResource("1_c12ct")
 patch_margin_left = 8
 patch_margin_top = 8
@@ -35,9 +35,9 @@ offset_bottom = 40.0
 texture_filter = 1
 layout_mode = 0
 offset_left = 22.0
-offset_top = 8.0
+offset_top = 9.0
 offset_right = 278.0
-offset_bottom = 46.0
+offset_bottom = 47.0
 text = "SPELL"
 label_settings = SubResource("LabelSettings_c6tjp")
 
@@ -45,9 +45,9 @@ label_settings = SubResource("LabelSettings_c6tjp")
 texture_filter = 1
 layout_mode = 0
 offset_left = 22.0
-offset_top = 23.0
+offset_top = 24.0
 offset_right = 278.0
-offset_bottom = 61.0
+offset_bottom = 62.0
 text = "SWITCH"
 label_settings = SubResource("LabelSettings_c6tjp")
 
@@ -55,9 +55,9 @@ label_settings = SubResource("LabelSettings_c6tjp")
 texture_filter = 1
 layout_mode = 0
 offset_left = 22.0
-offset_top = 38.0
+offset_top = 39.0
 offset_right = 278.0
-offset_bottom = 76.0
+offset_bottom = 77.0
 text = "ITEM"
 label_settings = SubResource("LabelSettings_c6tjp")
 
@@ -65,19 +65,9 @@ label_settings = SubResource("LabelSettings_c6tjp")
 texture_filter = 1
 layout_mode = 0
 offset_left = 22.0
-offset_top = 53.0
+offset_top = 54.0
 offset_right = 278.0
-offset_bottom = 91.0
-text = "END"
-label_settings = SubResource("LabelSettings_c6tjp")
-
-[node name="label6" type="Label" parent="options/col1"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 22.0
-offset_top = 68.0
-offset_right = 278.0
-offset_bottom = 106.0
+offset_bottom = 92.0
 text = "RUN"
 label_settings = SubResource("LabelSettings_c6tjp")
 

@@ -1,10 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://b7mpjknucy1aa"]
+[gd_scene load_steps=5 format=3 uid="uid://b7mpjknucy1aa"]
 
 [ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_m6bqj"]
 [ext_resource type="Script" path="res://ui/item_info/item_info.gd" id="2_y5bil"]
 [ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="3_mw756"]
-[ext_resource type="Script" path="res://ui/manabar.gd" id="4_nieni"]
-[ext_resource type="Texture2D" uid="uid://bdrmyw0jddcr6" path="res://ui/healthbar/mana.png" id="5_cfn3u"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_s7pw4"]
 font = ExtResource("3_mw756")
@@ -37,33 +35,3 @@ gem. Captures
 the soul of a 
 monster."
 label_settings = SubResource("LabelSettings_s7pw4")
-
-[node name="manabar" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 44.0
-offset_top = 26.0
-offset_right = 84.0
-offset_bottom = 66.0
-script = ExtResource("4_nieni")
-
-[node name="0" type="Sprite2D" parent="manabar"]
-position = Vector2(10, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("5_cfn3u")
-hframes = 3
-frame = 2
-
-[node name="1" type="Sprite2D" parent="manabar"]
-position = Vector2(24, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("5_cfn3u")
-hframes = 3
-frame = 2
-
-[node name="2" type="Sprite2D" parent="manabar"]
-position = Vector2(38, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("5_cfn3u")
-hframes = 3
-frame = 2

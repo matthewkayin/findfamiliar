@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://d3s1nxt7qpaqm"]
+[gd_scene load_steps=10 format=3 uid="uid://d3s1nxt7qpaqm"]
 
 [ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_rketr"]
 [ext_resource type="Script" path="res://ui/choicebox/choicebox.gd" id="2_60bfs"]
 [ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="3_8xq13"]
 [ext_resource type="Texture2D" uid="uid://cqve3mnfvk083" path="res://ui/cursor.png" id="4_svyio"]
+[ext_resource type="PackedScene" uid="uid://5ol8rm2tnr16" path="res://ui/spell_info/spell_info.tscn" id="5_6d3io"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_64ttc"]
 font = ExtResource("3_8xq13")
@@ -93,3 +94,10 @@ label_settings = SubResource("LabelSettings_mfdjd")
 position = Vector2(12, 14)
 scale = Vector2(2, 2)
 texture = ExtResource("4_svyio")
+
+[node name="spell_info" parent="." instance=ExtResource("5_6d3io")]
+layout_mode = 0
+offset_left = -132.0
+offset_top = -9.0
+offset_right = 0.0
+offset_bottom = 73.0

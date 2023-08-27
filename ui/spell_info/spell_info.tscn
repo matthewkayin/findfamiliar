@@ -1,10 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://5ol8rm2tnr16"]
+[gd_scene load_steps=6 format=3 uid="uid://5ol8rm2tnr16"]
 
 [ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_8x34e"]
 [ext_resource type="Script" path="res://ui/spell_info/spell_info.gd" id="2_ducfw"]
 [ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="2_yoq52"]
-[ext_resource type="Texture2D" uid="uid://bdrmyw0jddcr6" path="res://ui/healthbar/mana.png" id="3_fbfjg"]
-[ext_resource type="Script" path="res://ui/manabar.gd" id="4_decdu"]
 [ext_resource type="Texture2D" uid="uid://c056e3fhe6c8k" path="res://ui/conditions_small.png" id="6_6lepu"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_cq2lv"]
@@ -35,41 +33,10 @@ theme_override_fonts/font = ExtResource("2_yoq52")
 theme_override_font_sizes/font_size = 8
 text = "PHYSICAL
 TYPE: SPIRIT
-COST:
 POW:--- ACC:100
 Attack very 
 quickly"
 label_settings = SubResource("LabelSettings_cq2lv")
-
-[node name="manabar" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 48.0
-offset_top = 51.0
-offset_right = 88.0
-offset_bottom = 91.0
-script = ExtResource("4_decdu")
-
-[node name="0" type="Sprite2D" parent="manabar"]
-position = Vector2(10, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("3_fbfjg")
-hframes = 3
-frame = 2
-
-[node name="1" type="Sprite2D" parent="manabar"]
-position = Vector2(24, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("3_fbfjg")
-hframes = 3
-frame = 2
-
-[node name="2" type="Sprite2D" parent="manabar"]
-position = Vector2(38, -16)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("3_fbfjg")
-hframes = 3
-frame = 2
 
 [node name="type_icon" type="Sprite2D" parent="."]
 position = Vector2(80, 13)

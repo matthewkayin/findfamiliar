@@ -1,6 +1,7 @@
 extends NinePatchRect
 
 signal updated_cursor
+signal closed
 
 @export var allow_back: bool = false
 
@@ -50,6 +51,7 @@ func open_with(p_options: Array[String]):
 
 func close():
     visible = false
+    emit_signal("closed")
 
 func update_cursor():
     cursor.position = choice_labels[cursor_index.x][cursor_index.y].position + Vector2(-10, 6)

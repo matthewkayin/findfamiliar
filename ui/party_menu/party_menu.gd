@@ -1,5 +1,7 @@
 extends NinePatchRect
 
+@onready var party: Party = get_node("/root/player_party")
+
 signal interpolate_finished
 signal clear_warning
 
@@ -12,7 +14,6 @@ signal clear_warning
 @onready var health_amount = [$one/health/health_amount, $two/health/health_amount, $three/health/health_amount]
 @onready var exp_cluster = [$one/exp, $two/exp, $three/exp]
 @onready var expbar = [$one/exp/expbar, $two/exp/expbar, $three/exp/expbar]
-@onready var manabar = [$one/manabar, $two/manabar, $three/manabar]
 @onready var switch_cost_label = [$one/switch_cost_label, $two/switch_cost_label, $three/switch_cost_label]
 @onready var cursor = $cursor
 @onready var timer = $timer
@@ -21,7 +22,6 @@ const HEALTHBAR_COLOR_GREEN = Color8(0, 184, 0, 255)
 const HEALTHBAR_COLOR_YELLOW = Color8(248, 168, 0, 255)
 const HEALTHBAR_COLOR_RED = Color8(248, 0, 0, 255)
 
-var party: Party
 var cursor_index = Vector2i(0, 0)
 var allow_back: bool = true
 var is_finished: bool = false
@@ -43,7 +43,7 @@ func _ready():
 func _on_timer_timeout():
     if exp_cluster[0].visible:
         for i in range(0, party.familiars.size()):
-            if party.familiars[cursor_index.y].is_living():
+            if party.familiars[i].is_living():
                 minis[i].frame = 1 if minis[i].frame == 0 else 0
     else:
         if party.familiars[cursor_index.y].is_living():
@@ -59,7 +59,7 @@ func close():
     visible = false
     timer.stop()
 
-func open(item_mode: bool = false, p_allow_back: bool = true, exp_mode: bool = false):
+func open(p_allow_back: bool = true, exp_mode: bool = false):
     allow_back = p_allow_back
     cursor_index = Vector2i(0, 0)
     is_finished = false
@@ -69,14 +69,7 @@ func open(item_mode: bool = false, p_allow_back: bool = true, exp_mode: bool = f
             group[i].visible = false
             continue
 
-        if item_mode or i == 0:
-            switch_cost_label[i].visible = false
-            manabar[i].visible = false
-        else:
-            switch_cost_label[i].text = "SWITCH COST: "
-            switch_cost_label[i].visible = true
-            manabar[i].visible = true
-            manabar[i].set_value(party.get_switch_cost(i), false)
+        switch_cost_label[i].visible = false
         name_label[i].text = party.familiars[i].get_display_name()
         level_label[i].text = "L" + str(party.familiars[i].level)
         displayed_health[i] = party.familiars[i].health

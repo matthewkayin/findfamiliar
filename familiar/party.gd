@@ -1,11 +1,9 @@
 extends Node
 class_name Party
 
-var mana: int = 0
 var old_familiar_order: Array[Familiar] = []
 var familiars: Array[Familiar] = []
 var items: Dictionary = {}
-var burned_out: bool = false
 
 func get_living_familiar_count():
     var count = 0
@@ -21,20 +19,7 @@ func is_defeated() -> bool:
     return true
 
 func before_turn():
-    # if burned out, skip turn
-    if burned_out:
-        burned_out = false
-    else:
-        mana = familiars.size()
-    
-    # reset flags
-    for familiar in familiars:
-        if not familiar.is_living():
-            continue
-        familiar.has_attacked = false
-        familiar.has_switched = false
-        familiar.has_used_item = false
-    familiars[0].has_switched = true
+    pass
 
 func before_battle():
     # Remember the party order
@@ -60,17 +45,6 @@ func after_battle():
     # clear conditions
     for familiar in familiars:
         familiar.conditions.clear()
-
-func get_switch_cost(to_index: int) -> int:
-    var current_familiar_affinities = Types.INFO[familiars[0].species.type].affinities
-    if current_familiar_affinities.has(familiars[to_index].species.type):
-        var third_index = 1 if to_index == 2 else 1
-        if familiars.size() == 3 and current_familiar_affinities.has[familiars[third_index].type]:
-            return 0
-        else:
-            return 1
-    else:
-        return 2
 
 func switch(index_a: int, index_b: int):
     var temp = familiars[index_a]

@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://e8xfwq5j4g1b"]
+[gd_scene load_steps=4 format=3 uid="uid://e8xfwq5j4g1b"]
 
 [ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="1_dao1w"]
 [ext_resource type="Script" path="res://ui/healthbar/healthbar.gd" id="1_jbg1p"]
-[ext_resource type="Texture2D" uid="uid://bdrmyw0jddcr6" path="res://ui/healthbar/mana.png" id="3_o6sy8"]
-[ext_resource type="Texture2D" uid="uid://cxodxb0h3532l" path="res://ui/conditions.png" id="4_wpgfn"]
+[ext_resource type="Texture2D" uid="uid://c056e3fhe6c8k" path="res://ui/conditions_small.png" id="3_dmcyx"]
 
 [node name="healthbar" type="Control"]
 texture_filter = 1
@@ -94,63 +93,19 @@ offset_right = 133.0
 offset_bottom = 24.0
 color = Color(0, 0, 0, 1)
 
-[node name="manabar" type="Control" parent="."]
-anchors_preset = 0
-offset_left = 130.0
-offset_right = 170.0
-offset_bottom = 40.0
-
-[node name="0" type="Sprite2D" parent="manabar"]
-position = Vector2(8, -16)
-scale = Vector2(2, 2)
-texture = ExtResource("3_o6sy8")
-hframes = 3
-
-[node name="0" type="Sprite2D" parent="manabar/0"]
-texture = ExtResource("3_o6sy8")
-centered = false
-offset = Vector2(-4, -4)
-region_enabled = true
-region_rect = Rect2(16, 0, 8, 8)
-
-[node name="1" type="Sprite2D" parent="manabar"]
-position = Vector2(32, -16)
-scale = Vector2(2, 2)
-texture = ExtResource("3_o6sy8")
-hframes = 3
-
-[node name="1" type="Sprite2D" parent="manabar/1"]
-texture = ExtResource("3_o6sy8")
-centered = false
-offset = Vector2(-4, -4)
-region_enabled = true
-region_rect = Rect2(16, 0, 8, 8)
-
-[node name="2" type="Sprite2D" parent="manabar"]
-position = Vector2(56, -16)
-scale = Vector2(2, 2)
-texture = ExtResource("3_o6sy8")
-hframes = 3
-
-[node name="2" type="Sprite2D" parent="manabar/2"]
-texture = ExtResource("3_o6sy8")
-centered = false
-offset = Vector2(-4, -4)
-region_enabled = true
-region_rect = Rect2(16, 0, 8, 8)
-
 [node name="conditions" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_top = -26.0
-offset_right = 96.0
-offset_bottom = 14.0
+offset_left = 11.0
+offset_top = 26.0
+offset_right = 107.0
+offset_bottom = 66.0
 
 [node name="0" type="Control" parent="conditions"]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="sprite" type="Sprite2D" parent="conditions/0"]
-texture = ExtResource("4_wpgfn")
+texture = ExtResource("3_dmcyx")
 centered = false
 hframes = 15
 
@@ -159,38 +114,33 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="sprite" type="Sprite2D" parent="conditions/1"]
-texture = ExtResource("4_wpgfn")
+texture = ExtResource("3_dmcyx")
 centered = false
 hframes = 15
-frame = 1
 
 [node name="2" type="Control" parent="conditions"]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="sprite" type="Sprite2D" parent="conditions/2"]
-texture = ExtResource("4_wpgfn")
+texture = ExtResource("3_dmcyx")
 centered = false
 hframes = 15
-frame = 1
 
 [node name="3" type="Control" parent="conditions"]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="sprite" type="Sprite2D" parent="conditions/3"]
-texture = ExtResource("4_wpgfn")
+texture = ExtResource("3_dmcyx")
 centered = false
 hframes = 15
-frame = 1
 
 [node name="4" type="Control" parent="conditions"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="sprite" type="Sprite2D" parent="conditions/4"]
-texture = ExtResource("4_wpgfn")
+texture = ExtResource("3_dmcyx")
 centered = false
 hframes = 15
-frame = 1
