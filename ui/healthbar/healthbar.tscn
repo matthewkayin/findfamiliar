@@ -2,7 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="1_dao1w"]
 [ext_resource type="Script" path="res://ui/healthbar/healthbar.gd" id="1_jbg1p"]
-[ext_resource type="Texture2D" uid="uid://c056e3fhe6c8k" path="res://ui/conditions_small.png" id="3_dmcyx"]
+[ext_resource type="Texture2D" uid="uid://cxodxb0h3532l" path="res://ui/healthbar/conditions.png" id="3_n0gte"]
 
 [node name="healthbar" type="Control"]
 texture_filter = 1
@@ -105,42 +105,43 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="sprite" type="Sprite2D" parent="conditions/0"]
-texture = ExtResource("3_dmcyx")
+texture = ExtResource("3_n0gte")
 centered = false
-hframes = 15
+hframes = 22
+frame = 20
 
 [node name="1" type="Control" parent="conditions"]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="sprite" type="Sprite2D" parent="conditions/1"]
-texture = ExtResource("3_dmcyx")
+texture = ExtResource("3_n0gte")
 centered = false
-hframes = 15
+hframes = 22
 
 [node name="2" type="Control" parent="conditions"]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="sprite" type="Sprite2D" parent="conditions/2"]
-texture = ExtResource("3_dmcyx")
+texture = ExtResource("3_n0gte")
 centered = false
-hframes = 15
+hframes = 22
 
 [node name="3" type="Control" parent="conditions"]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="sprite" type="Sprite2D" parent="conditions/3"]
-texture = ExtResource("3_dmcyx")
+texture = ExtResource("3_n0gte")
 centered = false
-hframes = 15
+hframes = 22
 
 [node name="4" type="Control" parent="conditions"]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="sprite" type="Sprite2D" parent="conditions/4"]
-texture = ExtResource("3_dmcyx")
+texture = ExtResource("3_n0gte")
 centered = false
-hframes = 15
+hframes = 22

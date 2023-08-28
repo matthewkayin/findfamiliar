@@ -334,7 +334,6 @@ func do_action(action):
         var defender: Familiar = enemy_party.familiars[0] if action.actor == ActionActor.PLAYER else player_party.familiars[0]
         var attacker_healthbar = player_healthbar if action.actor == ActionActor.PLAYER else enemy_healthbar
         var defender_healthbar = enemy_healthbar if action.actor == ActionActor.PLAYER else player_healthbar
-        var attacker_party: Party = player_party if action.actor == ActionActor.PLAYER else enemy_party
 
         # display spell message
         var message = ""
@@ -345,11 +344,30 @@ func do_action(action):
         await dialog.finished
         dialog.clear()
 
-        # check if move hits or misses
+        # check if move hits
         var spell_hit: bool = false
         if action.spell.damage_type != Spell.DamageType.NONE:
             var accuracy_dc: int = action.spell.accuracy + (float(attacker.get_agility() - defender.get_agility()) / 1.5)
             spell_hit = randi_range(0, 100) <= accuracy_dc
+        # check if condition hit
+        var condition_hit: bool = false
+        var condition_dc: int = action.spell.condition_accuracy
+        if defender.is_living() and action.spell.condition_target == Spell.ConditionTarget.OPPONENT:
+            condition_dc += int(float(attacker.get_intellect() - defender.get_intellect()) / 1.5)
+            condition_hit = randi_range(0, 100) <= condition_dc
+        elif action.spell.condition_target == Spell.ConditionTarget.SELF: 
+            condition_hit = true
+
+        # display miss message
+        if (not spell_hit and action.spell.damage_type != Spell.DamageType.NONE) or (not condition_hit and action.spell.damage_type == Spell.DamageType.NONE):
+            var miss_message = ""
+            if action.actor == ActionActor.ENEMY:
+                miss_message += "Enemy "
+            miss_message += attacker.get_display_name() + "'s\nattack missed!"
+            dialog.open(miss_message)
+            await dialog.finished
+            dialog.clear()
+
         if spell_hit:
             # Compute base damage
             var attacker_attack: float = attacker.get_strength() if action.spell.damage_type == Spell.DamageType.PHYSICAL else attacker.get_intellect()
@@ -397,75 +415,40 @@ func do_action(action):
             if defender_healthbar.is_interpolating:
                 await defender_healthbar.finished
 
-        # else if not spell hit
-        elif action.spell.damage_type != Spell.DamageType.NONE:
-            var miss_message = ""
-            if action.actor == ActionActor.ENEMY:
-                miss_message += "Enemy "
-            miss_message += attacker.get_display_name() + "'s\nattack missed!"
-            dialog.open(miss_message)
-            await dialog.finished
-            dialog.clear()
+        # SPELL CONDITIONS
 
-        # determine if condition hit
-        var condition_hit: bool = false
-        var condition_dc: int = action.spell.condition_accuracy
-        if defender.is_living() and action.spell.condition_target == Condition.Target.OPPONENT:
-            condition_dc += int(float(attacker.get_intellect() - defender.get_intellect()) / 1.5)
-            condition_hit = randi_range(0, 100) <= condition_dc
-        elif action.spell.condition_target == Condition.Target.SELF or action.spell.condition_target == Condition.Target.PARTY:
-            condition_hit = true
-
-        # handle spell conditions
         if condition_hit:
-            for condition in action.spell.conditions:
-                # apply condition
-                var use_apply_message: bool = false
-                if action.spell.condition_target == Condition.Target.SELF:
-                    use_apply_message = attacker.add_condition(condition)
-                elif action.spell.condition_target == Condition.Target.PARTY:
-                    for familiar in attacker_party.familiars:
-                        familiar.add_condition(condition)
-                    use_apply_message = true
-                elif action.spell.condition_target == Condition.Target.OPPONENT:
-                    use_apply_message = defender.add_condition(condition)
+            var condition_target = attacker if action.spell.condition_target == Spell.ConditionTarget.SELF else defender
+            var condition_target_name = condition_target.get_display_name() if condition_target == player_party.familiars[0] else "Enemy " + condition_target.get_display_name()
+            var condition_target_healthbar = attacker_healthbar if action.spell.condition_target == Spell.ConditionTarget.SELF else defender_healthbar
 
-                # display condition message
-                # set condition message name
-                var condition_message = ""
-                if action.spell.condition_target == Condition.Target.PARTY:
-                    condition_message = "Your party" if action.actor == ActionActor.PLAYER else "Enemy party"
-                elif action.spell.condition_target == Condition.Target.SELF:
-                    if action.actor == ActionActor.ENEMY:
-                        condition_message += "Enemy "
-                    condition_message = attacker.get_display_name()
-                elif action.spell.condition_target == Condition.Target.OPPONENT:
-                    if action.actor == ActionActor.PLAYER:
-                        condition_message += "Enemy "
-                    condition_message = defender.get_display_name()
-                # set condition message content
-                if use_apply_message: 
-                    condition_message += Condition.INFO[condition].apply_message
-                elif action.spell.damage_type == Spell.DamageType.NONE:
-                    condition_message += Condition.INFO[condition].reapply_message
-                else:
-                    condition_message = ""
-                # open dialog box
-                if condition_message != "":
-                    dialog.open(condition_message)
-                    attacker_healthbar.refresh()
-                    defender_healthbar.refresh()
-                    await dialog.finished
-                    dialog.clear()
-        # if not condition hit
-        else:
-            if action.spell.damage_type == Spell.DamageType.NONE:
-                dialog.open("But it failed!")
+            # handle stats
+            for stat_name in Familiar.STAT_NAMES:
+                var stat_mod = action.spell[stat_name + "_mod"]
+                if stat_mod == 0:
+                    continue
+
+                var target_current_stage = condition_target[stat_name + "_stage"]
+                if (stat_mod > 0 and target_current_stage == 2) or (stat_mod < 0 and target_current_stage == -2):
+                    continue
+
+                var stat_verb = "rose" if stat_mod > 0 else "fell"
+                condition_target[stat_name + "_stage"] = clamp(target_current_stage + stat_mod, -2, 2)
+                condition_target_healthbar.refresh()
+                dialog.open(condition_target_name + "'s\n" + stat_name.to_upper() + " " + stat_verb + "!")
                 await dialog.finished
-                dialog.clear()
-
-        # update battle flag
-        attacker.has_attacked = true
+            if action.spell.condition != Condition.Type.NONE:
+                if condition_target.condition != Condition.Type.NONE and action.spell.damage_type == Spell.DamageType.NONE:
+                    dialog.open("But it failed!")
+                    await dialog.finished
+                if condition_target.condition == Condition.Type.NONE:
+                    condition_target.condition = action.spell.condition
+                    condition_target_healthbar.update()
+                    dialog.open(condition_target_name + Condition.INFO[action.spell.condition].apply_message)
+                    await animator.animate_spell(Condition.INFO[action.spell.condition].animation)
+                    if not dialog.is_finished:
+                        await dialog.finished
+                    dialog.clear()
     # SWITCH
     elif action.type == ActionType.SWITCH:
         var attacker_party = player_party if action.actor == ActionActor.PLAYER else enemy_sprite
@@ -529,9 +512,12 @@ func do_action(action):
     if action.actor == ActionActor.PLAYER and action.type != ActionType.RUN:
         player_escape_attempts = 0
 
-    # apply burn damage
+    # update battle flag
     var familiar = player_party.familiars[0] if action.actor == ActionActor.PLAYER else enemy_party.familiars[0]
-    if familiar.has_condition(Condition.Type.BURN):
+    familiar.has_participated = true
+
+    # apply burn damage
+    if familiar.condition == Condition.Type.BURN:
         var healthbar = player_healthbar if action.actor == ActionActor.PLAYER else enemy_healthbar
         familiar.health = max(familiar.health - int(familiar.max_health / 8.0), 0)
         healthbar.update()

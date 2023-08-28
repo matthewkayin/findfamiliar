@@ -1,6 +1,8 @@
 extends Node
 class_name Familiar
 
+const STAT_NAMES = ["strength", "intellect", "defense", "agility"]
+
 var species: Species
 var nickname: String = ""
 var experience: int = 0
@@ -18,12 +20,14 @@ var agility: int = 5
 var spells: Array[Spell] = []
 
 # conditions
-var conditions: Array[Dictionary] = []
+var condition: Condition.Type = Condition.Type.NONE
 
-# in battle flags
-var has_attacked: bool = false
-var has_switched: bool = false
-var has_used_item: bool = false
+# in battle variables
+var strength_stage: int = 0
+var intellect_stage: int = 0
+var defense_stage: int = 0
+var agility_stage: int = 0
+var has_participated: bool = false
 
 func _init(as_species: Species, at_level: int):
     species = as_species
@@ -40,37 +44,25 @@ func get_display_name() -> String:
 func is_living() -> bool:
     return health > 0
 
+func get_stat_mod(stage: int) -> float:
+    if stage > 0:
+        return (2.0 + (stage * 2)) / 2.0
+    if stage < 0:
+        return 2.0 / (2.0 + (abs(stage) * 2))
+    return 1.0
+
 func get_strength() -> int:
-    var mod = 1.0
-    if has_condition(Condition.Type.STR_UP):
-        mod = 2.0
-    elif has_condition(Condition.Type.STR_DOWN):
-        mod = 0.5
-    return strength * mod
+    print(get_display_name(), " str ", strength, " stage ", strength_stage, " mod ", get_stat_mod(strength_stage), " result ", int(strength * get_stat_mod(strength_stage)))
+    return int(strength * get_stat_mod(strength_stage))
 
 func get_intellect() -> int:
-    var mod = 1.0
-    if has_condition(Condition.Type.INT_UP):
-        mod = 2.0
-    elif has_condition(Condition.Type.INT_DOWN):
-        mod = 0.5
-    return intellect * mod
+    return int(intellect * get_stat_mod(intellect_stage))
 
 func get_defense() -> int:
-    var mod = 1.0
-    if has_condition(Condition.Type.DEF_UP):
-        mod = 2.0
-    elif has_condition(Condition.Type.DEF_DOWN):
-        mod = 0.5
-    return defense * mod
+    return int(defense * get_stat_mod(defense_stage))
 
 func get_agility() -> int:
-    var mod = 1.0
-    if has_condition(Condition.Type.AGI_UP):
-        mod = 2.0
-    elif has_condition(Condition.Type.AGI_DOWN):
-        mod = 0.5
-    return agility * mod
+    return int(agility * get_stat_mod(agility_stage))
 
 # level, stats, and experience
 
@@ -107,40 +99,3 @@ func update_stats():
     intellect = int((species.base_intellect * 2.0 * level) / 100) + 5
     defense = int((species.base_defense * 2.0 * level) / 100) + 5
     agility = int((species.base_agility * 2.0 * level) / 100) + 5
-
-# conditions
-
-func has_condition(type: Condition.Type):
-    for condition in conditions:
-        if condition.type == type:
-            return true
-    return false
-
-func add_condition(type: Condition.Type) -> bool:
-    var remove_indices = []
-    for i in range(0, conditions.size()):
-        if conditions[i].type == type:
-            conditions[i].ttl = Condition.INFO[type].ttl
-            return false
-        if Condition.INFO[type].opposites.has(conditions[i].type):
-            remove_indices.append(i)
-    for index in remove_indices:
-        conditions.remove_at(index)
-
-    if remove_indices.is_empty() or Condition.INFO[type].apply_anyway:
-        conditions.append({
-            "type": type,
-            "ttl": Condition.INFO[type].ttl
-        })
-    return true
-
-func tick_conditions() -> Array[int]:
-    var remove_indices: Array[int] = []
-    for i in range(0, conditions.size()):
-        if conditions[i].ttl == Condition.TTL_INDEFINITE:
-            continue
-        if conditions[i].ttl == 0:
-            remove_indices.append(i)
-        else:
-            conditions[i].ttl -= 1
-    return remove_indices

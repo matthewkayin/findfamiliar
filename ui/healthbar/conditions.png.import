@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cu5vektr5u0ow"
-path="res://.godot/imported/damage_types.png-995656cc08ccc21749c606ac4a5e857b.ctex"
+uid="uid://cxodxb0h3532l"
+path="res://.godot/imported/conditions.png-f71247c113a8fd4676579133316c1e06.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ui/damage_types.png"
-dest_files=["res://.godot/imported/damage_types.png-995656cc08ccc21749c606ac4a5e857b.ctex"]
+source_file="res://ui/healthbar/conditions.png"
+dest_files=["res://.godot/imported/conditions.png-f71247c113a8fd4676579133316c1e06.ctex"]
 
 [params]
 
