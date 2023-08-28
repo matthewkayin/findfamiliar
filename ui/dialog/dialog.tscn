@@ -28,6 +28,6 @@ theme_override_constants/line_spacing = 8
 theme_override_fonts/font = ExtResource("2_a1v6o")
 theme_override_font_sizes/font_size = 16
 text = "FRESHBREAD's
-resisted the attack!"
+already raised!"
 
 [node name="timer" type="Timer" parent="."]

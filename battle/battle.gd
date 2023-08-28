@@ -429,7 +429,15 @@ func do_action(action):
                     continue
 
                 var target_current_stage = condition_target[stat_name + "_stage"]
-                if (stat_mod > 0 and target_current_stage == 2) or (stat_mod < 0 and target_current_stage == -2):
+                if stat_mod > 0 and target_current_stage >= stat_mod:
+                    dialog.open(condition_target_name + "'s\n" + stat_name.to_upper() + " is\nalready raised!")
+                    await dialog.finished
+                    dialog.clear()
+                    continue
+                if stat_mod < 0 and target_current_stage <= stat_mod:
+                    dialog.open(condition_target_name + "'s\n" + stat_name.to_upper() + " is\nalready lowered!")
+                    await dialog.finished
+                    dialog.clear()
                     continue
 
                 var stat_verb = "rose" if stat_mod > 0 else "fell"
@@ -437,10 +445,12 @@ func do_action(action):
                 condition_target_healthbar.refresh()
                 dialog.open(condition_target_name + "'s\n" + stat_name.to_upper() + " " + stat_verb + "!")
                 await dialog.finished
+                dialog.clear()
             if action.spell.condition != Condition.Type.NONE:
                 if condition_target.condition != Condition.Type.NONE and action.spell.damage_type == Spell.DamageType.NONE:
                     dialog.open("But it failed!")
                     await dialog.finished
+                    dialog.clear()
                 if condition_target.condition == Condition.Type.NONE:
                     condition_target.condition = action.spell.condition
                     condition_target_healthbar.update()
