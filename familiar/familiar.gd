@@ -46,13 +46,12 @@ func is_living() -> bool:
 
 func get_stat_mod(stage: int) -> float:
     if stage > 0:
-        return (2.0 + (stage * 2)) / 2.0
+        return (2.0 + stage) / 2.0
     if stage < 0:
-        return 2.0 / (2.0 + (abs(stage) * 2))
+        return 2.0 / (2.0 + abs(stage))
     return 1.0
 
 func get_strength() -> int:
-    print(get_display_name(), " str ", strength, " stage ", strength_stage, " mod ", get_stat_mod(strength_stage), " result ", int(strength * get_stat_mod(strength_stage)))
     return int(strength * get_stat_mod(strength_stage))
 
 func get_intellect() -> int:

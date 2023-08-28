@@ -27,6 +27,10 @@ func before_battle():
     for i in range(0, familiars.size()):
         old_familiar_order.append(familiars[i])
 
+    # Reset participation flags
+    for familiar in familiars:
+        familiar.has_participated = false
+
     # Ensure familiar 0 is the first living familiar
     var first_living_index: int = -1
     for i in range(0, familiars.size()):
@@ -36,6 +40,8 @@ func before_battle():
     if first_living_index != -1 and first_living_index != 0:
         switch(0, first_living_index)
 
+    familiars[0].has_participated = true
+
 func after_battle():
     # Recall the party order
     familiars = []
@@ -44,7 +50,10 @@ func after_battle():
     
     # clear conditions
     for familiar in familiars:
-        familiar.conditions.clear()
+        for stat_name in Familiar.STAT_NAMES:
+            familiar[stat_name + "_stage"] = 0
+        if familiar.condition != Condition.Type.NONE and not Condition.INFO[familiar.condition].stays_after_battle:
+            familiar.condition = Condition.Type.NONE
 
 func switch(index_a: int, index_b: int):
     var temp = familiars[index_a]

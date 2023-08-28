@@ -2,96 +2,75 @@ class_name Types
 
 enum Type {
     NEUTRAL,
-    FIRE,
     WATER,
+    FIRE,
+    DARK,
+    NATURE,
     EARTH,
-    AIR,
-    SPIRIT
-}
-
-const NAME = {
-    Type.NEUTRAL: "NEUTRAL",
-    Type.FIRE: "FIRE",
-    Type.WATER: "WATER",
-    Type.EARTH: "EARTH",
-    Type.AIR: "AIR",
-    Type.SPIRIT: "SPIRIT"
+    LIGHTNING
 }
 
 const INFO = {
     Type.NEUTRAL: {
         "weaknesses": [],
         "resistances": [],
-        "affinities": []
+    },
+    Type.WATER: {
+        "weaknesses": [
+            Type.NATURE,
+            Type.LIGHTNING
+        ],
+        "resistances": [
+            Type.FIRE,
+            Type.EARTH
+        ]
     },
     Type.FIRE: {
         "weaknesses": [
             Type.WATER,
-            Type.AIR
-        ],
-        "resistances": [
-            Type.EARTH,
-            Type.SPIRIT
-        ],
-        "affinities": [
-            Type.AIR,
-            Type.SPIRIT
-        ]
-    },
-    Type.WATER: {
-        "weaknesses": [
-            Type.SPIRIT,
             Type.EARTH
         ],
         "resistances": [
+            Type.DARK,
+            Type.NATURE
+        ]
+    },
+    Type.DARK: {
+        "weaknesses": [
             Type.FIRE,
-            Type.AIR
+            Type.LIGHTNING
         ],
-        "affinities": [
+        "resistances": [
+            Type.NATURE,
+        ]
+    },
+    Type.NATURE: {
+        "weaknesses": [
+            Type.DARK,
+            Type.FIRE
+        ],
+        "resistances": [
             Type.EARTH,
-            Type.AIR
+            Type.WATER
         ]
     },
     Type.EARTH: {
         "weaknesses": [
-            Type.FIRE,
-            Type.SPIRIT
-        ],
-        "resistances": [
-            Type.AIR,
+            Type.NATURE,
             Type.WATER
         ],
-        "affinities": [
-            Type.WATER,
-            Type.SPIRIT
-        ]
-    },
-    Type.AIR: {
-        "weaknesses": [
-            Type.EARTH,
-            Type.AIR
-        ],
         "resistances": [
-            Type.FIRE,
-            Type.SPIRIT
-        ],
-        "affinities": [
-            Type.WATER,
+            Type.LIGHTNING,
             Type.FIRE
         ]
     },
-    Type.SPIRIT: {
+    Type.LIGHTNING: {
         "weaknesses": [
-            Type.FIRE,
-            Type.AIR
+            Type.EARTH,
         ],
         "resistances": [
             Type.WATER,
-            Type.EARTH
-        ],
-        "affinities": [
-            Type.EARTH,
-            Type.FIRE
+            Type.DARK
         ]
     }
 }

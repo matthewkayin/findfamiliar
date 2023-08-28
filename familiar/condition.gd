@@ -11,11 +11,13 @@ const INFO = {
     Type.BURN: {
         "apply_message": "\nwas burned!",
         "cure_message": "\nburn was cured!",
-        "animation": BattleAnimator.SpellAnimation.NONE
+        "animation": BattleAnimator.SpellAnimation.NONE,
+        "stays_after_battle": true
     },
     Type.SLEEP: {
         "apply_message": "\nfell asleep!",
         "cure_message": "\nwoke up!",
-        "animation": BattleAnimator.SpellAnimation.NONE
+        "animation": BattleAnimator.SpellAnimation.NONE,
+        "stays_after_battle": false
     }
 }

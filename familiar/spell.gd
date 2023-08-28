@@ -11,8 +11,10 @@ enum StatMod {
     NONE = 0,
     UP = 1,
     UP2 = 2,
+    UP3 = 3,
     DOWN = -1,
-    DOWN2 = -2
+    DOWN2 = -2,
+    DOWN3 = -3
 }
 
 enum ConditionTarget {

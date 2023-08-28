@@ -20,7 +20,7 @@ func open(spell: Spell):
         label.text = "STATUS"
     type_icon.frame = 0 if spell.damage_type == Spell.DamageType.PHYSICAL else 3
 
-    label.text += "\nTYPE: " + Types.NAME[spell.type] + "\n"
+    label.text += "\nTYPE: " + Types.Type.keys()[spell.type] + "\n"
     var damage_string = str(spell.power)
     var accuracy_string = str(spell.accuracy)
     if spell.damage_type == Spell.DamageType.NONE:
