@@ -63,6 +63,7 @@ func open(p_allow_back: bool = true, exp_mode: bool = false):
     allow_back = p_allow_back
     cursor_index = Vector2i(0, 0)
     is_finished = false
+    just_opened = true
 
     for i in range(0, 3):
         if i >= party.familiars.size():
@@ -154,6 +155,9 @@ func navigate_cursor(direction: int):
 func _process(_delta):
     if is_interpolating or exp_cluster[0].visible:
         refresh()
+    if just_opened:
+        just_opened = false
+        return
     if party == null or is_finished or not is_open() or exp_cluster[0].visible:
         return
 

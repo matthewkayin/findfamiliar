@@ -50,8 +50,7 @@ func after_battle():
     
     # clear conditions
     for familiar in familiars:
-        for stat_name in Familiar.STAT_NAMES:
-            familiar[stat_name + "_stage"] = 0
+        familiar.clear_stat_mods()
         if familiar.condition != Condition.Type.NONE and not Condition.INFO[familiar.condition].stays_after_battle:
             familiar.condition = Condition.Type.NONE
 
@@ -78,4 +77,3 @@ func use_item(item: Item, index: int):
 
     if item.type == Item.ItemType.HEALING:
         familiars[index].health = min(familiars[index].health + item.value, familiars[index].max_health)
-    familiars[index].has_used_item = true

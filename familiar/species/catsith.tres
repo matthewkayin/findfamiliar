@@ -10,6 +10,6 @@ base_health = 35
 base_strength = 45
 base_intellect = 60
 base_defense = 30
-base_agility = 0
+base_agility = 50
 catch_rate = 128
 exp_yield = 128

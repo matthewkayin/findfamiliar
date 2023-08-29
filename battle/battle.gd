@@ -295,7 +295,7 @@ func do_round(player_action):
                 var exp_yield_remainder: int = int(exp_yield) % player_party.get_living_familiar_count()
                 var exp_each: Array[int] = []
                 for i in range(0, player_party.familiars.size()):
-                    if not player_party.familiars[i].is_living():
+                    if not player_party.familiars[i].is_living() or not player_party.familiars[i].has_participated:
                         exp_each.append(0)
                         continue
                     exp_each.append(divided_exp_yield)
@@ -464,7 +464,10 @@ func do_action(action):
         var attacker_party = player_party if action.actor == ActionActor.PLAYER else enemy_sprite
 
         await animator.animate_unsummon(action.actor)
+
+        player_party.familiars[0].clear_stat_mods()
         attacker_party.switch(0, action.index)
+
         var delay_tween = get_tree().create_tween()
         delay_tween.tween_interval(0.25)
         await delay_tween.finished
