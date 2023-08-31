@@ -11,9 +11,7 @@ signal resume_round
 @onready var battle_actions = $battle_actions
 @onready var spell_chooser = $spell_chooser
 @onready var party_menu = $party_menu
-@onready var party_warning = $party_warning
 @onready var item_chooser = $item_chooser
-@onready var item_warning = $item_warning
 @onready var player_sprite = $player_sprite
 @onready var enemy_sprite = $enemy_sprite
 @onready var player_healthbar = $player_healthbar
@@ -39,9 +37,6 @@ var player_escape_attempts: int = 0
 var choosing_item_target: bool = false
 
 func _ready():
-    item_chooser.updated_cursor.connect(item_warning.close)
-    party_menu.clear_warning.connect(party_warning.close)
-
     var species_cat = load("res://familiar/species/catsith.tres")
     var spell_scratch = load("res://familiar/spells/scratch.tres")
     var spell_growl = load("res://familiar/spells/growl.tres")
@@ -60,6 +55,9 @@ func _ready():
     enemy_party.familiars[0].spells.append(spell_scratch)
     # enemy_party.familiars[0].spells.append(spell_growl)
 
+    player_party.familiars[0].experience += player_party.familiars[0].get_experience_for_next_level() - 20
+    enemy_party.familiars[0].health = 1
+
     player_party.add_item(item_gem, 5)
     player_party.add_item(item_potion, 10)
 
@@ -73,22 +71,27 @@ func battle_start():
     dialog.visible = true
     await animator.animate_enter()
     enemy_healthbar.open()
-    dialog.open("A wild " + enemy_party.familiars[0].get_display_name() + "\nappeared!")
+    dialog.open("A wild " + enemy_party.familiars[0].get_display_name() + " appeared!")
     await dialog.finished
     dialog.clear()
 
-    await animator.animate_player_exit()
-    await summon_familiar(ActionActor.PLAYER)
+    await summon_familiar(ActionActor.PLAYER, true)
     dialog.clear()
 
-    battle_actions.open()
+    battle_actions_open()
 
-func summon_familiar(who: ActionActor):
+func battle_actions_open(remember_cursor: bool = false):
+    dialog.set_text("What will\n" + player_party.familiars[0].get_display_name() + " do?") 
+    battle_actions.open(remember_cursor)
+
+func summon_familiar(who: ActionActor, animate_exit: bool = false):
     var party = player_party if who == ActionActor.PLAYER else enemy_party
-    var message = "You summon" if who == ActionActor.PLAYER else "Enemy summons"
-    message += "\n" + party.familiars[0].get_display_name() + "!"
+    var message = "You " if who == ActionActor.PLAYER else "Enemy "
+    message += " summoned " + party.familiars[0].get_display_name() + "!"
 
     dialog.open(message)
+    if animate_exit:
+        await animator.animate_player_exit()
     await animator.animate_summon(who)
     if not dialog.is_finished:
         await dialog.finished
@@ -112,10 +115,10 @@ func _process(_delta):
         elif battle_actions.choice == "RUN":
             if is_duel:
                 battle_actions.close()
-                dialog.open("There's no running\nfrom a duel!")
+                dialog.open("There's no running\nfrom a witch duel!")
                 await dialog.finished
                 dialog.clear()
-                battle_actions.open(true)
+                battle_actions_open(true)
             else:
                 do_round({
                     "actor": ActionActor.PLAYER,
@@ -128,7 +131,7 @@ func _process(_delta):
     if spell_chooser.is_open() and spell_chooser.finished:
         # return to battle actions
         if spell_chooser.choice == "":
-            battle_actions.open()
+            battle_actions_open()
             spell_chooser.close()
         else:
             # get chosen spell
@@ -150,12 +153,12 @@ func _process(_delta):
     if party_menu.is_open() and party_menu.is_finished and not choosing_item_target and not party_menu.is_interpolating:
         if party_menu.choice == -1:
             party_menu.close()
-            battle_actions.open(true)
+            battle_actions_open(true)
         elif not player_party.familiars[party_menu.choice].is_living():
-            party_warning.open(player_party.familiars[party_menu.choice].get_display_name() + " is out\nof energy!")
+            dialog.set_text_fancy(player_party.familiars[party_menu.choice].get_display_name() + " is out\nof energy!", dialog.CHAR_SPEED_POPUP)
             party_menu.is_finished = false
         elif party_menu.choice == 0:
-            party_warning.open(player_party.familiars[0].get_display_name() + " is already\nfighting!")
+            dialog.set_text_fancy(player_party.familiars[0].get_display_name() + " is already\nfighting!", dialog.CHAR_SPEED_POPUP)
             party_menu.is_finished = false
         else:
             if player_party.familiars[0].is_living():
@@ -177,18 +180,17 @@ func _process(_delta):
         var chosen_item: Item = item_chooser.choice
         # return to battle actions
         if chosen_item == null:
-            item_warning.close()
             item_chooser.close()
-            battle_actions.open(true)
+            battle_actions_open(true)
         else:
             # warn player they can't use gem
             if chosen_item.type == Item.ItemType.GEM and is_duel:
-                item_warning.open("Can't use that\nin a duel!")
+                dialog.set_text_fancy("You can't catch someone else's\nfamiliar!", dialog.CHAR_SPEED_POPUP)
                 item_chooser.finished = false
             # use gem
             elif chosen_item.type == Item.ItemType.GEM:
+                dialog.clear()
                 item_chooser.close()
-                item_warning.close()
                 player_party.remove_item(chosen_item)
                 do_action({
                     "actor": ActionActor.PLAYER,
@@ -196,7 +198,6 @@ func _process(_delta):
                     "item": chosen_item
                 })
             elif chosen_item.type == Item.ItemType.HEALING:
-                item_warning.close()
                 item_chooser.close()
                 choosing_item_target = true
                 party_menu.open()
@@ -209,7 +210,7 @@ func _process(_delta):
             item_chooser.open(player_party.items, true)
             choosing_item_target = false
         elif not player_party.familiars[party_menu.choice].is_living():
-            party_warning.open("You can't heal a\ndefeated familiar!")
+            dialog.set_text_fancy(player_party.familiars[party_menu.choice].get_display_name() + " is out\nof energy!", dialog.CHAR_SPEED_POPUP)
             party_menu.is_finished = false
         else:
             # use the item
@@ -255,12 +256,13 @@ func do_round(player_action):
 
     # do each turn
     var actions = [player_action, enemy_action] if player_first else [enemy_action, player_action]
-    for action in actions:
-        await do_action(action)
+    for turn_number in range(0, actions.size()):
+        await do_action(actions[turn_number])
+        var skip_next_turn: bool = false
 
         # check if player familiar is dead
         if not player_party.familiars[0].is_living():
-            dialog.open(player_party.familiars[0].get_display_name() + "\nwas defeated!")
+            dialog.open(player_party.familiars[0].get_display_name() + " was defeated!")
             await animator.animate_faint(ActionActor.PLAYER)
             if not dialog.is_finished:
                 await dialog.finished
@@ -273,9 +275,11 @@ func do_round(player_action):
             elif not player_party.familiars[0].is_living():
                 party_menu.open(false)
                 await resume_round
+                if turn_number == 0 and actions[1].actor == ActionActor.PLAYER:
+                    skip_next_turn = true
         # check if enemy familiar is dead
         if not enemy_party.familiars[0].is_living():
-            dialog.open("Enemy " + enemy_party.familiars[0].get_display_name() + "\nwas defeated!")
+            dialog.open("Enemy " + enemy_party.familiars[0].get_display_name() + " was defeated!")
             await animator.animate_faint(ActionActor.ENEMY)
             if not dialog.is_finished:
                 await dialog.finished
@@ -315,16 +319,23 @@ func do_round(player_action):
                             exp_each[i] -= 1
                             var leveled_up = player_party.familiars[i].give_exp(1)
                             if leveled_up:
-                                party_menu.announce_level_up(i)
+                                dialog.open(player_party.familiars[i].get_display_name() + " grew to\nlevel " + str(player_party.familiars[i].level) + "!")
+                                await dialog.finished
+                                dialog.clear()
                             if exp_each[i] > 0:
                                 exp_finished = false
                 return
             elif not enemy_party.familiars[0].is_living():
+                if turn_number == 0 and actions[1].actor == ActionActor.ENEMY:
+                    skip_next_turn = true
                 return
+        
+        if skip_next_turn:
+            break
     # end for action in actions
 
     # open action menu for player's next turn
-    battle_actions.open()
+    battle_actions_open()
 
 func do_action(action):
     # SPELL
@@ -339,14 +350,14 @@ func do_action(action):
         var message = ""
         if action.actor == ActionActor.ENEMY:
             message += "Enemy "
-        message += attacker.get_display_name() + "\nused " + action.spell.name + "!"
+        message += attacker.get_display_name() + " used\n" + action.spell.name + "!"
         dialog.open(message)
         await dialog.finished
         dialog.clear()
 
         # check if move hits
         var spell_hit: bool = false
-        if action.spell.damage_type != Spell.DamageType.NONE:
+        if action.spell.damage_type == Spell.DamageType.PHYSICAL:
             var accuracy_dc: int = action.spell.accuracy + (float(attacker.get_agility() - defender.get_agility()) / 1.5)
             spell_hit = randi_range(0, 100) <= accuracy_dc
         # check if condition hit
@@ -363,7 +374,7 @@ func do_action(action):
             var miss_message = ""
             if action.actor == ActionActor.ENEMY:
                 miss_message += "Enemy "
-            miss_message += attacker.get_display_name() + "'s\nattack missed!"
+            miss_message += attacker.get_display_name() + "'s attack missed!"
             dialog.open(miss_message)
             await dialog.finished
             dialog.clear()
@@ -405,11 +416,11 @@ func do_action(action):
                 await dialog.finished
                 dialog.clear()
             if type_mod == 2.0:
-                dialog.open("It's super\neffective!")
+                dialog.open("It's super effective!")
                 await dialog.finished
                 dialog.clear()
             if type_mod == 0.5:
-                dialog.open("It's not very\neffective...")
+                dialog.open("It's not very effective...")
                 await dialog.finished
                 dialog.clear()
             if defender_healthbar.is_interpolating:
@@ -429,19 +440,19 @@ func do_action(action):
                     continue
 
                 var target_current_stage = condition_target[stat_name + "_stage"]
-                if stat_mod > 0 and target_current_stage == 3:
-                    dialog.open(condition_target_name + "'s\n" + stat_name.to_upper() + " won't go\nany higher!")
+                if stat_mod > 0 and target_current_stage == 6:
+                    dialog.open(condition_target_name + "'s " + stat_name.to_upper() + "\nwon't go any higher!")
                     await dialog.finished
                     dialog.clear()
                     continue
-                if stat_mod < 0 and target_current_stage == -3:
-                    dialog.open(condition_target_name + "'s\n" + stat_name.to_upper() + " won't go\nany lower!")
+                if stat_mod < 0 and target_current_stage == -6:
+                    dialog.open(condition_target_name + "'s " + stat_name.to_upper() + "\nwon't go any lower!")
                     await dialog.finished
                     dialog.clear()
                     continue
 
                 var stat_verb = "rose" if stat_mod > 0 else "fell"
-                condition_target[stat_name + "_stage"] = clamp(target_current_stage + stat_mod, -3, 3)
+                condition_target[stat_name + "_stage"] = clamp(target_current_stage + stat_mod, -6, 6)
                 condition_target_healthbar.refresh()
                 dialog.open(condition_target_name + "'s\n" + stat_name.to_upper() + " " + stat_verb + "!")
                 await dialog.finished

@@ -2,18 +2,19 @@
 
 [ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_c12ct"]
 [ext_resource type="Script" path="res://ui/choicebox/choicebox.gd" id="2_33rxv"]
-[ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="2_skhsr"]
 [ext_resource type="Texture2D" uid="uid://cqve3mnfvk083" path="res://ui/cursor.png" id="3_0k37p"]
+[ext_resource type="FontFile" uid="uid://hyh7a7k6lkav" path="res://ui/BitPotion.ttf" id="3_ap1lf"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_c6tjp"]
 line_spacing = 0.0
-font = ExtResource("2_skhsr")
+font = ExtResource("3_ap1lf")
+font_size = 32
 font_color = Color(0, 0, 0, 1)
 
 [node name="battle_actions" type="NinePatchRect"]
 texture_filter = 1
-offset_right = 128.0
-offset_bottom = 73.0
+offset_right = 142.0
+offset_bottom = 56.0
 texture = ExtResource("1_c12ct")
 patch_margin_left = 8
 patch_margin_top = 8
@@ -35,9 +36,9 @@ offset_bottom = 40.0
 texture_filter = 1
 layout_mode = 0
 offset_left = 22.0
-offset_top = 9.0
+offset_top = 1.0
 offset_right = 278.0
-offset_bottom = 47.0
+offset_bottom = 39.0
 text = "SPELL"
 label_settings = SubResource("LabelSettings_c6tjp")
 
@@ -45,33 +46,38 @@ label_settings = SubResource("LabelSettings_c6tjp")
 texture_filter = 1
 layout_mode = 0
 offset_left = 22.0
-offset_top = 24.0
+offset_top = 25.0
 offset_right = 278.0
-offset_bottom = 62.0
+offset_bottom = 63.0
 text = "SWITCH"
 label_settings = SubResource("LabelSettings_c6tjp")
 
-[node name="label4" type="Label" parent="options/col1"]
+[node name="col2" type="Control" parent="options"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="label" type="Label" parent="options/col2"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 22.0
-offset_top = 39.0
-offset_right = 278.0
-offset_bottom = 77.0
+offset_left = 102.0
+offset_top = 1.0
+offset_right = 358.0
+offset_bottom = 39.0
 text = "ITEM"
 label_settings = SubResource("LabelSettings_c6tjp")
 
-[node name="label5" type="Label" parent="options/col1"]
+[node name="label3" type="Label" parent="options/col2"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 22.0
-offset_top = 54.0
-offset_right = 278.0
-offset_bottom = 92.0
+offset_left = 102.0
+offset_top = 25.0
+offset_right = 358.0
+offset_bottom = 63.0
 text = "RUN"
 label_settings = SubResource("LabelSettings_c6tjp")
 
 [node name="cursor" type="Sprite2D" parent="."]
-position = Vector2(12, 14)
+position = Vector2(12, 16)
 scale = Vector2(2, 2)
 texture = ExtResource("3_0k37p")

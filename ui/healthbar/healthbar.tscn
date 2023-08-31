@@ -1,9 +1,27 @@
-[gd_scene load_steps=5 format=3 uid="uid://e8xfwq5j4g1b"]
+[gd_scene load_steps=10 format=3 uid="uid://e8xfwq5j4g1b"]
 
-[ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="1_dao1w"]
 [ext_resource type="Script" path="res://ui/healthbar/healthbar.gd" id="1_jbg1p"]
+[ext_resource type="FontFile" uid="uid://bpv2n8psitkui" path="res://ui/BitPotionExt.ttf" id="2_y1r2m"]
 [ext_resource type="Texture2D" uid="uid://cxodxb0h3532l" path="res://ui/healthbar/conditions.png" id="3_dmf6h"]
+[ext_resource type="FontFile" uid="uid://hyh7a7k6lkav" path="res://ui/BitPotion.ttf" id="3_jn278"]
+[ext_resource type="Texture2D" uid="uid://dtn3pr5v54sl2" path="res://ui/spell_info/health_frame.png" id="4_7cwwn"]
 [ext_resource type="Texture2D" uid="uid://bwpa0pkhq2pja" path="res://ui/healthbar/stat_buff_arrows.png" id="4_edteg"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_3s2qj"]
+font = ExtResource("2_y1r2m")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_3mt5h"]
+line_spacing = 0.0
+font = ExtResource("2_y1r2m")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_m4hnp"]
+font = ExtResource("3_jn278")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
 
 [node name="healthbar" type="Control"]
 texture_filter = 1
@@ -16,90 +34,57 @@ script = ExtResource("1_jbg1p")
 [node name="name_label" type="Label" parent="."]
 texture_filter = 1
 layout_mode = 0
+offset_top = -8.0
 offset_right = 160.0
-offset_bottom = 19.0
+offset_bottom = 23.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("1_dao1w")
-theme_override_font_sizes/font_size = 16
 text = "FRESHBREAD"
+label_settings = SubResource("LabelSettings_3s2qj")
 
 [node name="level_label" type="Label" parent="."]
 layout_mode = 0
-offset_left = 171.0
-offset_top = 6.0
-offset_right = 195.0
-offset_bottom = 17.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("1_dao1w")
-theme_override_font_sizes/font_size = 8
-text = "L99"
+offset_left = 74.0
+offset_top = -8.0
+offset_right = 154.0
+offset_bottom = 20.0
+text = "Lv100"
+label_settings = SubResource("LabelSettings_3mt5h")
 horizontal_alignment = 2
 
 [node name="health" type="Control" parent="."]
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 16.0
+offset_top = 3.0
+offset_right = 56.0
+offset_bottom = 43.0
 
 [node name="health_amount" type="Label" parent="health"]
 layout_mode = 0
-offset_left = 139.0
-offset_top = 15.0
-offset_right = 227.0
-offset_bottom = 38.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("1_dao1w")
-theme_override_font_sizes/font_size = 8
+offset_left = 26.0
+offset_top = 18.0
+offset_right = 138.0
+offset_bottom = 47.0
 text = "100/100"
-
-[node name="ColorRect3" type="ColorRect" parent="health"]
-layout_mode = 0
-offset_left = 11.0
-offset_top = 13.0
-offset_right = 37.0
-offset_bottom = 24.0
-color = Color(0, 0, 0, 1)
-
-[node name="health_label" type="Label" parent="health"]
-layout_mode = 0
-offset_left = 13.0
-offset_top = 16.0
-offset_right = 101.0
-offset_bottom = 39.0
-theme_override_colors/font_color = Color(0.941176, 0.815686, 0.470588, 1)
-theme_override_fonts/font = ExtResource("1_dao1w")
-theme_override_font_sizes/font_size = 8
-text = "HP:"
+label_settings = SubResource("LabelSettings_m4hnp")
+horizontal_alignment = 2
 
 [node name="healthbar" type="ColorRect" parent="health"]
 layout_mode = 0
-offset_left = 37.0
+offset_left = 36.0
 offset_top = 17.0
-offset_right = 133.0
+offset_right = 132.0
 offset_bottom = 21.0
 color = Color(0, 0.721569, 0, 1)
 
-[node name="ColorRect" type="ColorRect" parent="health"]
-layout_mode = 0
-offset_left = 133.0
-offset_top = 14.0
-offset_right = 136.0
-offset_bottom = 24.0
-color = Color(0, 0, 0, 1)
-
-[node name="ColorRect2" type="ColorRect" parent="health"]
-layout_mode = 0
-offset_left = 37.0
-offset_top = 22.0
-offset_right = 133.0
-offset_bottom = 24.0
-color = Color(0, 0, 0, 1)
+[node name="health_frame" type="Sprite2D" parent="health"]
+position = Vector2(72, 19)
+texture = ExtResource("4_7cwwn")
 
 [node name="conditions" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 11.0
-offset_top = 26.0
-offset_right = 107.0
-offset_bottom = 66.0
+offset_top = 29.0
+offset_right = 82.0
+offset_bottom = 69.0
 
 [node name="0" type="Control" parent="conditions"]
 layout_mode = 2
@@ -108,12 +93,13 @@ size_flags_horizontal = 3
 [node name="sprite" type="Sprite2D" parent="conditions/0"]
 texture = ExtResource("3_dmf6h")
 centered = false
-hframes = 6
+hframes = 8
 
 [node name="arrows" type="Sprite2D" parent="conditions/0"]
 texture = ExtResource("4_edteg")
 centered = false
-hframes = 6
+hframes = 12
+frame = 1
 
 [node name="1" type="Control" parent="conditions"]
 layout_mode = 2
@@ -122,12 +108,12 @@ size_flags_horizontal = 3
 [node name="sprite" type="Sprite2D" parent="conditions/1"]
 texture = ExtResource("3_dmf6h")
 centered = false
-hframes = 6
+hframes = 8
 
 [node name="arrows" type="Sprite2D" parent="conditions/1"]
 texture = ExtResource("4_edteg")
 centered = false
-hframes = 6
+hframes = 12
 
 [node name="2" type="Control" parent="conditions"]
 layout_mode = 2
@@ -136,12 +122,12 @@ size_flags_horizontal = 3
 [node name="sprite" type="Sprite2D" parent="conditions/2"]
 texture = ExtResource("3_dmf6h")
 centered = false
-hframes = 6
+hframes = 8
 
 [node name="arrows" type="Sprite2D" parent="conditions/2"]
 texture = ExtResource("4_edteg")
 centered = false
-hframes = 6
+hframes = 12
 
 [node name="3" type="Control" parent="conditions"]
 layout_mode = 2
@@ -150,12 +136,12 @@ size_flags_horizontal = 3
 [node name="sprite" type="Sprite2D" parent="conditions/3"]
 texture = ExtResource("3_dmf6h")
 centered = false
-hframes = 6
+hframes = 8
 
 [node name="arrows" type="Sprite2D" parent="conditions/3"]
 texture = ExtResource("4_edteg")
 centered = false
-hframes = 6
+hframes = 12
 
 [node name="4" type="Control" parent="conditions"]
 layout_mode = 2
@@ -164,9 +150,9 @@ size_flags_horizontal = 3
 [node name="sprite" type="Sprite2D" parent="conditions/4"]
 texture = ExtResource("3_dmf6h")
 centered = false
-hframes = 6
+hframes = 8
 
 [node name="arrows" type="Sprite2D" parent="conditions/4"]
 texture = ExtResource("4_edteg")
 centered = false
-hframes = 6
+hframes = 12

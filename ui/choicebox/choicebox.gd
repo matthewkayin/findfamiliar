@@ -40,13 +40,13 @@ func open(remember_cursor: bool = false):
     just_opened = true
 
 func open_with(p_options: Array[String]):
-    var col = $options.get_child(0)
-    for i in range(0, col.get_child_count()):
-        if i <= p_options.size() - 1:
-            col.get_child(i).text = p_options[i]
-        else:
-            col.get_child(i).text = ""
-    # refresh_options()
+    for x in range(0, $options.get_child_count()):
+        for y in range(0, $options.get_child(0).get_child_count()):
+            var index = x + (y * $options.get_child_count())
+            if index <= p_options.size() - 1:
+                $options.get_child(x).get_child(y).text = p_options[index]
+            else:
+                $options.get_child(x).get_child(y).text = ""
     open()
 
 func close():
@@ -54,7 +54,7 @@ func close():
     emit_signal("closed")
 
 func update_cursor():
-    cursor.position = choice_labels[cursor_index.x][cursor_index.y].position + Vector2(-10, 6)
+    cursor.position = choice_labels[cursor_index.x][cursor_index.y].position + Vector2(-10, 15)
     emit_signal("updated_cursor")
 
 func navigate_cursor(direction: Vector2i):

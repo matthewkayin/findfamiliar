@@ -38,7 +38,7 @@ func refresh():
     # refresh healthbar
     var familiar = party.familiars[0]
     name_label.text = familiar.get_display_name()
-    level_label.text = "L" + str(familiar.level)
+    level_label.text = "Lv" + str(familiar.level)
     health_amount.text = str(int(displayed_health)) + "/" + str(familiar.max_health)
     var health_percent: float = displayed_health / float(familiar.max_health)
     healthbar.size.x = int(health_percent * healthbar_max_width)
@@ -63,7 +63,7 @@ func refresh():
         var stage = familiar[Familiar.STAT_NAMES[stat_index] + "_stage"]
         if stage == 0:
             continue
-        var offset = stage - 1 if stage > 0 else 2 + abs(stage)
+        var offset = stage - 1 if stage > 0 else 5 + abs(stage)
         conditions.get_child(condition_index).visible = true
         conditions.get_child(condition_index).get_child(0).frame = stat_index
         conditions.get_child(condition_index).get_child(1).frame = offset

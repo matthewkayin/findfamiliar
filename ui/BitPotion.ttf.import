@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://chh7uru3behv6"
-path="res://.godot/imported/gba.ttf-8714148dc2eb3a39cc58663aab4587fd.fontdata"
+uid="uid://hyh7a7k6lkav"
+path="res://.godot/imported/BitPotion.ttf-0d546f84a694551817fd78d822ed6568.fontdata"
 
 [deps]
 
-source_file="res://ui/gba.ttf"
-dest_files=["res://.godot/imported/gba.ttf-8714148dc2eb3a39cc58663aab4587fd.fontdata"]
+source_file="res://ui/BitPotion.ttf"
+dest_files=["res://.godot/imported/BitPotion.ttf-0d546f84a694551817fd78d822ed6568.fontdata"]
 
 [params]
 

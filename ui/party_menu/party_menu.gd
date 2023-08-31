@@ -14,7 +14,6 @@ signal clear_warning
 @onready var health_amount = [$one/health/health_amount, $two/health/health_amount, $three/health/health_amount]
 @onready var exp_cluster = [$one/exp, $two/exp, $three/exp]
 @onready var expbar = [$one/exp/expbar, $two/exp/expbar, $three/exp/expbar]
-@onready var switch_cost_label = [$one/switch_cost_label, $two/switch_cost_label, $three/switch_cost_label]
 @onready var cursor = $cursor
 @onready var timer = $timer
 
@@ -70,9 +69,8 @@ func open(p_allow_back: bool = true, exp_mode: bool = false):
             group[i].visible = false
             continue
 
-        switch_cost_label[i].visible = false
         name_label[i].text = party.familiars[i].get_display_name()
-        level_label[i].text = "L" + str(party.familiars[i].level)
+        level_label[i].text = "Lv" + str(party.familiars[i].level)
         displayed_health[i] = party.familiars[i].health
 
         health_cluster[i].visible = not exp_mode
@@ -80,7 +78,6 @@ func open(p_allow_back: bool = true, exp_mode: bool = false):
         cursor.visible = not exp_mode
 
         group[i].visible = true
-    position.y = 94 if exp_mode else 150
     start_animation()
     refresh()
     update_cursor()
@@ -112,8 +109,7 @@ func refresh():
             level_label[i].text = "L" + str(party.familiars[i].level)
 
 func announce_level_up(index: int):
-    switch_cost_label[index].text = "LEVEL " + str(party.familiars[index].level) + "!"
-    switch_cost_label[index].visible = true
+    pass
 
 func update_health():
     is_interpolating = true
@@ -138,9 +134,9 @@ func update_health():
     emit_signal("interpolate_finished")
 
 func update_cursor():
-    cursor.position = minis[cursor_index.y].position + Vector2(-19, 2)
+    cursor.global_position = minis[cursor_index.y].global_position + Vector2(-19, 2)
     start_animation()
-    emit_signal("clear_warning")
+    get_parent().dialog.clear()
 
 func navigate_cursor(direction: int):
     var old_cursor_index = cursor_index.y

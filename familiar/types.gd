@@ -1,17 +1,17 @@
 class_name Types
 
 enum Type {
-    NEUTRAL,
-    WATER,
-    FIRE,
-    DARK,
-    NATURE,
-    EARTH,
-    LIGHTNING
+    NORMAL = 0,
+    WATER = 1,
+    FIRE = 2,
+    DARK = 3,
+    NATURE = 4,
+    EARTH = 5,
+    LIGHTNING = 6
 }
 
 const INFO = {
-    Type.NEUTRAL: {
+    Type.NORMAL: {
         "weaknesses": [],
         "resistances": [],
     },
@@ -41,7 +41,7 @@ const INFO = {
             Type.LIGHTNING
         ],
         "resistances": [
-            Type.NATURE,
+            Type.NATURE
         ]
     },
     Type.NATURE: {

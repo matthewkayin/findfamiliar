@@ -51,8 +51,8 @@ func refresh():
     item_info.open(items.keys()[scroll_offset + cursor_index])
 
 func update_cursor():
-    cursor.position = choice_labels[cursor_index].position + Vector2(-10, 6)
-    emit_signal("updated_cursor")
+    cursor.position = choice_labels[cursor_index].position + Vector2(-10, 15)
+    get_parent().dialog.set_text(items.keys()[scroll_offset + cursor_index].desc)
 
 func navigate_cursor(direction: int):
     cursor_index += direction

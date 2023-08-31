@@ -5,7 +5,8 @@ signal finished
 @onready var timer = $timer
 @onready var label = $label
 
-const CHAR_SPEED: float = 0.03
+const CHAR_SPEED: float = 0.02
+const CHAR_SPEED_POPUP: float = 0.01
 
 var is_finished: bool = false
 var can_finish: bool = false
@@ -29,11 +30,27 @@ func open(with_text: String):
         else:
             extra_lines.append(lines[i])
     label.visible_ratio = 0.0
-    label.position.y = 11
+    label.position.y = 1
     visible = true
     is_finished = false
     can_finish = false
     timer.start(CHAR_SPEED)
+
+func set_text(with_text: String):
+    timer.stop()
+    label.text = with_text
+    label.visible_characters = with_text.length()
+    visible = true
+    is_finished = true
+    can_finish = false
+
+func set_text_fancy(with_text: String, at_speed: float = CHAR_SPEED):
+    label.text = with_text
+    label.visible_characters = 1
+    visible = true
+    is_finished = true
+    can_finish = false
+    timer.start(at_speed)
 
 func clear():
     label.text = ""
@@ -52,7 +69,7 @@ func read_next_line():
 
         # shift the text upward
         var shift_tween = get_tree().create_tween()
-        shift_tween.tween_property(label, "position", label.position + Vector2(0, -24), CHAR_SPEED)
+        shift_tween.tween_property(label, "position", label.position + Vector2(0, -26), CHAR_SPEED)
         await shift_tween.finished
 
         # start reading again

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Species" load_steps=2 format=3 uid="uid://k7234ymcl57u"]
+
+[ext_resource type="Script" path="res://familiar/species.gd" id="1_ijkcq"]
+
+[resource]
+script = ExtResource("1_ijkcq")
+name = ""
+type = 0
+base_health = 0
+base_strength = 0
+base_intellect = 0
+base_defense = 0
+base_agility = 0
+catch_rate = 0
+exp_yield = 0
