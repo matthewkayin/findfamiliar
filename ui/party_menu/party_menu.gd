@@ -14,6 +14,7 @@ signal clear_warning
 @onready var health_amount = [$one/health/health_amount, $two/health/health_amount, $three/health/health_amount]
 @onready var exp_cluster = [$one/exp, $two/exp, $three/exp]
 @onready var expbar = [$one/exp/expbar, $two/exp/expbar, $three/exp/expbar]
+@onready var condition = [$one/condition, $two/condition, $three/condition]
 @onready var cursor = $cursor
 @onready var timer = $timer
 
@@ -72,8 +73,10 @@ func open(p_allow_back: bool = true, exp_mode: bool = false):
         name_label[i].text = party.familiars[i].get_display_name()
         level_label[i].text = "Lv" + str(party.familiars[i].level)
         displayed_health[i] = party.familiars[i].health
+        condition[i].frame = party.familiars[i].condition
 
         health_cluster[i].visible = not exp_mode
+        condition[i].visible = party.familiars[i].condition != Condition.Type.NONE and not exp_mode
         exp_cluster[i].visible = exp_mode
         cursor.visible = not exp_mode
 
@@ -107,9 +110,6 @@ func refresh():
         else:
             expbar[i].size.x = int(expbar_max_width * (party.familiars[i].get_experience_toward_next_level() / float(party.familiars[i].get_experience_for_next_level())))
             level_label[i].text = "L" + str(party.familiars[i].level)
-
-func announce_level_up(index: int):
-    pass
 
 func update_health():
     is_interpolating = true

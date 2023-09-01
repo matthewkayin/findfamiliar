@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="Spell" load_steps=2 format=3 uid="uid://c8p33rx0g1mpp"]
+
+[ext_resource type="Script" path="res://familiar/spell.gd" id="1_uhg5l"]
+
+[resource]
+script = ExtResource("1_uhg5l")
+name = "BAD LUCK"
+type = 3
+animation = 0
+desc = ""
+power = 0
+damage_type = 2
+accuracy = 0
+condition_accuracy = 100
+condition_target = 2
+condition = 0
+strength_mod = 0
+intellect_mod = 0
+defense_mod = 0
+agility_mod = -1

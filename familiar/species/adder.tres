@@ -4,12 +4,14 @@
 
 [resource]
 script = ExtResource("1_ijkcq")
-name = ""
-type = 0
-base_health = 0
-base_strength = 0
-base_intellect = 0
-base_defense = 0
-base_agility = 0
+name = "ADDER"
+type = 1
+base_health = 42
+base_strength = 60
+base_intellect = 50
+base_defense = 48
+base_agility = 65
 catch_rate = 0
 exp_yield = 0
+learn_spells = Array[Resource("res://familiar/spell.gd")]([])
+learn_level = Array[int]([])

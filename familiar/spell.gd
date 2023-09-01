@@ -7,16 +7,6 @@ enum DamageType {
     NONE
 }
 
-enum StatMod {
-    NONE = 0,
-    UP = 1,
-    UP2 = 2,
-    UP3 = 3,
-    DOWN = -1,
-    DOWN2 = -2,
-    DOWN3 = -3
-}
-
 enum ConditionTarget {
     NONE,
     SELF,
@@ -28,14 +18,16 @@ enum ConditionTarget {
 @export var animation: BattleAnimator.SpellAnimation
 @export_multiline var desc: String
 
-@export var power: int
+@export_group("Stats")
+@export_range(0, 255, 1) var power: int
 @export var damage_type: DamageType
-@export var accuracy: int
-@export var condition_accuracy: int
+@export_range(0, 100, 1) var accuracy: int
+@export_range(0, 100, 1) var condition_accuracy: int
 
+@export_group("Condition")
 @export var condition_target: ConditionTarget = ConditionTarget.NONE
 @export var condition: Condition.Type = Condition.Type.NONE
-@export var strength_mod: StatMod
-@export var intellect_mod: StatMod
-@export var defense_mod: StatMod
-@export var agility_mod: StatMod
+@export_range(-6, 6, 1) var strength_mod: int = 0
+@export_range(-6, 6, 1) var intellect_mod: int = 0
+@export_range(-6, 6, 1) var defense_mod: int = 0
+@export_range(-6, 6, 1) var agility_mod: int = 0

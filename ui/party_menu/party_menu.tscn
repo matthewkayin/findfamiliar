@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://wphpyoii23gm"]
+[gd_scene load_steps=9 format=3 uid="uid://wphpyoii23gm"]
 
 [ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_sp5pl"]
 [ext_resource type="Script" path="res://ui/party_menu/party_menu.gd" id="2_7x5pg"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dtn3pr5v54sl2" path="res://ui/spell_info/health_frame.png" id="5_6t8ci"]
 [ext_resource type="Texture2D" uid="uid://cqve3mnfvk083" path="res://ui/cursor.png" id="5_c0t82"]
 [ext_resource type="Texture2D" uid="uid://j57gwk0cki7b" path="res://ui/spell_info/exp_frame.png" id="6_26fdw"]
+[ext_resource type="Texture2D" uid="uid://cxodxb0h3532l" path="res://ui/healthbar/conditions.png" id="7_drjq8"]
 
 [node name="party_menu" type="NinePatchRect"]
 texture_filter = 1
@@ -107,9 +108,10 @@ position = Vector2(78, 20)
 texture = ExtResource("6_26fdw")
 
 [node name="condition" type="Sprite2D" parent="one"]
-visible = false
-position = Vector2(53, 28)
-hframes = 3
+position = Vector2(56, 33)
+texture = ExtResource("7_drjq8")
+hframes = 8
+frame = 4
 
 [node name="two" type="Control" parent="."]
 anchors_preset = 0
@@ -200,9 +202,10 @@ position = Vector2(78, 20)
 texture = ExtResource("6_26fdw")
 
 [node name="condition" type="Sprite2D" parent="two"]
-visible = false
-position = Vector2(53, 28)
-hframes = 3
+position = Vector2(56, 34)
+texture = ExtResource("7_drjq8")
+hframes = 8
+frame = 4
 
 [node name="three" type="Control" parent="."]
 anchors_preset = 0
@@ -293,9 +296,10 @@ position = Vector2(78, 20)
 texture = ExtResource("6_26fdw")
 
 [node name="condition" type="Sprite2D" parent="three"]
-visible = false
-position = Vector2(53, 28)
-hframes = 3
+position = Vector2(56, 35)
+texture = ExtResource("7_drjq8")
+hframes = 8
+frame = 4
 
 [node name="cursor" type="Sprite2D" parent="."]
 position = Vector2(11, 21)

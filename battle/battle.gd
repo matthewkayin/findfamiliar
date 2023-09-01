@@ -319,9 +319,26 @@ func do_round(player_action):
                             exp_each[i] -= 1
                             var leveled_up = player_party.familiars[i].give_exp(1)
                             if leveled_up:
+                                # announce level up
                                 dialog.open(player_party.familiars[i].get_display_name() + " grew to\nlevel " + str(player_party.familiars[i].level) + "!")
                                 await dialog.finished
                                 dialog.clear()
+
+                                # check for any learned spells
+                                var learn_spell = null
+                                for spell_index in range(0, player_party.familiars[i].species.learn_spells.size()):
+                                    if player_party.familiars[i].species.learn_level[spell_index] == player_party.familiars[i].level:
+                                        learn_spell = player_party.familiars[i].species.learn_spells[spell_index]
+                                        break
+                                if learn_spell != null:
+                                    if player_party.familiars[i].spells.size() == 4:
+                                        # TODO have players choose which move to forget
+                                        pass
+                                    else:
+                                        player_party.familiars[i].spells.append(learn_spell)
+                                        dialog.open(player_party.familiars[i].get_display_name() + " learned " + learn_spell.name + "!")
+                                        await dialog.finished
+                                        dialog.clear()
                             if exp_each[i] > 0:
                                 exp_finished = false
                 return
@@ -541,7 +558,7 @@ func do_action(action):
     familiar.has_participated = true
 
     # apply burn damage
-    if familiar.condition == Condition.Type.BURN:
+    if familiar.condition == Condition.Type.BURNED:
         var healthbar = player_healthbar if action.actor == ActionActor.PLAYER else enemy_healthbar
         familiar.health = max(familiar.health - int(familiar.max_health / 8.0), 0)
         healthbar.update()

@@ -1,0 +1,316 @@
+[gd_scene load_steps=10 format=3 uid="uid://d3iwf7waew1od"]
+
+[ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_7ojml"]
+[ext_resource type="Texture2D" uid="uid://wms1mx2tepno" path="res://battle/sprites/front/cat-sith.png" id="2_f4mdo"]
+[ext_resource type="Script" path="res://ui/summary/summary.gd" id="2_mgnnq"]
+[ext_resource type="Texture2D" uid="uid://tc458rasd81c" path="res://ui/spell_info/types.png" id="3_d0di8"]
+[ext_resource type="FontFile" uid="uid://hyh7a7k6lkav" path="res://ui/BitPotion.ttf" id="3_ddme5"]
+[ext_resource type="Texture2D" uid="uid://cxodxb0h3532l" path="res://ui/healthbar/conditions.png" id="4_1rx5i"]
+[ext_resource type="Texture2D" uid="uid://dtn3pr5v54sl2" path="res://ui/spell_info/health_frame.png" id="4_v4pt8"]
+[ext_resource type="Texture2D" uid="uid://j57gwk0cki7b" path="res://ui/spell_info/exp_frame.png" id="5_75ovr"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ffw6k"]
+line_spacing = 0.0
+font = ExtResource("3_ddme5")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[node name="summary" type="NinePatchRect"]
+texture_filter = 1
+offset_right = 319.0
+offset_bottom = 288.0
+texture = ExtResource("1_7ojml")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource("2_mgnnq")
+
+[node name="name_label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 3.0
+offset_right = 185.0
+offset_bottom = 55.0
+text = "FRESHBREAD "
+label_settings = SubResource("LabelSettings_ffw6k")
+
+[node name="level_label" type="Label" parent="name_label"]
+layout_mode = 0
+offset_top = 18.0
+offset_right = 176.0
+offset_bottom = 70.0
+text = "Lv100"
+label_settings = SubResource("LabelSettings_ffw6k")
+
+[node name="species_label" type="Label" parent="name_label"]
+layout_mode = 0
+offset_top = 36.0
+offset_right = 176.0
+offset_bottom = 88.0
+text = "CAT SITH"
+label_settings = SubResource("LabelSettings_ffw6k")
+
+[node name="type_label" type="Label" parent="name_label"]
+offset_top = 55.0
+offset_right = 176.0
+offset_bottom = 107.0
+text = "TYPE:"
+label_settings = SubResource("LabelSettings_ffw6k")
+
+[node name="type_value" type="Label" parent="name_label/type_label"]
+offset_left = 68.0
+offset_right = 244.0
+offset_bottom = 52.0
+text = "DARK"
+label_settings = SubResource("LabelSettings_ffw6k")
+
+[node name="type_icon" type="Sprite2D" parent="name_label/type_label"]
+position = Vector2(48, 7)
+texture = ExtResource("3_d0di8")
+centered = false
+hframes = 7
+frame = 3
+
+[node name="sign_label" type="Label" parent="name_label"]
+offset_top = 73.0
+offset_right = 176.0
+offset_bottom = 125.0
+text = "SIGN: SAGITTARIUS"
+label_settings = SubResource("LabelSettings_ffw6k")
+
+[node name="health_cluster" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 156.0
+offset_top = 12.0
+offset_right = 196.0
+offset_bottom = 52.0
+
+[node name="health_amount" type="Label" parent="health_cluster"]
+layout_mode = 0
+offset_left = 66.0
+offset_top = -9.0
+offset_right = 154.0
+offset_bottom = 20.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "100/100"
+horizontal_alignment = 2
+
+[node name="health_label" type="Label" parent="health_cluster"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -9.0
+offset_right = 90.0
+offset_bottom = 20.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "HP:"
+
+[node name="status_icon" type="Sprite2D" parent="health_cluster"]
+position = Vector2(55, 40)
+texture = ExtResource("4_1rx5i")
+hframes = 8
+frame = 4
+
+[node name="status_label" type="Label" parent="health_cluster"]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 23.0
+offset_right = 153.0
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "POISONED"
+horizontal_alignment = 2
+
+[node name="healthbar" type="ColorRect" parent="health_cluster"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 19.0
+offset_right = 148.0
+offset_bottom = 23.0
+color = Color(0, 0.721569, 0, 1)
+
+[node name="health_frame" type="Sprite2D" parent="health_cluster"]
+position = Vector2(88, 21)
+texture = ExtResource("4_v4pt8")
+
+[node name="stat_cluster" type="Control" parent="."]
+anchors_preset = 0
+offset_top = 2.0
+offset_right = 40.0
+offset_bottom = 42.0
+
+[node name="strength_label" type="Label" parent="stat_cluster"]
+layout_mode = 0
+offset_left = 158.0
+offset_top = 114.0
+offset_right = 246.0
+offset_bottom = 143.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "STRENGTH:"
+
+[node name="value" type="Label" parent="stat_cluster/strength_label"]
+layout_mode = 0
+offset_left = 64.0
+offset_right = 152.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "255"
+horizontal_alignment = 2
+
+[node name="intellect_label" type="Label" parent="stat_cluster"]
+layout_mode = 0
+offset_left = 158.0
+offset_top = 132.0
+offset_right = 246.0
+offset_bottom = 161.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "INTELLECT:"
+
+[node name="value" type="Label" parent="stat_cluster/intellect_label"]
+layout_mode = 0
+offset_left = 64.0
+offset_right = 152.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "255"
+horizontal_alignment = 2
+
+[node name="defense_label" type="Label" parent="stat_cluster"]
+layout_mode = 0
+offset_left = 158.0
+offset_top = 150.0
+offset_right = 246.0
+offset_bottom = 179.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "DEFENSE:"
+
+[node name="value" type="Label" parent="stat_cluster/defense_label"]
+layout_mode = 0
+offset_left = 64.0
+offset_right = 152.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "255"
+horizontal_alignment = 2
+
+[node name="agility_label" type="Label" parent="stat_cluster"]
+layout_mode = 0
+offset_left = 158.0
+offset_top = 168.0
+offset_right = 246.0
+offset_bottom = 197.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "AGILITY:"
+
+[node name="value" type="Label" parent="stat_cluster/agility_label"]
+layout_mode = 0
+offset_left = 64.0
+offset_right = 152.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "255"
+horizontal_alignment = 2
+
+[node name="exp_cluster" type="Control" parent="stat_cluster"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 154.0
+offset_top = 200.0
+offset_right = 194.0
+offset_bottom = 240.0
+
+[node name="expbar" type="ColorRect" parent="stat_cluster/exp_cluster"]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 36.0
+offset_right = 150.0
+offset_bottom = 38.0
+color = Color(0.12549, 0.533333, 0.972549, 1)
+
+[node name="exp_frame" type="Sprite2D" parent="stat_cluster/exp_cluster"]
+position = Vector2(81, 37)
+texture = ExtResource("5_75ovr")
+
+[node name="exp_label" type="Label" parent="stat_cluster/exp_cluster"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = -10.0
+offset_right = 92.0
+offset_bottom = 19.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "EXP:"
+
+[node name="value" type="Label" parent="stat_cluster/exp_cluster/exp_label"]
+layout_mode = 0
+offset_left = 39.0
+offset_right = 152.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "1234567"
+horizontal_alignment = 2
+
+[node name="tnl_label" type="Label" parent="stat_cluster/exp_cluster"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 8.0
+offset_right = 92.0
+offset_bottom = 37.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "NEXT LVL:"
+
+[node name="value" type="Label" parent="stat_cluster/exp_cluster/tnl_label"]
+layout_mode = 0
+offset_left = 39.0
+offset_right = 152.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "37127"
+horizontal_alignment = 2
+
+[node name="sprite_frame" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 108.0
+offset_right = 146.0
+offset_bottom = 244.0
+texture = ExtResource("1_7ojml")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="sprite" type="Sprite2D" parent="sprite_frame"]
+position = Vector2(68, 68)
+scale = Vector2(2, 2)
+texture = ExtResource("2_f4mdo")
