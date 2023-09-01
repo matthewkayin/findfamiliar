@@ -46,7 +46,7 @@ func open_with(p_options: Array[String]):
             if index <= p_options.size() - 1:
                 $options.get_child(x).get_child(y).text = p_options[index]
             else:
-                $options.get_child(x).get_child(y).text = ""
+                $options.get_child(x).get_child(y).text = "-"
     open()
 
 func close():
@@ -59,7 +59,7 @@ func update_cursor():
 
 func navigate_cursor(direction: Vector2i):
     var gone_once = false
-    while choice_labels[cursor_index.x][cursor_index.y].text == "" or not gone_once:
+    while choice_labels[cursor_index.x][cursor_index.y].text == "-" or not gone_once:
         gone_once = true
         cursor_index += direction
         if cursor_index.x >= choice_labels.size():

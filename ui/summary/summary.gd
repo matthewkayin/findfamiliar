@@ -2,6 +2,10 @@ extends NinePatchRect
 
 @onready var player_party = get_node("/root/player_party")
 
+@onready var page_label = $header/page_label
+@onready var page_left_arrow = $header/page_left_arrow
+@onready var page_right_arrow = $header/page_right_arrow
+
 @onready var name_label = $name_label
 @onready var level_label = $name_label/level_label
 @onready var species_label = $name_label/species_label
@@ -9,6 +13,7 @@ extends NinePatchRect
 @onready var type_icon = $name_label/type_label/type_icon
 @onready var sign_label = $name_label/sign_label
 
+@onready var health_cluster = $health_cluster
 @onready var health_amount = $health_cluster/health_amount
 @onready var healthbar = $health_cluster/healthbar
 @onready var status_icon = $health_cluster/status_icon
@@ -23,12 +28,19 @@ extends NinePatchRect
 @onready var exp_value = $stat_cluster/exp_cluster/exp_label/value
 @onready var tnl_value = $stat_cluster/exp_cluster/tnl_label/value
 
+@onready var sprite_frame = $sprite_frame
 @onready var sprite = $sprite_frame/sprite
+
+enum Page {
+    STATS,
+    SPELLS
+}
 
 var healthbar_max_width: int
 var expbar_max_width: int
 
 var familiar_index: int = 0
+var page: Page = Page.STATS
 
 func _ready():
     var species_adder = load("res://familiar/species/adder.tres")
@@ -54,6 +66,12 @@ func open(index: int):
     familiar_index = index
     var familiar = player_party.familiars[familiar_index]
 
+    page = Page.STATS
+    page_label.text = "STATS"
+    page_left_arrow.visible = false
+    page_right_arrow.visible = false
+
+    name_label.visible = true
     name_label.text = familiar.get_display_name()
     level_label.text = "Lv" + str(familiar.level)
     species_label.text = familiar.species.name
@@ -61,6 +79,7 @@ func open(index: int):
     type_icon.frame = familiar.species.type as int
     sign_label.text = "SIGN: " + Familiar.Zodiac.keys()[familiar.zodiac]
 
+    health_cluster.visible = true
     health_amount.text = str(familiar.health) + "/" + str(familiar.max_health)
     healthbar.size.x = int((float(familiar.health) / float(familiar.max_health)) * healthbar_max_width)
 
@@ -86,6 +105,7 @@ func open(index: int):
     exp_value.text = str(familiar.experience)
     tnl_value.text = str(familiar.get_experience_to_next_level())
 
+    sprite_frame.visible = true
     sprite.texture = load("res://battle/sprites/front/" + familiar.species.name.to_lower().replace(" ", "-") + ".png")
 
     visible = true

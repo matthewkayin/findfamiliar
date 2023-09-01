@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://d3iwf7waew1od"]
+[gd_scene load_steps=18 format=3 uid="uid://d3iwf7waew1od"]
 
 [ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_7ojml"]
 [ext_resource type="Texture2D" uid="uid://wms1mx2tepno" path="res://battle/sprites/front/cat-sith.png" id="2_f4mdo"]
@@ -7,11 +7,33 @@
 [ext_resource type="FontFile" uid="uid://hyh7a7k6lkav" path="res://ui/BitPotion.ttf" id="3_ddme5"]
 [ext_resource type="Texture2D" uid="uid://cxodxb0h3532l" path="res://ui/healthbar/conditions.png" id="4_1rx5i"]
 [ext_resource type="Texture2D" uid="uid://dtn3pr5v54sl2" path="res://ui/spell_info/health_frame.png" id="4_v4pt8"]
+[ext_resource type="Texture2D" uid="uid://cqve3mnfvk083" path="res://ui/cursor.png" id="4_y12t0"]
 [ext_resource type="Texture2D" uid="uid://j57gwk0cki7b" path="res://ui/spell_info/exp_frame.png" id="5_75ovr"]
+[ext_resource type="Texture2D" uid="uid://bkbr53n5ty1uc" path="res://battle/sprites/minis/cat-sith.png" id="6_hpixp"]
+[ext_resource type="FontFile" uid="uid://bpv2n8psitkui" path="res://ui/BitPotionExt.ttf" id="11_gqhbv"]
+[ext_resource type="Texture2D" uid="uid://bvcdhi1v05im1" path="res://ui/spell_info/damage_type.png" id="12_lhkea"]
+[ext_resource type="PackedScene" uid="uid://5ol8rm2tnr16" path="res://ui/spell_info/spell_info.tscn" id="13_yhv4k"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ffw6k"]
 line_spacing = 0.0
 font = ExtResource("3_ddme5")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_11atb"]
+line_spacing = -10.0
+font = ExtResource("3_ddme5")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_pvinf"]
+font = ExtResource("3_ddme5")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_6lpgl"]
+line_spacing = -13.0
+font = ExtResource("11_gqhbv")
 font_size = 32
 font_color = Color(0, 0, 0, 1)
 
@@ -26,12 +48,42 @@ patch_margin_right = 8
 patch_margin_bottom = 8
 script = ExtResource("2_mgnnq")
 
-[node name="name_label" type="Label" parent="."]
+[node name="header" type="Label" parent="."]
 layout_mode = 0
 offset_left = 9.0
-offset_top = 3.0
 offset_right = 185.0
-offset_bottom = 55.0
+offset_bottom = 52.0
+text = "FAMILIAR INFO"
+label_settings = SubResource("LabelSettings_ffw6k")
+
+[node name="page_label" type="Label" parent="header"]
+layout_mode = 0
+offset_left = 106.0
+offset_right = 282.0
+offset_bottom = 52.0
+text = "SPELLS"
+label_settings = SubResource("LabelSettings_ffw6k")
+horizontal_alignment = 2
+
+[node name="page_left_arrow" type="Sprite2D" parent="header"]
+visible = false
+position = Vector2(223, 15)
+scale = Vector2(2, 2)
+texture = ExtResource("4_y12t0")
+flip_h = true
+
+[node name="page_right_arrow" type="Sprite2D" parent="header"]
+position = Vector2(293, 15)
+scale = Vector2(2, 2)
+texture = ExtResource("4_y12t0")
+
+[node name="name_label" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 9.0
+offset_top = 36.0
+offset_right = 185.0
+offset_bottom = 88.0
 text = "FRESHBREAD "
 label_settings = SubResource("LabelSettings_ffw6k")
 
@@ -52,6 +104,7 @@ text = "CAT SITH"
 label_settings = SubResource("LabelSettings_ffw6k")
 
 [node name="type_label" type="Label" parent="name_label"]
+layout_mode = 0
 offset_top = 55.0
 offset_right = 176.0
 offset_bottom = 107.0
@@ -59,6 +112,7 @@ text = "TYPE:"
 label_settings = SubResource("LabelSettings_ffw6k")
 
 [node name="type_value" type="Label" parent="name_label/type_label"]
+layout_mode = 0
 offset_left = 68.0
 offset_right = 244.0
 offset_bottom = 52.0
@@ -73,19 +127,83 @@ hframes = 7
 frame = 3
 
 [node name="sign_label" type="Label" parent="name_label"]
+layout_mode = 0
 offset_top = 73.0
 offset_right = 176.0
 offset_bottom = 125.0
 text = "SIGN: SAGITTARIUS"
 label_settings = SubResource("LabelSettings_ffw6k")
 
+[node name="one" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -10.0
+offset_top = 39.0
+offset_right = 30.0
+offset_bottom = 79.0
+
+[node name="mini" type="Sprite2D" parent="one"]
+position = Vector2(30, 18)
+texture = ExtResource("6_hpixp")
+hframes = 2
+
+[node name="name_label" type="Label" parent="one"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 46.0
+offset_top = -1.0
+offset_right = 206.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "FRESHBREAD"
+
+[node name="level_label" type="Label" parent="one"]
+visible = false
+layout_mode = 0
+offset_left = 152.0
+offset_top = -1.0
+offset_right = 200.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_ddme5")
+theme_override_font_sizes/font_size = 32
+text = "Lv100"
+horizontal_alignment = 2
+
+[node name="type_label" type="Label" parent="one"]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 17.0
+offset_right = 222.0
+offset_bottom = 69.0
+text = "TYPE:"
+label_settings = SubResource("LabelSettings_ffw6k")
+
+[node name="type_value" type="Label" parent="one/type_label"]
+layout_mode = 0
+offset_left = 68.0
+offset_right = 244.0
+offset_bottom = 52.0
+text = "DARK"
+label_settings = SubResource("LabelSettings_ffw6k")
+
+[node name="type_icon" type="Sprite2D" parent="one/type_label"]
+position = Vector2(48, 7)
+texture = ExtResource("3_d0di8")
+centered = false
+hframes = 7
+frame = 3
+
 [node name="health_cluster" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_left = 156.0
-offset_top = 12.0
+offset_top = 45.0
 offset_right = 196.0
-offset_bottom = 52.0
+offset_bottom = 85.0
 
 [node name="health_amount" type="Label" parent="health_cluster"]
 layout_mode = 0
@@ -141,10 +259,11 @@ position = Vector2(88, 21)
 texture = ExtResource("4_v4pt8")
 
 [node name="stat_cluster" type="Control" parent="."]
+visible = false
 anchors_preset = 0
-offset_top = 2.0
+offset_top = 35.0
 offset_right = 40.0
-offset_bottom = 42.0
+offset_bottom = 75.0
 
 [node name="strength_label" type="Label" parent="stat_cluster"]
 layout_mode = 0
@@ -299,11 +418,12 @@ text = "37127"
 horizontal_alignment = 2
 
 [node name="sprite_frame" type="NinePatchRect" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 10.0
-offset_top = 108.0
+offset_top = 141.0
 offset_right = 146.0
-offset_bottom = 244.0
+offset_bottom = 277.0
 texture = ExtResource("1_7ojml")
 patch_margin_left = 8
 patch_margin_top = 8
@@ -314,3 +434,278 @@ patch_margin_bottom = 8
 position = Vector2(68, 68)
 scale = Vector2(2, 2)
 texture = ExtResource("2_f4mdo")
+
+[node name="spells" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 124.0
+offset_right = 186.0
+offset_bottom = 216.0
+texture = ExtResource("1_7ojml")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="label5" type="Label" parent="spells"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 4.0
+offset_top = -40.0
+offset_right = 260.0
+offset_bottom = 28.0
+text = "PREPARED
+SPELLS:"
+label_settings = SubResource("LabelSettings_11atb")
+
+[node name="options" type="Control" parent="spells"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="col1" type="Control" parent="spells/options"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="label" type="Label" parent="spells/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 1.0
+offset_right = 278.0
+offset_bottom = 39.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_11atb")
+
+[node name="label2" type="Label" parent="spells/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 21.0
+offset_right = 278.0
+offset_bottom = 59.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_11atb")
+
+[node name="label3" type="Label" parent="spells/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 41.0
+offset_right = 278.0
+offset_bottom = 79.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_11atb")
+
+[node name="label4" type="Label" parent="spells/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 61.0
+offset_right = 278.0
+offset_bottom = 99.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_11atb")
+
+[node name="cursor" type="Sprite2D" parent="spells"]
+position = Vector2(13, 17)
+scale = Vector2(2, 2)
+texture = ExtResource("4_y12t0")
+
+[node name="spells2" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 190.0
+offset_top = 87.0
+offset_right = 310.0
+offset_bottom = 216.0
+texture = ExtResource("1_7ojml")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="label6" type="Label" parent="spells2"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 4.0
+offset_top = -40.0
+offset_right = 260.0
+offset_bottom = 28.0
+text = "KNOWN
+SPELLS:"
+label_settings = SubResource("LabelSettings_11atb")
+
+[node name="options" type="Control" parent="spells2"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="col1" type="Control" parent="spells2/options"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="label" type="Label" parent="spells2/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 12.0
+offset_right = 278.0
+offset_bottom = 50.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_pvinf")
+
+[node name="label2" type="Label" parent="spells2/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 30.0
+offset_right = 278.0
+offset_bottom = 68.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_pvinf")
+
+[node name="label3" type="Label" parent="spells2/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 49.0
+offset_right = 278.0
+offset_bottom = 87.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_pvinf")
+
+[node name="label4" type="Label" parent="spells2/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 67.0
+offset_right = 278.0
+offset_bottom = 105.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_pvinf")
+
+[node name="label5" type="Label" parent="spells2/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 85.0
+offset_right = 278.0
+offset_bottom = 123.0
+text = "APPLEFIGHT"
+label_settings = SubResource("LabelSettings_pvinf")
+
+[node name="cursor" type="Sprite2D" parent="spells2"]
+position = Vector2(12, 42)
+scale = Vector2(2, 2)
+texture = ExtResource("4_y12t0")
+
+[node name="up_arrow" type="Sprite2D" parent="spells2"]
+position = Vector2(73, 10)
+rotation = -1.5708
+scale = Vector2(2, 2)
+texture = ExtResource("4_y12t0")
+
+[node name="down_arrow" type="Sprite2D" parent="spells2"]
+position = Vector2(73, 117)
+rotation = 1.5708
+scale = Vector2(2, 2)
+texture = ExtResource("4_y12t0")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 222.0
+offset_right = 239.0
+offset_bottom = 280.0
+texture = ExtResource("1_7ojml")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="label" type="Label" parent="NinePatchRect"]
+texture_filter = 1
+offset_left = 6.0
+offset_top = -1.0
+offset_right = 262.0
+offset_bottom = 101.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Reflects opponent's
+next attack, if it's 
+magical"
+label_settings = SubResource("LabelSettings_6lpgl")
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 6.0
+offset_top = 194.0
+offset_right = 136.0
+offset_bottom = 280.0
+texture = ExtResource("1_7ojml")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="label" type="Label" parent="NinePatchRect2"]
+texture_filter = 1
+offset_left = 6.0
+offset_top = 38.0
+offset_right = 262.0
+offset_bottom = 116.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "POWER: 100"
+label_settings = SubResource("LabelSettings_6lpgl")
+
+[node name="label2" type="Label" parent="NinePatchRect2"]
+texture_filter = 1
+offset_left = 6.0
+offset_top = 56.0
+offset_right = 262.0
+offset_bottom = 134.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "ACCURACY: 100"
+label_settings = SubResource("LabelSettings_6lpgl")
+
+[node name="damage_type_icon" type="Sprite2D" parent="NinePatchRect2"]
+position = Vector2(18, 14)
+texture = ExtResource("12_lhkea")
+hframes = 2
+
+[node name="label2" type="Label" parent="NinePatchRect2/damage_type_icon"]
+texture_filter = 1
+offset_left = 15.0
+offset_top = -15.0
+offset_right = 271.0
+offset_bottom = 63.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "PHYSICAL"
+label_settings = SubResource("LabelSettings_6lpgl")
+
+[node name="spell_type_icon" type="Sprite2D" parent="NinePatchRect2"]
+position = Vector2(6, 26)
+texture = ExtResource("3_d0di8")
+centered = false
+hframes = 7
+
+[node name="label2" type="Label" parent="NinePatchRect2/spell_type_icon"]
+texture_filter = 1
+offset_left = 20.0
+offset_top = -7.0
+offset_right = 276.0
+offset_bottom = 71.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "LIGHTNING"
+label_settings = SubResource("LabelSettings_6lpgl")
+
+[node name="spell_info" parent="." instance=ExtResource("13_yhv4k")]
+layout_mode = 0
+offset_left = 239.0
+offset_top = 222.0
+offset_right = 310.0
+offset_bottom = 280.0
