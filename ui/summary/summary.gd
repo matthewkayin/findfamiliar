@@ -31,6 +31,27 @@ extends NinePatchRect
 @onready var sprite_frame = $sprite_frame
 @onready var sprite = $sprite_frame/sprite
 
+@onready var mini_header = $mini_header
+@onready var mini_header_mini = $mini_header/mini
+@onready var mini_name_label = $mini_header/name_label
+@onready var mini_level_label = $mini_header/level_label
+@onready var mini_type_value = $mini_header/type_label/type_value
+@onready var mini_type_icon = $mini_header/type_label/type_icon
+
+@onready var prepared_spells = $prepared_spells
+@onready var known_spells = $known_spells
+
+@onready var spell_desc = $spell_desc
+@onready var spell_desc_label = $spell_desc/label
+
+@onready var spell_info = $spell_info
+@onready var spell_info_power_label = $spell_info/power_label
+@onready var spell_info_accuracy_label = $spell_info/accuracy_label
+@onready var spell_info_damage_type_icon = $spell_info/damage_type_icon
+@onready var spell_info_damage_type_label = $spell_info/damage_type_icon/label
+@onready var spell_info_spell_type_icon = $spell_info/spell_type_icon
+@onready var spell_info_spell_type_label = $spell_info/spell_type_icon/label
+
 enum Page {
     STATS,
     SPELLS
@@ -48,28 +69,38 @@ func _ready():
     var spell_scratch = load("res://familiar/spells/scratch.tres")
     var spell_growl = load("res://familiar/spells/growl.tres")
 
-    player_party.familiars.append(Familiar.new(species_adder, 5))
-    player_party.familiars[0].nickname = "Monty"
-    player_party.familiars[0].condition = Condition.Type.POISONED
     player_party.familiars.append(Familiar.new(species_cat, 5))
-    player_party.familiars[1].nickname = "Jiji"
-    player_party.familiars[1].spells.append(spell_scratch)
-    player_party.familiars[1].spells.append(spell_growl)
+    player_party.familiars[0].nickname = "Jiji"
+    player_party.familiars[0].spells.append(spell_scratch)
+    player_party.familiars[0].spells.append(spell_growl)
+    player_party.familiars.append(Familiar.new(species_adder, 5))
+    player_party.familiars[1].nickname = "Monty"
+    player_party.familiars[1].condition = Condition.Type.POISONED
 
     healthbar_max_width = healthbar.size.x
     expbar_max_width = expbar.size.x
     visible = false
 
+    prepared_spells.updated_cursor.connect(open_spell_info)
+    known_spells.updated_cursor.connect(open_spell_info)
+
     open(0)
 
 func open(index: int):
+    open_stats_page(index)
+
+func open_stats_page(index: int):
     familiar_index = index
     var familiar = player_party.familiars[familiar_index]
 
     page = Page.STATS
     page_label.text = "STATS"
-    page_left_arrow.visible = false
-    page_right_arrow.visible = false
+
+    mini_header.visible = false
+    prepared_spells.close()
+    known_spells.close()
+    spell_desc.visible = false
+    spell_info.visible = false
 
     name_label.visible = true
     name_label.text = familiar.get_display_name()
@@ -109,3 +140,54 @@ func open(index: int):
     sprite.texture = load("res://battle/sprites/front/" + familiar.species.name.to_lower().replace(" ", "-") + ".png")
 
     visible = true
+
+func open_spell_page(index: int):
+    familiar_index = index
+    var familiar = player_party.familiars[index]
+
+    page = Page.SPELLS
+    page_label.text = "SPELLS"
+
+    name_label.visible = false
+    health_cluster.visible = false
+    stat_cluster.visible = false
+    sprite_frame.visible = false
+
+    mini_header.visible = true
+    mini_header_mini.texture = load("res://battle/sprites/minis/" + familiar.species.name.to_lower().replace(" ", "-") + ".png")
+    mini_name_label.text = familiar.get_display_name()
+    mini_level_label.text = "Lv" + str(familiar.level)
+    mini_type_value.text = Types.Type.keys()[familiar.species.type]
+    mini_type_icon.frame = familiar.species.type as int
+
+    var spell_names: Array[String] = []
+    for spell in familiar.spells:
+        spell_names.append(spell.name)
+    prepared_spells.open_with(spell_names)
+    open_spell_info()
+
+func open_spell_info():
+    spell_info.visible = true
+    spell_desc.visible = true
+
+    var spell: Spell
+    if prepared_spells.visible:
+        spell = player_party.familiars[familiar_index].spells[prepared_spells.cursor_index.y]
+    else:
+        return
+
+    spell_info_power_label.text = "POWER: " + str(spell.power)
+    spell_info_accuracy_label.text = "ACCURACY: " + str(spell.accuracy)
+    spell_info_damage_type_icon.frame = 0 if spell.damage_type == Spell.DamageType.PHYSICAL else 1
+    spell_info_damage_type_label.text = "PHYSICAL" if spell.damage_type == Spell.DamageType.PHYSICAL else "MAGICAL"
+    spell_info_spell_type_icon.frame = spell.type
+    spell_info_spell_type_label.text = Types.Type.keys()[spell.type]
+
+    spell_desc_label.text = spell.desc
+
+func _process(_delta):
+    if Input.is_action_just_pressed("right") or Input.is_action_just_pressed("left"):
+        if page == Page.STATS:
+            open_spell_page(familiar_index)
+        elif page == Page.SPELLS:
+            open_stats_page(familiar_index)
