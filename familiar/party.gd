@@ -45,7 +45,7 @@ func before_battle():
 func after_battle():
     # Recall the party order
     familiars = []
-    for i in range(0, familiars.size()):
+    for i in range(0, old_familiar_order.size()):
         familiars.append(old_familiar_order[i])
     
     # clear conditions

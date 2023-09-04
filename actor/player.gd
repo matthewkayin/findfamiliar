@@ -1,6 +1,7 @@
 extends Node2D
 
 @onready var director = get_node("/root/director")
+@onready var pause_menu = get_node("../ui/pause_menu")
 
 @onready var sprite = $sprite
 @onready var move_input_timer = $move_input_timer
@@ -16,6 +17,8 @@ var next_tile_position: Vector2
 
 func _process(delta):
     # check input
+    if Input.is_action_just_pressed("menu"):
+        pause_menu.open()
     input_direction = Vector2.ZERO
     for direction_name in World.DIRECTIONS.keys():
         if Input.is_action_pressed(direction_name):

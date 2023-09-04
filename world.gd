@@ -12,7 +12,7 @@ const TALLGRASS_COORDS = Vector2i(2, 1)
 
 @onready var tilemap = $tilemap
 @onready var player = $player
-@onready var transition = $transition
+@onready var transition = $ui/transition
 
 var tile_blocked
 

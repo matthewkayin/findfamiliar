@@ -34,8 +34,7 @@ func open(with_text: String):
     visible = true
     is_finished = false
     can_finish = false
-    if with_text != "":
-        timer.start(CHAR_SPEED)
+    timer.start(CHAR_SPEED)
 
 func set_text(with_text: String):
     timer.stop()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://4xaqdp8x46q3"]
+[gd_scene load_steps=41 format=3 uid="uid://4xaqdp8x46q3"]
 
 [ext_resource type="Script" path="res://battle/battle.gd" id="1_62dho"]
 [ext_resource type="Script" path="res://battle/battle_animator.gd" id="2_ipy34"]
@@ -215,6 +215,9 @@ animations = [{
 "speed": 7.0
 }]
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_bykr6"]
+blend_mode = 1
+
 [node name="battle" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_62dho")
@@ -317,3 +320,9 @@ offset_left = 2.0
 offset_top = 103.0
 offset_right = 148.0
 offset_bottom = 231.0
+
+[node name="whiteout" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("CanvasItemMaterial_bykr6")
+offset_right = 320.0
+offset_bottom = 288.0

@@ -19,6 +19,7 @@ signal resume_round
 @onready var enemy_healthbar = $enemy_healthbar
 @onready var gem_sprite = $gem_sprite
 @onready var exp_timer = $exp_timer
+@onready var whiteout = $whiteout
 
 enum ActionActor {
     PLAYER = 0,
@@ -38,33 +39,15 @@ var player_escape_attempts: int = 0
 var choosing_item_target: bool = false
 
 func _ready():
-    var species_cat = load("res://familiar/species/catsith.tres")
-    var spell_scratch = load("res://familiar/spells/scratch.tres")
-    var spell_growl = load("res://familiar/spells/growl.tres")
-    var item_gem = load("res://familiar/items/gem.tres")
-    var item_potion = load("res://familiar/items/potion.tres")
-
-    player_party.familiars.append(Familiar.new(species_cat, 5))
-    player_party.familiars[0].nickname = "Jiji"
-    player_party.familiars[0].spells.append(spell_scratch)
-    player_party.familiars[0].spells.append(spell_growl)
-    player_party.familiars.append(Familiar.new(species_cat, 3))
-    player_party.familiars[1].nickname = "Meowth"
-    player_party.familiars[1].spells.append(spell_scratch)
-    player_party.familiars[1].spells.append(spell_growl)
-    enemy_party.familiars.append(Familiar.new(species_cat, 5))
-    enemy_party.familiars[0].spells.append(spell_scratch)
-    # enemy_party.familiars[0].spells.append(spell_growl)
-
-    player_party.familiars[0].experience += player_party.familiars[0].get_experience_for_next_level() - 20
-    enemy_party.familiars[0].health = 1
-
-    player_party.add_item(item_gem, 5)
-    player_party.add_item(item_potion, 10)
-
+    pass
     #battle_start()
 
 func battle_start():
+    var species_cat = load("res://familiar/species/catsith.tres")
+    var spell_scratch = load("res://familiar/spells/scratch.tres")
+    enemy_party.familiars.append(Familiar.new(species_cat, 3))
+    enemy_party.familiars[0].spells.append(spell_scratch)
+
     player_party.before_battle()
     enemy_party.before_battle()
 
@@ -269,15 +252,6 @@ func do_round(player_action):
                 await dialog.finished
             player_healthbar.close()
             dialog.clear()
-
-            if player_party.is_defeated():
-                dialog.open("All of your lads have\nbeen knocked out!")
-                return
-            elif not player_party.familiars[0].is_living():
-                party_menu.open(false)
-                await resume_round
-                if turn_number == 0 and actions[1].actor == ActionActor.PLAYER:
-                    skip_next_turn = true
         # check if enemy familiar is dead
         if not enemy_party.familiars[0].is_living():
             dialog.open("Enemy " + enemy_party.familiars[0].get_display_name() + " was defeated!")
@@ -287,66 +261,85 @@ func do_round(player_action):
             enemy_healthbar.close()
             dialog.clear()
 
-            if enemy_party.is_defeated():
-                # calculate exp gained
-                var exp_yield: float = 0.0
-                for i in range(0, enemy_party.familiars.size()):
-                    exp_yield += float(enemy_party.familiars[i].species.exp_yield * enemy_party.familiars[i].level) / 7.0
-                if is_duel:
-                    exp_yield *= 1.5
+        # player party defeated
+        if player_party.is_defeated():
+            dialog.open("All of your familiars\nhave been defeated!")
+            await dialog.finished
+            battle_end()
+            return
+        # enemy party defeated
+        if enemy_party.is_defeated():
+            # calculate exp gained
+            var exp_yield: float = 0.0
+            for i in range(0, enemy_party.familiars.size()):
+                exp_yield += float(enemy_party.familiars[i].species.exp_yield * enemy_party.familiars[i].level) / 7.0
+            if is_duel:
+                exp_yield *= 1.5
 
-                # divide it up among party familiars
-                var divided_exp_yield: int = int(exp_yield / player_party.get_living_familiar_count())
-                var exp_yield_remainder: int = int(exp_yield) % player_party.get_living_familiar_count()
-                var exp_each: Array[int] = []
+            # divide it up among party familiars
+            var divided_exp_yield: int = int(exp_yield / player_party.get_living_familiar_count())
+            var exp_yield_remainder: int = int(exp_yield) % player_party.get_living_familiar_count()
+            var exp_each: Array[int] = []
+            for i in range(0, player_party.familiars.size()):
+                if not player_party.familiars[i].is_living() or not player_party.familiars[i].has_participated:
+                    exp_each.append(0)
+                    continue
+                exp_each.append(divided_exp_yield)
+                if i == 0:
+                    exp_each[i] += exp_yield_remainder
+
+            dialog.open("You gained\n" + str(int(exp_yield)) + " EXP. Points!")
+            party_menu.open(false, true)
+
+            var exp_finished = false
+            while not exp_finished:
+                exp_timer.start(0.025)
+                await exp_timer.timeout
+                exp_finished = true
                 for i in range(0, player_party.familiars.size()):
-                    if not player_party.familiars[i].is_living() or not player_party.familiars[i].has_participated:
-                        exp_each.append(0)
-                        continue
-                    exp_each.append(divided_exp_yield)
-                    if i == 0:
-                        exp_each[i] += exp_yield_remainder
+                    if exp_each[i] > 0:
+                        exp_each[i] -= 1
+                        var leveled_up = player_party.familiars[i].give_exp(1)
+                        if leveled_up:
+                            # announce level up
+                            dialog.open(player_party.familiars[i].get_display_name() + " grew to\nlevel " + str(player_party.familiars[i].level) + "!")
+                            await dialog.finished
+                            dialog.clear()
 
-                dialog.open("You gained\n" + str(int(exp_yield)) + " EXP. Points!")
-                party_menu.open(false, true)
-
-                var exp_finished = false
-                while not exp_finished:
-                    exp_timer.start(0.025)
-                    await exp_timer.timeout
-                    exp_finished = true
-                    for i in range(0, player_party.familiars.size()):
+                            # check for any learned spells
+                            var learn_spell = null
+                            for spell_index in range(0, player_party.familiars[i].species.learn_spells.size()):
+                                if player_party.familiars[i].species.learn_level[spell_index] == player_party.familiars[i].level:
+                                    learn_spell = player_party.familiars[i].species.learn_spells[spell_index]
+                                    break
+                            if learn_spell != null:
+                                if player_party.familiars[i].spells.size() == 4:
+                                    # TODO have players choose which move to forget
+                                    pass
+                                else:
+                                    player_party.familiars[i].spells.append(learn_spell)
+                                    dialog.open(player_party.familiars[i].get_display_name() + " learned " + learn_spell.name + "!")
+                                    await dialog.finished
+                                    dialog.clear()
                         if exp_each[i] > 0:
-                            exp_each[i] -= 1
-                            var leveled_up = player_party.familiars[i].give_exp(1)
-                            if leveled_up:
-                                # announce level up
-                                dialog.open(player_party.familiars[i].get_display_name() + " grew to\nlevel " + str(player_party.familiars[i].level) + "!")
-                                await dialog.finished
-                                dialog.clear()
+                            exp_finished = false
+            if dialog.is_finished:
+                dialog.open("")
+            await dialog.finished
+            battle_end()
+            return
+        # end enemy party defeated
 
-                                # check for any learned spells
-                                var learn_spell = null
-                                for spell_index in range(0, player_party.familiars[i].species.learn_spells.size()):
-                                    if player_party.familiars[i].species.learn_level[spell_index] == player_party.familiars[i].level:
-                                        learn_spell = player_party.familiars[i].species.learn_spells[spell_index]
-                                        break
-                                if learn_spell != null:
-                                    if player_party.familiars[i].spells.size() == 4:
-                                        # TODO have players choose which move to forget
-                                        pass
-                                    else:
-                                        player_party.familiars[i].spells.append(learn_spell)
-                                        dialog.open(player_party.familiars[i].get_display_name() + " learned " + learn_spell.name + "!")
-                                        await dialog.finished
-                                        dialog.clear()
-                            if exp_each[i] > 0:
-                                exp_finished = false
-                return
-            elif not enemy_party.familiars[0].is_living():
-                if turn_number == 0 and actions[1].actor == ActionActor.ENEMY:
-                    skip_next_turn = true
-                return
+        # switch
+        if not player_party.familiars[0].is_living():
+            party_menu.open(false)
+            await resume_round
+            if turn_number == 0 and actions[1].actor == ActionActor.PLAYER:
+                skip_next_turn = true
+        if not enemy_party.familiars[0].is_living():
+            # TODO enemy switch
+            if turn_number == 0 and actions[1].actor == ActionActor.ENEMY:
+                skip_next_turn = true
         var player_catch_successful = gem_sprite.visible
         if player_catch_successful:
             skip_next_turn = true
@@ -530,6 +523,7 @@ func do_action(action):
 
             dialog.open("Gotcha! " + familiar.get_display_name() + "\nwas caught!")
             await dialog.finished
+            battle_end()
         else:
             gem_sprite.visible = false
             await animator.animate_summon(ActionActor.ENEMY)
@@ -548,7 +542,7 @@ func do_action(action):
             dialog.open("Got away safely!")
             await dialog.finished
             dialog.clear()
-            emit_signal("finished")
+            battle_end()
         else:
             dialog.open("Can't escape!")
             if not dialog.is_finished:
@@ -576,3 +570,10 @@ func do_action(action):
         dialog.open(burn_message)
         await dialog.finished
         dialog.clear()
+
+func battle_end():
+    var whiteout_tween = get_tree().create_tween()
+    whiteout_tween.tween_property(whiteout, "modulate", Color(1, 1, 1, 1), 0.5)
+    await whiteout_tween.finished
+    player_party.after_battle()
+    emit_signal("finished")
