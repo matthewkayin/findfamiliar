@@ -652,6 +652,7 @@ patch_margin_bottom = 8
 
 [node name="label" type="Label" parent="spell_desc"]
 texture_filter = 1
+layout_mode = 0
 offset_left = 6.0
 offset_right = 262.0
 offset_bottom = 102.0
@@ -676,6 +677,7 @@ patch_margin_bottom = 8
 
 [node name="power_label" type="Label" parent="spell_info"]
 texture_filter = 1
+layout_mode = 0
 offset_left = 6.0
 offset_top = 38.0
 offset_right = 262.0
@@ -686,6 +688,7 @@ label_settings = SubResource("LabelSettings_6lpgl")
 
 [node name="accuracy_label" type="Label" parent="spell_info"]
 texture_filter = 1
+layout_mode = 0
 offset_left = 6.0
 offset_top = 56.0
 offset_right = 262.0

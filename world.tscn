@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://bsn674nenauod"]
+[gd_scene load_steps=9 format=3 uid="uid://sxr3ucetkgy6"]
 
 [ext_resource type="Texture2D" uid="uid://d27yyntagyn2k" path="res://tiles.png" id="1_0qyxr"]
 [ext_resource type="Script" path="res://world.gd" id="1_4nct1"]
 [ext_resource type="PackedScene" uid="uid://da4twrxii2p3p" path="res://actor/player.tscn" id="2_rrqnb"]
+[ext_resource type="Shader" path="res://transition.gdshader" id="4_4tqmb"]
+[ext_resource type="Script" path="res://transition.gd" id="5_5xfbf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h84hr"]
 texture = ExtResource("1_0qyxr")
@@ -13,13 +15,23 @@ texture = ExtResource("1_0qyxr")
 2:0/0/custom_data_0 = true
 0:1/0 = 0
 2:1/0 = 0
+2:1/0/custom_data_1 = 20
 1:1/0 = 0
 1:1/0/custom_data_0 = true
+3:1/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_dpylh"]
 custom_data_layer_0/name = "blocked"
 custom_data_layer_0/type = 1
+custom_data_layer_1/name = "encounter_rate"
+custom_data_layer_1/type = 2
 sources/1 = SubResource("TileSetAtlasSource_h84hr")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_thn1u"]
+shader = ExtResource("4_4tqmb")
+shader_parameter/progress = 0.0
+shader_parameter/snap_size = 4.0
+shader_parameter/diamond_size = 16.0
 
 [node name="world" type="Node2D"]
 texture_filter = 1
@@ -33,3 +45,15 @@ layer_0/tile_data = PackedInt32Array(0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1, 0, 4, 1, 0
 
 [node name="player" parent="." instance=ExtResource("2_rrqnb")]
 position = Vector2(128, 64)
+
+[node name="transition" type="CanvasLayer" parent="."]
+process_mode = 3
+script = ExtResource("5_5xfbf")
+
+[node name="color_rect" type="ColorRect" parent="transition"]
+process_mode = 3
+z_index = 3
+material = SubResource("ShaderMaterial_thn1u")
+offset_right = 320.0
+offset_bottom = 288.0
+color = Color(0, 0, 0, 1)

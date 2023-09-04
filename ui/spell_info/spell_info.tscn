@@ -3,19 +3,19 @@
 [ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_8x34e"]
 [ext_resource type="Script" path="res://ui/spell_info/spell_info.gd" id="2_ducfw"]
 [ext_resource type="FontFile" uid="uid://chh7uru3behv6" path="res://ui/gba.ttf" id="2_yoq52"]
-[ext_resource type="FontFile" uid="uid://hyh7a7k6lkav" path="res://ui/BitPotion.ttf" id="4_g742u"]
-[ext_resource type="Texture2D" uid="uid://bvcdhi1v05im1" path="res://ui/spell_info/damage_type.png" id="5_26xkt"]
-[ext_resource type="Texture2D" uid="uid://tc458rasd81c" path="res://ui/spell_info/types.png" id="6_0owr2"]
+[ext_resource type="Texture2D" uid="uid://bvcdhi1v05im1" path="res://ui/spell_info/damage_type.png" id="4_1bmi2"]
+[ext_resource type="FontFile" uid="uid://hyh7a7k6lkav" path="res://ui/BitPotion.ttf" id="4_eeb3r"]
+[ext_resource type="Texture2D" uid="uid://tc458rasd81c" path="res://ui/spell_info/types.png" id="5_cid5n"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_cq2lv"]
 line_spacing = -4.0
-font = ExtResource("4_g742u")
+font = ExtResource("4_eeb3r")
 font_size = 24
 font_color = Color(0, 0, 0, 1)
 
 [node name="spell_info" type="NinePatchRect"]
 texture_filter = 1
-offset_right = 88.0
+offset_right = 84.0
 offset_bottom = 56.0
 texture = ExtResource("1_8x34e")
 patch_margin_left = 8
@@ -28,22 +28,23 @@ script = ExtResource("2_ducfw")
 layout_mode = 0
 offset_left = 7.0
 offset_top = 19.0
-offset_right = 127.0
-offset_bottom = 91.0
+offset_right = 93.0
+offset_bottom = 75.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("2_yoq52")
 theme_override_font_sizes/font_size = 8
-text = "POW: ---
-ACC: 100"
+text = "POW:--- 
+ACC:100"
 label_settings = SubResource("LabelSettings_cq2lv")
 
 [node name="damage_type_icon" type="Sprite2D" parent="."]
-position = Vector2(18, 14)
-texture = ExtResource("5_26xkt")
+position = Vector2(6, 6)
+texture = ExtResource("4_1bmi2")
+centered = false
 hframes = 2
 
 [node name="spell_type_icon" type="Sprite2D" parent="."]
-position = Vector2(37, 6)
-texture = ExtResource("6_0owr2")
+position = Vector2(34, 6)
+texture = ExtResource("5_cid5n")
 centered = false
 hframes = 7

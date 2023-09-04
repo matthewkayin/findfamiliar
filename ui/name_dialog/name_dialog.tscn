@@ -1,0 +1,790 @@
+[gd_scene load_steps=8 format=3 uid="uid://2f2e0ef1tovq"]
+
+[ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_ihcqu"]
+[ext_resource type="FontFile" uid="uid://hyh7a7k6lkav" path="res://ui/BitPotion.ttf" id="2_ib4rr"]
+[ext_resource type="Script" path="res://ui/name_dialog/name_dialog.gd" id="2_wct87"]
+[ext_resource type="Texture2D" uid="uid://bkbr53n5ty1uc" path="res://battle/sprites/minis/cat-sith.png" id="3_l0lq4"]
+[ext_resource type="Texture2D" uid="uid://cqve3mnfvk083" path="res://ui/cursor.png" id="4_e0vjf"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_fjjyl"]
+font = ExtResource("2_ib4rr")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_gbru7"]
+font = ExtResource("2_ib4rr")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[node name="name_dialog" type="NinePatchRect"]
+texture_filter = 1
+offset_right = 320.0
+offset_bottom = 288.0
+texture = ExtResource("1_ihcqu")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource("2_wct87")
+
+[node name="prompt_label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 8.0
+offset_right = 248.0
+offset_bottom = 37.0
+text = "FRESHBREAD's NICKNAME?"
+label_settings = SubResource("LabelSettings_fjjyl")
+
+[node name="prompt_icon" type="Sprite2D" parent="prompt_label"]
+position = Vector2(20, 38)
+texture = ExtResource("3_l0lq4")
+hframes = 2
+
+[node name="input_hbox" type="Control" parent="prompt_label/prompt_icon"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 19.0
+offset_top = -21.0
+offset_right = 119.0
+offset_bottom = 19.0
+
+[node name="Label2" type="Label" parent="prompt_label/prompt_icon/input_hbox"]
+layout_mode = 2
+offset_top = 5.0
+offset_right = 10.0
+offset_bottom = 34.0
+text = "J"
+label_settings = SubResource("LabelSettings_fjjyl")
+horizontal_alignment = 1
+
+[node name="underscore" type="Label" parent="prompt_label/prompt_icon/input_hbox/Label2"]
+layout_mode = 2
+offset_top = 4.0
+offset_right = 10.0
+offset_bottom = 33.0
+text = "_"
+label_settings = SubResource("LabelSettings_fjjyl")
+
+[node name="Label3" type="Label" parent="prompt_label/prompt_icon/input_hbox"]
+layout_mode = 2
+offset_left = 11.0
+offset_top = 5.0
+offset_right = 21.0
+offset_bottom = 34.0
+text = "A"
+label_settings = SubResource("LabelSettings_fjjyl")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="prompt_label/prompt_icon/input_hbox/Label3"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "_"
+label_settings = SubResource("LabelSettings_fjjyl")
+
+[node name="Label4" type="Label" parent="prompt_label/prompt_icon/input_hbox"]
+layout_mode = 2
+offset_left = 22.0
+offset_top = 5.0
+offset_right = 32.0
+offset_bottom = 34.0
+text = "A"
+label_settings = SubResource("LabelSettings_fjjyl")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="prompt_label/prompt_icon/input_hbox/Label4"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "_"
+label_settings = SubResource("LabelSettings_fjjyl")
+
+[node name="Label5" type="Label" parent="prompt_label/prompt_icon/input_hbox"]
+layout_mode = 2
+offset_left = 33.0
+offset_top = 5.0
+offset_right = 43.0
+offset_bottom = 34.0
+text = "A"
+label_settings = SubResource("LabelSettings_fjjyl")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="prompt_label/prompt_icon/input_hbox/Label5"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "_"
+label_settings = SubResource("LabelSettings_fjjyl")
+
+[node name="Label6" type="Label" parent="prompt_label/prompt_icon/input_hbox"]
+layout_mode = 2
+offset_left = 44.0
+offset_top = 5.0
+offset_right = 54.0
+offset_bottom = 34.0
+text = "A"
+label_settings = SubResource("LabelSettings_fjjyl")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="prompt_label/prompt_icon/input_hbox/Label6"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "_"
+label_settings = SubResource("LabelSettings_fjjyl")
+
+[node name="Label7" type="Label" parent="prompt_label/prompt_icon/input_hbox"]
+layout_mode = 2
+offset_left = 55.0
+offset_top = 5.0
+offset_right = 65.0
+offset_bottom = 34.0
+text = "A"
+label_settings = SubResource("LabelSettings_fjjyl")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="prompt_label/prompt_icon/input_hbox/Label7"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "_"
+label_settings = SubResource("LabelSettings_fjjyl")
+
+[node name="Label8" type="Label" parent="prompt_label/prompt_icon/input_hbox"]
+layout_mode = 2
+offset_left = 66.0
+offset_top = 5.0
+offset_right = 76.0
+offset_bottom = 34.0
+text = "A"
+label_settings = SubResource("LabelSettings_fjjyl")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="prompt_label/prompt_icon/input_hbox/Label8"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "_"
+label_settings = SubResource("LabelSettings_fjjyl")
+
+[node name="Label9" type="Label" parent="prompt_label/prompt_icon/input_hbox"]
+layout_mode = 2
+offset_left = 77.0
+offset_top = 5.0
+offset_right = 87.0
+offset_bottom = 34.0
+text = "A"
+label_settings = SubResource("LabelSettings_fjjyl")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="prompt_label/prompt_icon/input_hbox/Label9"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "_"
+label_settings = SubResource("LabelSettings_fjjyl")
+
+[node name="Label10" type="Label" parent="prompt_label/prompt_icon/input_hbox"]
+layout_mode = 2
+offset_left = 88.0
+offset_top = 5.0
+offset_right = 98.0
+offset_bottom = 34.0
+text = "A"
+label_settings = SubResource("LabelSettings_fjjyl")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="prompt_label/prompt_icon/input_hbox/Label10"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "_"
+label_settings = SubResource("LabelSettings_fjjyl")
+
+[node name="Label11" type="Label" parent="prompt_label/prompt_icon/input_hbox"]
+layout_mode = 2
+offset_left = 99.0
+offset_top = 5.0
+offset_right = 109.0
+offset_bottom = 34.0
+text = "A"
+label_settings = SubResource("LabelSettings_fjjyl")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="prompt_label/prompt_icon/input_hbox/Label11"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "_"
+label_settings = SubResource("LabelSettings_fjjyl")
+
+[node name="letters_box" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 34.0
+offset_top = 71.0
+offset_right = 287.0
+offset_bottom = 233.0
+texture = ExtResource("1_ihcqu")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="confirm_box" type="NinePatchRect" parent="letters_box"]
+layout_mode = 0
+offset_left = 159.0
+offset_top = 166.0
+offset_right = 253.0
+offset_bottom = 196.0
+texture = ExtResource("1_ihcqu")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="confirm_label" type="Label" parent="letters_box/confirm_box"]
+layout_mode = 2
+offset_left = 21.0
+offset_right = 87.0
+offset_bottom = 29.0
+text = "CONFIRM"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 2
+
+[node name="row1" type="Control" parent="letters_box"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 22.0
+offset_top = 8.0
+offset_right = 240.0
+offset_bottom = 8.0
+
+[node name="Label" type="Label" parent="letters_box/row1"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="letters_box/row1"]
+layout_mode = 2
+offset_left = 26.0
+offset_right = 36.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="letters_box/row1"]
+layout_mode = 2
+offset_left = 52.0
+offset_right = 62.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="letters_box/row1"]
+layout_mode = 2
+offset_left = 78.0
+offset_right = 88.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="letters_box/row1"]
+layout_mode = 2
+offset_left = 104.0
+offset_right = 114.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="letters_box/row1"]
+layout_mode = 2
+offset_left = 130.0
+offset_right = 140.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="letters_box/row1"]
+layout_mode = 2
+offset_left = 156.0
+offset_right = 166.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label8" type="Label" parent="letters_box/row1"]
+layout_mode = 2
+offset_left = 182.0
+offset_right = 192.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label9" type="Label" parent="letters_box/row1"]
+layout_mode = 2
+offset_left = 208.0
+offset_right = 212.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="row2" type="Control" parent="letters_box"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 22.0
+offset_top = 32.0
+offset_right = 240.0
+offset_bottom = 32.0
+
+[node name="Label" type="Label" parent="letters_box/row2"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="letters_box/row2"]
+layout_mode = 2
+offset_left = 26.0
+offset_right = 36.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="letters_box/row2"]
+layout_mode = 2
+offset_left = 52.0
+offset_right = 62.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="letters_box/row2"]
+layout_mode = 2
+offset_left = 78.0
+offset_right = 88.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="letters_box/row2"]
+layout_mode = 2
+offset_left = 104.0
+offset_right = 114.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="letters_box/row2"]
+layout_mode = 2
+offset_left = 130.0
+offset_right = 140.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="letters_box/row2"]
+layout_mode = 2
+offset_left = 156.0
+offset_right = 166.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label8" type="Label" parent="letters_box/row2"]
+layout_mode = 2
+offset_left = 182.0
+offset_right = 192.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label9" type="Label" parent="letters_box/row2"]
+layout_mode = 2
+offset_left = 208.0
+offset_right = 212.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="row3" type="Control" parent="letters_box"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 22.0
+offset_top = 56.0
+offset_right = 240.0
+offset_bottom = 56.0
+
+[node name="Label" type="Label" parent="letters_box/row3"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="letters_box/row3"]
+layout_mode = 2
+offset_left = 26.0
+offset_right = 36.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="letters_box/row3"]
+layout_mode = 2
+offset_left = 52.0
+offset_right = 62.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="letters_box/row3"]
+layout_mode = 2
+offset_left = 78.0
+offset_right = 88.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="letters_box/row3"]
+layout_mode = 2
+offset_left = 104.0
+offset_right = 114.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="letters_box/row3"]
+layout_mode = 2
+offset_left = 130.0
+offset_right = 140.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="letters_box/row3"]
+layout_mode = 2
+offset_left = 156.0
+offset_right = 166.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label8" type="Label" parent="letters_box/row3"]
+layout_mode = 2
+offset_left = 182.0
+offset_right = 192.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label9" type="Label" parent="letters_box/row3"]
+layout_mode = 2
+offset_left = 208.0
+offset_right = 212.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="row4" type="Control" parent="letters_box"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 22.0
+offset_top = 80.0
+offset_right = 240.0
+offset_bottom = 80.0
+
+[node name="Label" type="Label" parent="letters_box/row4"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="letters_box/row4"]
+layout_mode = 2
+offset_left = 26.0
+offset_right = 36.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="letters_box/row4"]
+layout_mode = 2
+offset_left = 52.0
+offset_right = 62.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="letters_box/row4"]
+layout_mode = 2
+offset_left = 78.0
+offset_right = 88.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="letters_box/row4"]
+layout_mode = 2
+offset_left = 104.0
+offset_right = 114.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="letters_box/row4"]
+layout_mode = 2
+offset_left = 130.0
+offset_right = 140.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="letters_box/row4"]
+layout_mode = 2
+offset_left = 156.0
+offset_right = 166.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label8" type="Label" parent="letters_box/row4"]
+layout_mode = 2
+offset_left = 182.0
+offset_right = 192.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label9" type="Label" parent="letters_box/row4"]
+layout_mode = 2
+offset_left = 208.0
+offset_right = 212.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="row5" type="Control" parent="letters_box"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 22.0
+offset_top = 104.0
+offset_right = 240.0
+offset_bottom = 104.0
+
+[node name="Label" type="Label" parent="letters_box/row5"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="letters_box/row5"]
+layout_mode = 2
+offset_left = 26.0
+offset_right = 36.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="letters_box/row5"]
+layout_mode = 2
+offset_left = 52.0
+offset_right = 62.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="letters_box/row5"]
+layout_mode = 2
+offset_left = 78.0
+offset_right = 88.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="letters_box/row5"]
+layout_mode = 2
+offset_left = 104.0
+offset_right = 114.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="letters_box/row5"]
+layout_mode = 2
+offset_left = 130.0
+offset_right = 140.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="letters_box/row5"]
+layout_mode = 2
+offset_left = 156.0
+offset_right = 166.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label8" type="Label" parent="letters_box/row5"]
+layout_mode = 2
+offset_left = 182.0
+offset_right = 192.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label9" type="Label" parent="letters_box/row5"]
+layout_mode = 2
+offset_left = 208.0
+offset_right = 212.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="row6" type="Control" parent="letters_box"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 22.0
+offset_top = 128.0
+offset_right = 240.0
+offset_bottom = 128.0
+
+[node name="Label" type="Label" parent="letters_box/row6"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="letters_box/row6"]
+layout_mode = 2
+offset_left = 26.0
+offset_right = 36.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="letters_box/row6"]
+layout_mode = 2
+offset_left = 52.0
+offset_right = 62.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="letters_box/row6"]
+layout_mode = 2
+offset_left = 78.0
+offset_right = 88.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="letters_box/row6"]
+layout_mode = 2
+offset_left = 104.0
+offset_right = 114.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="letters_box/row6"]
+layout_mode = 2
+offset_left = 130.0
+offset_right = 140.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="letters_box/row6"]
+layout_mode = 2
+offset_left = 156.0
+offset_right = 166.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label8" type="Label" parent="letters_box/row6"]
+layout_mode = 2
+offset_left = 182.0
+offset_right = 192.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="Label9" type="Label" parent="letters_box/row6"]
+layout_mode = 2
+offset_left = 208.0
+offset_right = 212.0
+offset_bottom = 29.0
+text = "A"
+label_settings = SubResource("LabelSettings_gbru7")
+horizontal_alignment = 1
+
+[node name="cursor" type="Sprite2D" parent="letters_box"]
+position = Vector2(173, 176)
+scale = Vector2(2, 2)
+texture = ExtResource("4_e0vjf")
+
+[node name="mini_anim_timer" type="Timer" parent="."]
+
+[node name="cursor_blink_timer" type="Timer" parent="."]

@@ -1,6 +1,7 @@
 extends Node2D
 class_name Battle
 
+signal finished
 signal resume_round
 
 @onready var player_party = get_node("/root/player_party")
@@ -61,7 +62,7 @@ func _ready():
     player_party.add_item(item_gem, 5)
     player_party.add_item(item_potion, 10)
 
-    battle_start()
+    #battle_start()
 
 func battle_start():
     player_party.before_battle()
@@ -192,7 +193,7 @@ func _process(_delta):
                 dialog.clear()
                 item_chooser.close()
                 player_party.remove_item(chosen_item)
-                do_action({
+                do_round({
                     "actor": ActionActor.PLAYER,
                     "type": ActionType.ITEM,
                     "item": chosen_item
@@ -346,6 +347,9 @@ func do_round(player_action):
                 if turn_number == 0 and actions[1].actor == ActionActor.ENEMY:
                     skip_next_turn = true
                 return
+        var player_catch_successful = gem_sprite.visible
+        if player_catch_successful:
+            skip_next_turn = true
         
         if skip_next_turn:
             break
@@ -399,7 +403,8 @@ func do_action(action):
         if spell_hit:
             # Compute base damage
             var attacker_attack: float = attacker.get_strength() if action.spell.damage_type == Spell.DamageType.PHYSICAL else attacker.get_intellect()
-            var base_damage: float = (((((2.0 * attacker.level) / 5.0) + 2.0) * action.spell.power * (attacker_attack / defender.get_defense())) / 50.0) + 2.0
+            var defender_defense: float = defender.get_defense() if action.spell.damage_type == Spell.DamageType.PHYSICAL else defender.get_intellect()
+            var base_damage: float = (((((2.0 * attacker.level) / 5.0) + 2.0) * action.spell.power * (attacker_attack / defender_defense)) / 50.0) + 2.0
 
             # Compute STAB
             var stab: float = 1
@@ -516,7 +521,7 @@ func do_action(action):
             else:
                 num_ticks = 1
         await gem_sprite.animate_throw()
-        await enemy_sprite.animate_unsummon()
+        await animator.animate_unsummon(ActionActor.ENEMY)
         await gem_sprite.animate_fall()
         await gem_sprite.animate_ticks(num_ticks)
 
@@ -527,7 +532,7 @@ func do_action(action):
             await dialog.finished
         else:
             gem_sprite.visible = false
-            await enemy_sprite.animate_summon(familiar.species.name)
+            await animator.animate_summon(ActionActor.ENEMY)
 
             dialog.open("It broke free!")
             await dialog.finished
@@ -543,6 +548,7 @@ func do_action(action):
             dialog.open("Got away safely!")
             await dialog.finished
             dialog.clear()
+            emit_signal("finished")
         else:
             dialog.open("Can't escape!")
             if not dialog.is_finished:

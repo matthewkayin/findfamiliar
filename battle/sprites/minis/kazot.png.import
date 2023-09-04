@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2atwronf04si"
-path="res://.godot/imported/sakhir.png-8672402256d2611f7dade6d1303d7fb6.ctex"
+uid="uid://bwthiys75av5q"
+path="res://.godot/imported/kazot.png-6d06327f824a163153a031406b331768.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://battle/sprites/front/sakhir.png"
-dest_files=["res://.godot/imported/sakhir.png-8672402256d2611f7dade6d1303d7fb6.ctex"]
+source_file="res://battle/sprites/minis/kazot.png"
+dest_files=["res://.godot/imported/kazot.png-6d06327f824a163153a031406b331768.ctex"]
 
 [params]
 
