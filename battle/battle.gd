@@ -39,7 +39,7 @@ var player_escape_attempts: int = 0
 var choosing_item_target: bool = false
 
 func _ready():
-    pass
+    party_menu.clear_warning.connect(dialog.clear)
     #battle_start()
 
 func battle_start():

@@ -86,6 +86,6 @@ func _process(delta):
     if direction_name == "left" or direction_name == "right":
         direction_name = "side"
     var anim_prefix = "walk" if (is_moving or input_direction != Vector2.ZERO) else "idle"
-    sprite.speed_scale = 0.75 if anim_prefix == "walk" and not is_moving else 1.0
+    sprite.speed_scale = 0.5 if anim_prefix == "walk" and not is_moving else 1.0
     sprite.play(anim_prefix + "_" + direction_name)
     sprite.flip_h = direction == Vector2.RIGHT

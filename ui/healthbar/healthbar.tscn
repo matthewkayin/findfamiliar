@@ -74,7 +74,7 @@ offset_left = 36.0
 offset_top = 17.0
 offset_right = 132.0
 offset_bottom = 21.0
-color = Color(0, 0.721569, 0, 1)
+color = Color(0.168627, 0.619608, 0.384314, 1)
 
 [node name="health_frame" type="Sprite2D" parent="health"]
 position = Vector2(72, 19)

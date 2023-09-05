@@ -17,6 +17,8 @@ signal clear_warning
 @onready var condition = [$one/condition, $two/condition, $three/condition]
 @onready var cursor = $cursor
 @onready var timer = $timer
+@onready var action_menu = $actions
+@onready var summary = $ui/summary
 
 const HEALTHBAR_COLOR_GREEN = Color8(0, 184, 0, 255)
 const HEALTHBAR_COLOR_YELLOW = Color8(248, 168, 0, 255)
@@ -64,6 +66,7 @@ func open(p_allow_back: bool = true, exp_mode: bool = false):
     cursor_index = Vector2i(0, 0)
     is_finished = false
     just_opened = true
+    action_menu.close()
 
     for i in range(0, 3):
         if i >= party.familiars.size():
@@ -157,6 +160,22 @@ func _process(_delta):
     if party == null or is_finished or not is_open() or exp_cluster[0].visible:
         return
 
+    if action_menu.is_open():
+        if not action_menu.finished:
+            return
+        action_menu.finished = false
+        if action_menu.choice == "":
+            emit_signal("clear_warning")
+            action_menu.close()
+        elif action_menu.choice == "SWITCH":
+            is_finished = true
+            choice = cursor_index.y
+        elif action_menu.choice == "STATUS":
+            summary.open(cursor_index.y)
+            await summary.finished
+            summary.close()
+        return
+
     if Input.is_action_just_pressed("up"):
         navigate_cursor(-1)
     if Input.is_action_just_pressed("down"):
@@ -164,8 +183,6 @@ func _process(_delta):
     if allow_back and Input.is_action_just_pressed("back"):
         is_finished = true
         choice = -1 
-        emit_signal("clear_warning")
     if Input.is_action_just_pressed("action"):
-        is_finished = true
-        choice = cursor_index.y
-        emit_signal("clear_warning")
+        action_menu.position.y = group[cursor_index.y].position.y + 7
+        action_menu.open()

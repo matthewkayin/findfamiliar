@@ -1,5 +1,7 @@
 extends NinePatchRect
 
+signal finished
+
 @onready var player_party = get_node("/root/player_party")
 
 @onready var page_label = $header/page_label
@@ -64,19 +66,6 @@ var familiar_index: int = 0
 var page: Page = Page.STATS
 
 func _ready():
-    var species_adder = load("res://familiar/species/adder.tres")
-    var species_cat = load("res://familiar/species/catsith.tres")
-    var spell_scratch = load("res://familiar/spells/scratch.tres")
-    var spell_growl = load("res://familiar/spells/growl.tres")
-
-    player_party.familiars.append(Familiar.new(species_cat, 5))
-    player_party.familiars[0].nickname = "Jiji"
-    player_party.familiars[0].spells.append(spell_scratch)
-    player_party.familiars[0].spells.append(spell_growl)
-    player_party.familiars.append(Familiar.new(species_adder, 5))
-    player_party.familiars[1].nickname = "Monty"
-    player_party.familiars[1].condition = Condition.Type.POISONED
-
     healthbar_max_width = healthbar.size.x
     expbar_max_width = expbar.size.x
     visible = false
@@ -84,7 +73,8 @@ func _ready():
     prepared_spells.updated_cursor.connect(open_spell_info)
     known_spells.updated_cursor.connect(open_spell_info)
 
-    open(0)
+func close():
+    visible = false
 
 func open(index: int):
     open_stats_page(index)
@@ -186,8 +176,12 @@ func open_spell_info():
     spell_desc_label.text = spell.desc
 
 func _process(_delta):
+    if not visible:
+        return
     if Input.is_action_just_pressed("right") or Input.is_action_just_pressed("left"):
         if page == Page.STATS:
             open_spell_page(familiar_index)
         elif page == Page.SPELLS:
             open_stats_page(familiar_index)
+    if Input.is_action_just_pressed("back"):
+        emit_signal("finished")

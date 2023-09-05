@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://wphpyoii23gm"]
+[gd_scene load_steps=12 format=3 uid="uid://wphpyoii23gm"]
 
 [ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_sp5pl"]
 [ext_resource type="Script" path="res://ui/party_menu/party_menu.gd" id="2_7x5pg"]
@@ -8,6 +8,14 @@
 [ext_resource type="Texture2D" uid="uid://cqve3mnfvk083" path="res://ui/cursor.png" id="5_c0t82"]
 [ext_resource type="Texture2D" uid="uid://j57gwk0cki7b" path="res://ui/spell_info/exp_frame.png" id="6_26fdw"]
 [ext_resource type="Texture2D" uid="uid://cxodxb0h3532l" path="res://ui/healthbar/conditions.png" id="7_drjq8"]
+[ext_resource type="Script" path="res://ui/choicebox/choicebox.gd" id="9_tf1vm"]
+[ext_resource type="PackedScene" uid="uid://d3iwf7waew1od" path="res://ui/summary/summary.tscn" id="10_vpkro"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_28ia0"]
+line_spacing = 0.0
+font = ExtResource("4_hh1r5")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
 
 [node name="party_menu" type="NinePatchRect"]
 texture_filter = 1
@@ -80,7 +88,7 @@ offset_left = 52.0
 offset_top = 17.0
 offset_right = 148.0
 offset_bottom = 21.0
-color = Color(0, 0.721569, 0, 1)
+color = Color(0.168627, 0.619608, 0.384314, 1)
 
 [node name="health_frame" type="Sprite2D" parent="one/health"]
 position = Vector2(88, 19)
@@ -101,7 +109,7 @@ offset_left = 35.0
 offset_top = 19.0
 offset_right = 147.0
 offset_bottom = 21.0
-color = Color(0.12549, 0.533333, 0.972549, 1)
+color = Color(0.396078, 0.666667, 0.811765, 1)
 
 [node name="exp_frame" type="Sprite2D" parent="one/exp"]
 position = Vector2(78, 20)
@@ -174,7 +182,7 @@ offset_left = 52.0
 offset_top = 17.0
 offset_right = 148.0
 offset_bottom = 21.0
-color = Color(0, 0.721569, 0, 1)
+color = Color(0.168627, 0.619608, 0.384314, 1)
 
 [node name="health_frame" type="Sprite2D" parent="two/health"]
 position = Vector2(88, 19)
@@ -195,7 +203,7 @@ offset_left = 35.0
 offset_top = 19.0
 offset_right = 147.0
 offset_bottom = 21.0
-color = Color(0.12549, 0.533333, 0.972549, 1)
+color = Color(0.396078, 0.666667, 0.811765, 1)
 
 [node name="exp_frame" type="Sprite2D" parent="two/exp"]
 position = Vector2(78, 20)
@@ -268,7 +276,7 @@ offset_left = 52.0
 offset_top = 17.0
 offset_right = 148.0
 offset_bottom = 21.0
-color = Color(0, 0.721569, 0, 1)
+color = Color(0.168627, 0.619608, 0.384314, 1)
 
 [node name="health_frame" type="Sprite2D" parent="three/health"]
 position = Vector2(88, 19)
@@ -289,7 +297,7 @@ offset_left = 35.0
 offset_top = 19.0
 offset_right = 147.0
 offset_bottom = 21.0
-color = Color(0.12549, 0.533333, 0.972549, 1)
+color = Color(0.396078, 0.666667, 0.811765, 1)
 
 [node name="exp_frame" type="Sprite2D" parent="three/exp"]
 position = Vector2(78, 20)
@@ -307,3 +315,57 @@ scale = Vector2(2, 2)
 texture = ExtResource("5_c0t82")
 
 [node name="timer" type="Timer" parent="."]
+
+[node name="actions" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = -88.0
+offset_top = 97.0
+offset_bottom = 153.0
+texture = ExtResource("1_sp5pl")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource("9_tf1vm")
+allow_back = true
+
+[node name="options" type="Control" parent="actions"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="col1" type="Control" parent="actions/options"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="label" type="Label" parent="actions/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 1.0
+offset_right = 278.0
+offset_bottom = 39.0
+text = "SWITCH"
+label_settings = SubResource("LabelSettings_28ia0")
+
+[node name="label3" type="Label" parent="actions/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 25.0
+offset_right = 278.0
+offset_bottom = 63.0
+text = "STATUS"
+label_settings = SubResource("LabelSettings_28ia0")
+
+[node name="cursor" type="Sprite2D" parent="actions"]
+position = Vector2(12, 16)
+scale = Vector2(2, 2)
+texture = ExtResource("5_c0t82")
+
+[node name="ui" type="CanvasLayer" parent="."]
+
+[node name="summary" parent="ui" instance=ExtResource("10_vpkro")]
+visible = false
