@@ -39,7 +39,7 @@ font_color = Color(0, 0, 0, 1)
 
 [node name="summary" type="NinePatchRect"]
 texture_filter = 1
-offset_right = 319.0
+offset_right = 320.0
 offset_bottom = 288.0
 texture = ExtResource("1_7ojml")
 patch_margin_left = 8
@@ -77,7 +77,6 @@ scale = Vector2(2, 2)
 texture = ExtResource("4_y12t0")
 
 [node name="name_label" type="Label" parent="."]
-visible = false
 layout_mode = 0
 offset_left = 9.0
 offset_top = 36.0
@@ -126,6 +125,7 @@ hframes = 7
 frame = 3
 
 [node name="sign_label" type="Label" parent="name_label"]
+visible = false
 layout_mode = 0
 offset_top = 73.0
 offset_right = 176.0
@@ -373,6 +373,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("2_f4mdo")
 
 [node name="mini_header" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_left = -10.0
@@ -434,6 +435,7 @@ hframes = 7
 frame = 3
 
 [node name="prepared_spells" type="NinePatchRect" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 190.0
 offset_top = 185.0
@@ -639,6 +641,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("4_y12t0")
 
 [node name="spell_desc" type="NinePatchRect" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 8.0
 offset_top = 185.0
@@ -664,6 +667,7 @@ physical spells."
 label_settings = SubResource("LabelSettings_6lpgl")
 
 [node name="spell_info" type="NinePatchRect" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 8.0
 offset_top = 95.0

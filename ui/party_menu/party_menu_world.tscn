@@ -1,0 +1,373 @@
+[gd_scene load_steps=11 format=3 uid="uid://b2wxobtfnnxog"]
+
+[ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_fl4dq"]
+[ext_resource type="Texture2D" uid="uid://bkbr53n5ty1uc" path="res://battle/sprites/minis/cat-sith.png" id="2_rmsco"]
+[ext_resource type="FontFile" uid="uid://hyh7a7k6lkav" path="res://ui/BitPotion.ttf" id="3_w151g"]
+[ext_resource type="Texture2D" uid="uid://dtn3pr5v54sl2" path="res://ui/spell_info/health_frame.png" id="4_4m2mp"]
+[ext_resource type="Texture2D" uid="uid://j57gwk0cki7b" path="res://ui/spell_info/exp_frame.png" id="5_wiocg"]
+[ext_resource type="Texture2D" uid="uid://cxodxb0h3532l" path="res://ui/healthbar/conditions.png" id="6_tiiq7"]
+[ext_resource type="Texture2D" uid="uid://cqve3mnfvk083" path="res://ui/cursor.png" id="7_66nfd"]
+[ext_resource type="Script" path="res://ui/choicebox/choicebox.gd" id="8_85n28"]
+[ext_resource type="PackedScene" uid="uid://d3iwf7waew1od" path="res://ui/summary/summary.tscn" id="9_u885f"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_uq6n4"]
+line_spacing = 0.0
+font = ExtResource("3_w151g")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[node name="party_menu_world" type="NinePatchRect"]
+texture_filter = 1
+offset_right = 320.0
+offset_bottom = 288.0
+texture = ExtResource("1_fl4dq")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="one" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 108.0
+offset_top = 20.0
+offset_right = 148.0
+offset_bottom = 60.0
+
+[node name="mini" type="Sprite2D" parent="one"]
+position = Vector2(30, 18)
+texture = ExtResource("2_rmsco")
+hframes = 2
+
+[node name="name_label" type="Label" parent="one"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 46.0
+offset_top = -1.0
+offset_right = 206.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_w151g")
+theme_override_font_sizes/font_size = 32
+text = "FRESHBREAD"
+
+[node name="level_label" type="Label" parent="one"]
+layout_mode = 0
+offset_left = 152.0
+offset_top = -1.0
+offset_right = 200.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_w151g")
+theme_override_font_sizes/font_size = 32
+text = "Lv100"
+horizontal_alignment = 2
+
+[node name="health" type="Control" parent="one"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 46.0
+offset_top = 9.0
+offset_right = 86.0
+offset_bottom = 49.0
+
+[node name="health_amount" type="Label" parent="one/health"]
+layout_mode = 0
+offset_left = 86.0
+offset_top = 16.0
+offset_right = 174.0
+offset_bottom = 45.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_w151g")
+theme_override_font_sizes/font_size = 32
+text = "100/100"
+
+[node name="healthbar" type="ColorRect" parent="one/health"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 17.0
+offset_right = 148.0
+offset_bottom = 21.0
+color = Color(0.168627, 0.619608, 0.384314, 1)
+
+[node name="health_frame" type="Sprite2D" parent="one/health"]
+position = Vector2(88, 19)
+texture = ExtResource("4_4m2mp")
+
+[node name="exp" type="Control" parent="one"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 46.0
+offset_top = 9.0
+offset_right = 86.0
+offset_bottom = 49.0
+
+[node name="expbar" type="ColorRect" parent="one/exp"]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 19.0
+offset_right = 147.0
+offset_bottom = 21.0
+color = Color(0.396078, 0.666667, 0.811765, 1)
+
+[node name="exp_frame" type="Sprite2D" parent="one/exp"]
+position = Vector2(78, 20)
+texture = ExtResource("5_wiocg")
+
+[node name="condition" type="Sprite2D" parent="one"]
+position = Vector2(56, 33)
+texture = ExtResource("6_tiiq7")
+hframes = 8
+frame = 4
+
+[node name="two" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 107.0
+offset_top = 80.0
+offset_right = 147.0
+offset_bottom = 120.0
+
+[node name="mini" type="Sprite2D" parent="two"]
+position = Vector2(30, 18)
+texture = ExtResource("2_rmsco")
+hframes = 2
+
+[node name="name_label" type="Label" parent="two"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 46.0
+offset_top = -1.0
+offset_right = 206.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_w151g")
+theme_override_font_sizes/font_size = 32
+text = "FRESHBREAD"
+
+[node name="level_label" type="Label" parent="two"]
+layout_mode = 0
+offset_left = 152.0
+offset_top = -1.0
+offset_right = 200.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_w151g")
+theme_override_font_sizes/font_size = 32
+text = "Lv100"
+horizontal_alignment = 2
+
+[node name="health" type="Control" parent="two"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 46.0
+offset_top = 9.0
+offset_right = 86.0
+offset_bottom = 49.0
+
+[node name="health_amount" type="Label" parent="two/health"]
+layout_mode = 0
+offset_left = 86.0
+offset_top = 16.0
+offset_right = 174.0
+offset_bottom = 45.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_w151g")
+theme_override_font_sizes/font_size = 32
+text = "100/100"
+
+[node name="healthbar" type="ColorRect" parent="two/health"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 17.0
+offset_right = 148.0
+offset_bottom = 21.0
+color = Color(0.168627, 0.619608, 0.384314, 1)
+
+[node name="health_frame" type="Sprite2D" parent="two/health"]
+position = Vector2(88, 19)
+texture = ExtResource("4_4m2mp")
+
+[node name="exp" type="Control" parent="two"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 46.0
+offset_top = 9.0
+offset_right = 86.0
+offset_bottom = 49.0
+
+[node name="expbar" type="ColorRect" parent="two/exp"]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 19.0
+offset_right = 147.0
+offset_bottom = 21.0
+color = Color(0.396078, 0.666667, 0.811765, 1)
+
+[node name="exp_frame" type="Sprite2D" parent="two/exp"]
+position = Vector2(78, 20)
+texture = ExtResource("5_wiocg")
+
+[node name="condition" type="Sprite2D" parent="two"]
+position = Vector2(56, 34)
+texture = ExtResource("6_tiiq7")
+hframes = 8
+frame = 4
+
+[node name="three" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 106.0
+offset_top = 140.0
+offset_right = 146.0
+offset_bottom = 180.0
+
+[node name="mini" type="Sprite2D" parent="three"]
+position = Vector2(30, 18)
+texture = ExtResource("2_rmsco")
+hframes = 2
+
+[node name="name_label" type="Label" parent="three"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 46.0
+offset_top = -1.0
+offset_right = 206.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_w151g")
+theme_override_font_sizes/font_size = 32
+text = "FRESHBREAD"
+
+[node name="level_label" type="Label" parent="three"]
+layout_mode = 0
+offset_left = 152.0
+offset_top = -1.0
+offset_right = 200.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_w151g")
+theme_override_font_sizes/font_size = 32
+text = "Lv100"
+horizontal_alignment = 2
+
+[node name="health" type="Control" parent="three"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 46.0
+offset_top = 9.0
+offset_right = 86.0
+offset_bottom = 49.0
+
+[node name="health_amount" type="Label" parent="three/health"]
+layout_mode = 0
+offset_left = 86.0
+offset_top = 16.0
+offset_right = 174.0
+offset_bottom = 45.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_w151g")
+theme_override_font_sizes/font_size = 32
+text = "100/100"
+
+[node name="healthbar" type="ColorRect" parent="three/health"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 17.0
+offset_right = 148.0
+offset_bottom = 21.0
+color = Color(0.168627, 0.619608, 0.384314, 1)
+
+[node name="health_frame" type="Sprite2D" parent="three/health"]
+position = Vector2(88, 19)
+texture = ExtResource("4_4m2mp")
+
+[node name="exp" type="Control" parent="three"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 46.0
+offset_top = 9.0
+offset_right = 86.0
+offset_bottom = 49.0
+
+[node name="expbar" type="ColorRect" parent="three/exp"]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 19.0
+offset_right = 147.0
+offset_bottom = 21.0
+color = Color(0.396078, 0.666667, 0.811765, 1)
+
+[node name="exp_frame" type="Sprite2D" parent="three/exp"]
+position = Vector2(78, 20)
+texture = ExtResource("5_wiocg")
+
+[node name="condition" type="Sprite2D" parent="three"]
+position = Vector2(56, 35)
+texture = ExtResource("6_tiiq7")
+hframes = 8
+frame = 4
+
+[node name="cursor" type="Sprite2D" parent="."]
+position = Vector2(11, 21)
+scale = Vector2(2, 2)
+texture = ExtResource("7_66nfd")
+
+[node name="timer" type="Timer" parent="."]
+
+[node name="actions" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 220.0
+offset_top = 220.0
+offset_right = 308.0
+offset_bottom = 276.0
+texture = ExtResource("1_fl4dq")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource("8_85n28")
+allow_back = true
+
+[node name="options" type="Control" parent="actions"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="col1" type="Control" parent="actions/options"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="label" type="Label" parent="actions/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 1.0
+offset_right = 278.0
+offset_bottom = 39.0
+text = "SWITCH"
+label_settings = SubResource("LabelSettings_uq6n4")
+
+[node name="label3" type="Label" parent="actions/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 25.0
+offset_right = 278.0
+offset_bottom = 63.0
+text = "STATUS"
+label_settings = SubResource("LabelSettings_uq6n4")
+
+[node name="cursor" type="Sprite2D" parent="actions"]
+position = Vector2(12, 16)
+scale = Vector2(2, 2)
+texture = ExtResource("7_66nfd")
+
+[node name="summary" parent="." instance=ExtResource("9_u885f")]
+visible = false
+layout_mode = 0

@@ -28,9 +28,13 @@ var level: int = 5
 var health: int = 20
 var max_health: int = 20
 var strength: int = 5
+var strength_dv: int = 0
 var intellect: int = 5
+var intellect_dv: int = 0
 var defense: int = 5
+var defense_dv: int = 0
 var agility: int = 5
+var agility_dv: int = 0
 
 # spells
 var spells: Array[Spell] = []
@@ -47,8 +51,13 @@ var has_participated: bool = false
 
 func _init(as_species: Species, at_level: int):
     species = as_species
-    experience = 0
+
     zodiac = randi_range(0, 11) as Zodiac
+    strength_dv = randi_range(0, 15)
+    intellect_dv = randi_range(0, 15)
+    defense_dv = randi_range(0, 15)
+    agility_dv = randi_range(0, 15)
+
     set_level(at_level)
     health = max_health
 
@@ -115,18 +124,13 @@ func get_experience_toward_next_level() -> int:
 func get_experience_to_next_level() -> int:
     return get_experience_for_next_level() - get_experience_toward_next_level()
 
-func calculate_stat(base: int, growth_zodiacs: Array[Zodiac], stunt_zodiacs: Array[Zodiac]) -> int:
-    var growth_multiplier = 1.0
-    if growth_zodiacs.has(zodiac):
-        growth_multiplier = 1.1
-    elif stunt_zodiacs.has(zodiac):
-        growth_multiplier = 0.9
-    return int((((base * 2.0 * level) / 100) + 5) * growth_multiplier)
+func calculate_stat(base: int, base_dv: int):
+    return int((((base + base_dv) * 2.0 * level) / 100) + 5)
 
 func update_stats():
     max_health = int((species.base_health * 2.0 * level) / 100) + level + 10
 
-    strength = calculate_stat(species.base_strength, [Zodiac.VIRGO, Zodiac.LEO, Zodiac.ARIES], [Zodiac.PISCES, Zodiac.AQUARIUS, Zodiac.LIBRA])
-    intellect = calculate_stat(species.base_intellect, [Zodiac.PISCES, Zodiac.SCORPIO, Zodiac.CANCER], [Zodiac.VIRGO, Zodiac.TAURUS, Zodiac.CAPRICORN])
-    defense = calculate_stat(species.base_defense, [Zodiac.AQUARIUS, Zodiac.TAURUS, Zodiac.SAGITTARIUS], [Zodiac.LEO, Zodiac.SCORPIO, Zodiac.GEMINI])
-    agility = calculate_stat(species.base_agility, [Zodiac.LIBRA, Zodiac.CAPRICORN, Zodiac.GEMINI], [Zodiac.ARIES, Zodiac.CANCER, Zodiac.SAGITTARIUS])
+    strength = calculate_stat(species.base_strength, strength_dv)
+    intellect = calculate_stat(species.base_intellect, intellect_dv)
+    defense = calculate_stat(species.base_defense, defense_dv)
+    agility = calculate_stat(species.base_agility, agility_dv)
