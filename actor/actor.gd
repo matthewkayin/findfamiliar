@@ -3,8 +3,10 @@ extends Sprite2D
 signal has_approached_player
 
 @onready var world = get_parent().get_parent()
+@onready var enemy_party = get_node("/root/enemy_party")
 @onready var wait_timer = $wait_timer
 @onready var exclamation = $exclamation
+@onready var tallgrass_step = $tallgrass_step
 var player = null
 var dialogbox = null
 
@@ -13,7 +15,12 @@ var dialogbox = null
 
 @export_group("duel")
 @export var is_duelist: bool = false
+@export var sight_range: int = 5
 @export_multiline var pre_duel_dialog: Array[String]
+@export_multiline var post_duel_dialog: String
+@export var duelist_name: String
+@export var battle_sprite: Texture2D
+@export var familiars: Array[WitchFamiliar]
 
 enum BehaviorAction {
     FACE,
@@ -53,9 +60,13 @@ var is_approaching_player: bool = false
 
 func _ready():
     add_to_group("walkers")
-    add_to_group("npc")
+    add_to_group("npcs")
 
-    var behavior_lines = behavior.split("\n")
+    var behavior_lines
+    if behavior.contains("\n"):
+        behavior_lines = behavior.split("\n") 
+    else:
+        behavior_lines = [behavior]
     for line in behavior_lines:
         var parts = line.split(" ")
         if parts[0] == "face":
@@ -75,6 +86,25 @@ func _ready():
                 "duration": float(parts[1])
             })
 
+func eyes_meet_player(next_position = null):
+    var player_position = next_position if next_position != null else player.position
+    if not is_duelist:
+        return false
+    if is_defeated:
+        return false
+    if int(player_position.x) % World.TILE_SIZE != 0 or int(player_position.y) % World.TILE_SIZE != 0:
+        return false
+    if direction != position.direction_to(player_position):
+        return false
+    var position_check_tile = (next_tile_position if is_moving else position) + (direction * World.TILE_SIZE)
+    var sight_index = 1
+    while sight_index <= sight_range and position_check_tile != player_position:
+        if world.is_tile_blocked(position_check_tile):
+            return false
+        position_check_tile += direction * World.TILE_SIZE
+        sight_index += 1
+    return position_check_tile == player_position
+
 func _process(delta):
     if player == null or dialogbox == null:
         player = get_node_or_null("../player")
@@ -82,19 +112,7 @@ func _process(delta):
         if player == null or dialogbox == null:
             return
 
-    # check for duel with player
-    if is_duelist and not is_defeated and player.position.x % World.TILE_SIZE == 0 and player.position.y % World.TILE_SIZE == 0 and direction == position.direction_to(player.direction):
-        var can_see_player = true
-        var position_check_tile = Vector2(int(player.position.x / World.TILE_SIZE), int(player.position.y / World.TILE_SIZE)) + (direction * World.TILE_SIZE)
-        while position_check_tile != player.position:
-            if world.is_tile_blocked(position_check_tile):
-                can_see_player = false
-                break
-            position_check_tile += direction * World.TILE_SIZE
-        if can_see_player:
-            begin_duel()
-
-    if not is_behaving and not behavior_paused:
+    if not is_behaving and not behavior_paused and not is_defeated:
         if behaviors[behavior_index].action == BehaviorAction.FACE:
             direction = behaviors[behavior_index].direction
             behavior_index = (behavior_index + 1) % behaviors.size()
@@ -105,10 +123,10 @@ func _process(delta):
             target_position = position + (behaviors[behavior_index].steps * behaviors[behavior_index].direction * World.TILE_SIZE)
             is_behaving = true
 
-    if is_behaving and behaviors[behavior_index].action == BehaviorAction.WAIT and wait_timer.is_stopped() and not behavior_paused:
+    if is_behaving and behaviors[behavior_index].action == BehaviorAction.WAIT and wait_timer.is_stopped() and not behavior_paused and not is_defeated:
         is_behaving = false
         behavior_index = (behavior_index + 1) % behaviors.size()
-    elif is_behaving and behaviors[behavior_index].action == BehaviorAction.WALK and not is_moving and not behavior_paused:
+    elif is_behaving and behaviors[behavior_index].action == BehaviorAction.WALK and not is_moving and not behavior_paused and not is_defeated:
         var next_position = position + (behaviors[behavior_index].direction * World.TILE_SIZE)
         if not world.is_tile_blocked(next_position):
             previous_position = position
@@ -116,6 +134,11 @@ func _process(delta):
             is_moving = true
 
     if is_moving and not behavior_paused:
+        # tall grass animation
+        if world.is_tall_grass(next_tile_position):
+            tallgrass_step.play("step")
+        else:
+            tallgrass_step.play("default")
         # set facing direction
         var new_direction = position.direction_to(next_tile_position)
         if new_direction != Vector2.ZERO:
@@ -135,6 +158,8 @@ func _process(delta):
 
             if input_direction == Vector2.ZERO or next_position_blocked:
                 is_moving = false
+                if tallgrass_step.animation == "step":
+                    tallgrass_step.play("in_grass")
             else:
                 previous_position = next_tile_position
                 next_tile_position = next_position
@@ -145,11 +170,19 @@ func _process(delta):
         else:
             position += direction * step
     elif is_moving and is_approaching_player:
+        # tall grass animation
+        var tile_ahead = Vector2(int(position.x / World.TILE_SIZE) * World.TILE_SIZE, int(position.y / World.TILE_SIZE) * World.TILE_SIZE) + (direction * World.TILE_SIZE)
+        if world.is_tall_grass(tile_ahead):
+            tallgrass_step.play("step")
+        else:
+            tallgrass_step.play("default")
         var step = SPEED * delta
         if position.distance_to(target_position) <= step:
             position = target_position
             is_moving = false
             is_approaching_player = false
+            if world.is_tall_grass(position):
+                tallgrass_step.play("in_grass")
             emit_signal("has_approached_player")
         else:
             position += direction * step
@@ -176,20 +209,51 @@ func _process(delta):
     flip_h = direction == Vector2.RIGHT
 
 func begin_duel():
+    # pause everybody
     for npc in get_tree().get_nodes_in_group("npcs"):
         npc.behavior_paused = true
+
+    # show exclamation
     exclamation.visible = true
+    is_moving = false
+    if tallgrass_step.animation == "step":
+        tallgrass_step.play("in_grass")
     wait_timer.start(1.0)
-    await wait_timer.finished
+    await wait_timer.timeout
+    exclamation.visible = false
+
+    # walk to player
     target_position = player.position - (direction * World.TILE_SIZE)
     is_moving = true
     is_approaching_player = true
     await has_approached_player
+    player.direction = direction * -1
+
+    # do dialog
     for line in pre_duel_dialog:
         dialogbox.open(line)
         await dialogbox.finished
     dialogbox.close()
     wait_timer.start(0.2)
-    await wait_timer.finished
+    await wait_timer.timeout
+
+    # form party
+    enemy_party.familiars.clear()
+    for witch_familiar in familiars:
+        var familiar = Familiar.new(witch_familiar.species, witch_familiar.level)
+        for i in range(0, 4):
+            var witch_familiar_spell = witch_familiar["spell" + str(i + 1)]
+            if witch_familiar_spell == null:
+                continue
+            familiar.spells.append(witch_familiar_spell)
+        enemy_party.familiars.append(familiar)
+    enemy_party.enemy_witch_name = duelist_name
+    enemy_party.enemy_lose_message = post_duel_dialog
+    enemy_party.enemy_witch_sprite = battle_sprite
+
+    await director.start_battle(true)
+
+    # unpause everybody
     for npc in get_tree().get_nodes_in_group("npcs"):
         npc.behavior_paused = false
+    is_defeated = true

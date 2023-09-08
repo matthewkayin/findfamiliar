@@ -40,24 +40,26 @@ var choosing_item_target: bool = false
 
 func _ready():
     party_menu.clear_warning.connect(dialog.clear)
-    #battle_start()
 
-func battle_start():
-    var species_cat = load("res://familiar/species/catsith.tres")
-    var spell_scratch = load("res://familiar/spells/scratch.tres")
-    enemy_party.familiars.append(Familiar.new(species_cat, 3))
-    enemy_party.familiars[0].spells.append(spell_scratch)
+func battle_start(is_witch_battle: bool = false):
+    is_duel = is_witch_battle
 
     player_party.before_battle()
     enemy_party.before_battle()
 
     dialog.clear()
     dialog.visible = true
-    await animator.animate_enter()
-    enemy_healthbar.open()
-    dialog.open("A wild " + enemy_party.familiars[0].get_display_name() + " appeared!")
-    await dialog.finished
-    dialog.clear()
+    await animator.animate_enter(is_duel)
+    if is_duel:
+        dialog.open(enemy_party.enemy_witch_name + "\nchallenged you to a duel!")
+        await dialog.finished
+        dialog.clear()
+        await summon_familiar(ActionActor.ENEMY, true)
+    else:
+        enemy_healthbar.open()
+        dialog.open("A wild " + enemy_party.familiars[0].get_display_name() + " appeared!")
+        await dialog.finished
+        dialog.clear()
 
     await summon_familiar(ActionActor.PLAYER, true)
     dialog.clear()
@@ -70,12 +72,15 @@ func battle_actions_open(remember_cursor: bool = false):
 
 func summon_familiar(who: ActionActor, animate_exit: bool = false):
     var party = player_party if who == ActionActor.PLAYER else enemy_party
-    var message = "You " if who == ActionActor.PLAYER else "Enemy "
-    message += " summoned " + party.familiars[0].get_display_name() + "!"
+    var message = "You " if who == ActionActor.PLAYER else enemy_party.enemy_witch_name + "\n"
+    message += "summoned " + party.familiars[0].get_display_name() + "!"
 
     dialog.open(message)
     if animate_exit:
-        await animator.animate_player_exit()
+        if who == ActionActor.PLAYER:
+            await animator.animate_player_exit()
+        else:
+            await animator.animate_enemy_exit()
     await animator.animate_summon(who)
     if not dialog.is_finished:
         await dialog.finished
@@ -269,6 +274,12 @@ func do_round(player_action):
             return
         # enemy party defeated
         if enemy_party.is_defeated():
+            if is_duel:
+                await animator.animate_enemy_reenter()
+                dialog.open(enemy_party.enemy_lose_message)
+                await dialog.finished
+                dialog.clear()
+
             # calculate exp gained
             var exp_yield: float = 0.0
             for i in range(0, enemy_party.familiars.size()):

@@ -1,8 +1,62 @@
-[gd_scene load_steps=4 format=3 uid="uid://c868hfexw38qs"]
+[gd_scene load_steps=11 format=3 uid="uid://c1gfvqxec8bbx"]
 
 [ext_resource type="Texture2D" uid="uid://deubqkgodrs1f" path="res://actor/frida.png" id="1_8lbkq"]
 [ext_resource type="Script" path="res://actor/actor.gd" id="2_c2qfl"]
 [ext_resource type="Texture2D" uid="uid://bs2uriia35wyd" path="res://actor/exclamation.png" id="3_dm4ra"]
+[ext_resource type="Texture2D" uid="uid://culmfv7u8om36" path="res://tallgrass_step.png" id="4_5m25s"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kbhaq"]
+atlas = ExtResource("4_5m25s")
+region = Rect2(54, 0, 18, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qfcmc"]
+atlas = ExtResource("4_5m25s")
+region = Rect2(36, 0, 18, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vbdb1"]
+atlas = ExtResource("4_5m25s")
+region = Rect2(0, 0, 18, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nkxv3"]
+atlas = ExtResource("4_5m25s")
+region = Rect2(18, 0, 18, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5o1p5"]
+atlas = ExtResource("4_5m25s")
+region = Rect2(36, 0, 18, 10)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ig5rm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kbhaq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qfcmc")
+}],
+"loop": true,
+"name": &"in_grass",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_vbdb1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nkxv3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5o1p5")
+}],
+"loop": true,
+"name": &"step",
+"speed": 8.0
+}]
 
 [node name="actor" type="Sprite2D"]
 texture_filter = 1
@@ -19,3 +73,9 @@ visible = false
 texture = ExtResource("3_dm4ra")
 centered = false
 offset = Vector2(2.08165e-12, -16)
+
+[node name="tallgrass_step" type="AnimatedSprite2D" parent="."]
+z_index = 2
+z_as_relative = false
+position = Vector2(8, 13)
+sprite_frames = SubResource("SpriteFrames_ig5rm")

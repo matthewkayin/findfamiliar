@@ -25,7 +25,7 @@ func _process(_delta):
     if world == null:
         world = get_node("/root/world")
 
-func start_battle():
+func start_battle(is_witch_battle: bool = false):
     get_tree().paused = true
 
     # play transition
@@ -39,7 +39,7 @@ func start_battle():
     root.remove_child(world)
     root.add_child(battle_instance)
     get_tree().paused = false
-    battle_instance.battle_start()
+    battle_instance.battle_start(is_witch_battle)
     await battle_instance.finished
 
     # return to world

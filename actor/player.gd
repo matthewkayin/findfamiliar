@@ -18,11 +18,18 @@ var direction: Vector2 = Vector2.DOWN
 var is_moving: bool = false
 var next_tile_position: Vector2
 var is_interacting: bool = false
+var is_entering_duel: bool = false
 
 func _ready():
     add_to_group("walkers")
 
 func _process(delta):
+    update_behavior(delta)
+    update_sprite()
+
+func update_behavior(delta):
+    if is_entering_duel:
+        return
     if is_interacting:
         if not dialog.is_open():
             is_interacting = false
@@ -39,7 +46,7 @@ func _process(delta):
             if npc.position == interact_coord and not npc.is_moving:
                 npc.direction = direction * -1
                 is_interacting = true
-                if npc.is_duelist and not npc.is_duelist_defeated:
+                if npc.is_duelist and not npc.is_defeated:
                     await npc.begin_duel()
                 else:
                     npc.behavior_paused = true
@@ -92,24 +99,12 @@ func _process(delta):
         # player has reached tile
         if position.distance_to(next_tile_position) <= step:
             var entering_battle = world.check_for_encounter(next_tile_position)
+            var entering_duel = false
+            var duel_opponent = null
             for npc in get_tree().get_nodes_in_group("npcs"):
-                if npc.is_duelist_defeated or not npc.is_duelist:
-                    continue
-                if npc.direction != npc.position.direction_to(position):
-                    continue
-                var position_check = npc.position
-                if npc.is_moving:
-                    npc.position = npc.next_tile_position
-                position_check += npc.direction * World.TILE_SIZE
-                var can_see_player = true
-                while position_check != next_tile_position:
-                    if world.is_tile_blocked(position_check):
-                        can_see_player = false
-                        break
-                if can_see_player:
+                if npc.eyes_meet_player(next_tile_position):
                     entering_duel = true
                     duel_opponent = npc
-                    print("hey")
                 break
 
             var next_position = next_tile_position + (input_direction * World.TILE_SIZE)
@@ -131,7 +126,9 @@ func _process(delta):
             if entering_duel:
                 input_direction = Vector2.ZERO
                 is_moving = false
+                is_entering_duel = true
                 await duel_opponent.begin_duel()
+                is_entering_duel = false
             elif entering_battle:
                 input_direction = Vector2.ZERO
                 is_moving = false
@@ -139,12 +136,21 @@ func _process(delta):
         # player has not reached tile, move normally
         else:
             position += direction * step
+    # elif not moving
+    else:
+        for npc in get_tree().get_nodes_in_group("npcs"):
+            if npc.eyes_meet_player():
+                is_entering_duel = true
+                await npc.begin_duel()
+                is_entering_duel = false
+                break
 
+func update_sprite():
     # sprite animation
     var direction_name = World.get_direction_name(direction)
     if direction_name == "left" or direction_name == "right":
         direction_name = "side"
-    var anim_prefix = "walk" if (is_moving or input_direction != Vector2.ZERO) else "idle"
+    var anim_prefix = "walk" if ((is_moving or input_direction != Vector2.ZERO) and not is_entering_duel) else "idle"
     sprite.speed_scale = 0.5 if anim_prefix == "walk" and not is_moving else 1.0
     sprite.play(anim_prefix + "_" + direction_name)
     sprite.flip_h = direction == Vector2.RIGHT

@@ -4,6 +4,9 @@ class_name Party
 var old_familiar_order: Array[Familiar] = []
 var familiars: Array[Familiar] = []
 var items: Dictionary = {}
+var enemy_witch_name: String
+var enemy_witch_sprite: Texture2D
+var enemy_lose_message: String
 
 func get_living_familiar_count():
     var count = 0

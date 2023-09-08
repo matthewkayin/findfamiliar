@@ -22,8 +22,8 @@ func _ready():
     player_animation.visible = false
     enemy_animation.visible = false
 
-func animate_enter():
-    enemy_sprite.texture = load("res://battle/sprites/front/" + enemy_party.familiars[0].species.name.replace(" ", "-").to_lower() + ".png")
+func animate_enter(is_duel: bool):
+    enemy_sprite.texture = enemy_party.enemy_witch_sprite if is_duel else load("res://battle/sprites/front/" + enemy_party.familiars[0].species.name.replace(" ", "-").to_lower() + ".png")
     enemy_sprite.position = Vector2(-64, 64) 
     enemy_sprite.visible = true
 
@@ -49,6 +49,15 @@ func animate_enemy_exit():
     var animate_tween = get_tree().create_tween()
 
     animate_tween.tween_property(enemy_sprite, "position", Vector2(376, 64), 0.5)
+    await animate_tween.finished
+
+func animate_enemy_reenter():
+    var animate_tween = get_tree().create_tween()
+
+    enemy_sprite.texture = enemy_party.enemy_witch_sprite
+    enemy_sprite.region_enabled = false
+    enemy_sprite.position = Vector2(320, 64)
+    animate_tween.tween_property(enemy_sprite, "position", Vector2(256, 64), 0.5)
     await animate_tween.finished
 
 func animate_summon(who: Battle.ActionActor):
