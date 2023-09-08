@@ -10,6 +10,7 @@ var cursor_index = Vector2i(0, 0)
 var choice: String = ""
 var finished: bool = false
 var just_opened: bool = false
+var just_closed: bool = false
 
 func _ready():
     refresh_options()
@@ -30,6 +31,8 @@ func refresh_options():
         choice_labels.append(col_array)
 
 func open(remember_cursor: bool = false):
+    if just_closed:
+        return
     if not remember_cursor:
         cursor_index = Vector2i(0, 0)
     update_cursor()
@@ -51,6 +54,7 @@ func open_with(p_options: Array[String]):
 func close():
     visible = false
     get_tree().paused = false
+    just_closed = true
     emit_signal("closed")
 
 func update_cursor():
@@ -77,6 +81,8 @@ func _process(_delta):
     if just_opened:
         just_opened = false
         return
+    if just_closed:
+        just_closed = false
     if finished or not is_open():
         return
 

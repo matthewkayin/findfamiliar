@@ -55,6 +55,9 @@ func set_text_fancy(with_text: String, at_speed: float = CHAR_SPEED):
 func clear():
     label.text = ""
 
+func close():
+    visible = false
+
 func _on_timer_timeout():
     label.visible_characters += 1
     if label.visible_ratio == 1.0:

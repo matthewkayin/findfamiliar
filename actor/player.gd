@@ -1,7 +1,9 @@
 extends Node2D
 
 @onready var director = get_node("/root/director")
-@onready var pause_menu = get_node("../ui/pause_menu")
+@onready var pause_menu = get_node("../../ui/pause_menu")
+@onready var dialog = get_node("../../ui/dialog")
+@onready var world = get_parent().get_parent()
 
 @onready var sprite = $sprite
 @onready var move_input_timer = $move_input_timer
@@ -11,14 +13,44 @@ const SPEED: int = 48
 const MOVE_INPUT_DELAY: float = 0.1
 
 var input_direction: Vector2 = Vector2.ZERO
+var previous_position: Vector2 = Vector2.ZERO
 var direction: Vector2 = Vector2.DOWN
 var is_moving: bool = false
 var next_tile_position: Vector2
+var is_interacting: bool = false
+
+func _ready():
+    add_to_group("walkers")
 
 func _process(delta):
+    if is_interacting:
+        if not dialog.is_open():
+            is_interacting = false
+        return
+
     # check input
     if Input.is_action_just_pressed("menu"):
         pause_menu.open()
+
+    # interaction
+    if Input.is_action_just_pressed("action") and not is_moving and not is_interacting:
+        var interact_coord = position + (direction * World.TILE_SIZE)
+        for npc in get_tree().get_nodes_in_group("npcs"):
+            if npc.position == interact_coord and not npc.is_moving:
+                npc.direction = direction * -1
+                is_interacting = true
+                if npc.is_duelist and not npc.is_duelist_defeated:
+                    await npc.begin_duel()
+                else:
+                    npc.behavior_paused = true
+                    for line in npc.dialog:
+                        dialog.open(line)
+                        await dialog.finished
+                    dialog.close()
+                    npc.behavior_paused = false
+            break
+
+    # directional input
     input_direction = Vector2.ZERO
     for direction_name in World.DIRECTIONS.keys():
         if Input.is_action_pressed(direction_name):
@@ -35,20 +67,23 @@ func _process(delta):
     # get movement next tile
     if not is_moving and input_direction != Vector2.ZERO and move_input_timer.is_stopped():
         var next_position = position + (input_direction * World.TILE_SIZE)
-        if not get_parent().is_tile_blocked(next_position / World.TILE_SIZE):
+        if not world.is_tile_blocked(next_position):
+            previous_position = position
             next_tile_position = next_position
             is_moving = true
 
     # set facing direction
     if is_moving:
-        direction = position.direction_to(next_tile_position)
+        var new_direction = position.direction_to(next_tile_position)
+        if new_direction != Vector2.ZERO:
+            direction = new_direction
     elif input_direction != Vector2.ZERO:
         direction = input_direction
 
     # handle movement
     if is_moving: 
         # tall grass animation
-        if get_parent().is_tall_grass(next_tile_position / World.TILE_SIZE):
+        if world.is_tall_grass(next_tile_position):
             tallgrass_step.play("step")
         else:
             tallgrass_step.play("default")
@@ -56,12 +91,31 @@ func _process(delta):
         var step = SPEED * delta
         # player has reached tile
         if position.distance_to(next_tile_position) <= step:
-            var entering_battle = get_parent().check_for_encounter(next_tile_position / World.TILE_SIZE)
+            var entering_battle = world.check_for_encounter(next_tile_position)
+            for npc in get_tree().get_nodes_in_group("npcs"):
+                if npc.is_duelist_defeated or not npc.is_duelist:
+                    continue
+                if npc.direction != npc.position.direction_to(position):
+                    continue
+                var position_check = npc.position
+                if npc.is_moving:
+                    npc.position = npc.next_tile_position
+                position_check += npc.direction * World.TILE_SIZE
+                var can_see_player = true
+                while position_check != next_tile_position:
+                    if world.is_tile_blocked(position_check):
+                        can_see_player = false
+                        break
+                if can_see_player:
+                    entering_duel = true
+                    duel_opponent = npc
+                    print("hey")
+                break
 
             var next_position = next_tile_position + (input_direction * World.TILE_SIZE)
-            var next_position_blocked = get_parent().is_tile_blocked(next_position / World.TILE_SIZE)
+            var next_position_blocked = world.is_tile_blocked(next_position)
 
-            if input_direction == direction and not next_position_blocked and not entering_battle:
+            if input_direction == direction and not next_position_blocked and not entering_battle and not entering_duel:
                 position += direction * step
             else:
                 position = next_tile_position
@@ -71,9 +125,14 @@ func _process(delta):
                 if tallgrass_step.animation == "step":
                     tallgrass_step.play("in_grass")
             else:
+                previous_position = next_tile_position
                 next_tile_position = next_position
 
-            if entering_battle:
+            if entering_duel:
+                input_direction = Vector2.ZERO
+                is_moving = false
+                await duel_opponent.begin_duel()
+            elif entering_battle:
                 input_direction = Vector2.ZERO
                 is_moving = false
                 director.start_battle()
