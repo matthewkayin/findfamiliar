@@ -61,6 +61,14 @@ func _init(as_species: Species, at_level: int):
     set_level(at_level)
     health = max_health
 
+    for i in range(0, species.learn_spells.size()):
+        var learn_spell = species.learn_spells[species.learn_spells.size() - 1 - i]
+        if learn_spell.level > level:
+            continue
+        spells.insert(0, learn_spell.spell)
+        if spells.size() == 4:
+            break
+
 func get_display_name() -> String:
     if nickname == "":
         return species.name.to_upper()

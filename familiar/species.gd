@@ -16,5 +16,4 @@ class_name Species
 @export_range(0, 255, 1) var exp_yield: int
 
 @export_group("Spells")
-@export var learn_spells: Array[Spell]
-@export var learn_level: Array[int]
+@export var learn_spells: Array[LearnSpell]

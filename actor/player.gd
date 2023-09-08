@@ -1,6 +1,7 @@
 extends Node2D
 
 @onready var director = get_node("/root/director")
+@onready var enemy_party = get_node("/root/enemy_party")
 @onready var pause_menu = get_node("../../ui/pause_menu")
 @onready var dialog = get_node("../../ui/dialog")
 @onready var world = get_parent().get_parent()
@@ -98,7 +99,7 @@ func update_behavior(delta):
         var step = SPEED * delta
         # player has reached tile
         if position.distance_to(next_tile_position) <= step:
-            var entering_battle = world.check_for_encounter(next_tile_position)
+            var wild_familiar = world.check_for_encounter(next_tile_position)
             var entering_duel = false
             var duel_opponent = null
             for npc in get_tree().get_nodes_in_group("npcs"):
@@ -110,12 +111,12 @@ func update_behavior(delta):
             var next_position = next_tile_position + (input_direction * World.TILE_SIZE)
             var next_position_blocked = world.is_tile_blocked(next_position)
 
-            if input_direction == direction and not next_position_blocked and not entering_battle and not entering_duel:
+            if input_direction == direction and not next_position_blocked and wild_familiar == null and not entering_duel:
                 position += direction * step
             else:
                 position = next_tile_position
 
-            if input_direction == Vector2.ZERO or next_position_blocked or entering_battle:
+            if input_direction == Vector2.ZERO or next_position_blocked or wild_familiar != null:
                 is_moving = false
                 if tallgrass_step.animation == "step":
                     tallgrass_step.play("in_grass")
@@ -129,9 +130,11 @@ func update_behavior(delta):
                 is_entering_duel = true
                 await duel_opponent.begin_duel()
                 is_entering_duel = false
-            elif entering_battle:
+            elif wild_familiar != null:
                 input_direction = Vector2.ZERO
                 is_moving = false
+                enemy_party.familiars.clear()
+                enemy_party.familiars.append(wild_familiar)
                 director.start_battle()
         # player has not reached tile, move normally
         else:

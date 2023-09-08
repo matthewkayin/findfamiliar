@@ -318,20 +318,16 @@ func do_round(player_action):
                             dialog.clear()
 
                             # check for any learned spells
-                            var learn_spell = null
-                            for spell_index in range(0, player_party.familiars[i].species.learn_spells.size()):
-                                if player_party.familiars[i].species.learn_level[spell_index] == player_party.familiars[i].level:
-                                    learn_spell = player_party.familiars[i].species.learn_spells[spell_index]
-                                    break
-                            if learn_spell != null:
-                                if player_party.familiars[i].spells.size() == 4:
-                                    # TODO have players choose which move to forget
-                                    pass
-                                else:
-                                    player_party.familiars[i].spells.append(learn_spell)
-                                    dialog.open(player_party.familiars[i].get_display_name() + " learned " + learn_spell.name + "!")
-                                    await dialog.finished
-                                    dialog.clear()
+                            for learn_spell in player_party.familiars[i].species.learn_spells:
+                                if learn_spell.level == player_party.familiars[i].level:
+                                    if player_party.familiars[i].spells.size() == 4:
+                                        # TODO have players choose which move to forget
+                                        pass
+                                    else:
+                                        player_party.familiars[i].spells.append(learn_spell)
+                                        dialog.open(player_party.familiars[i].get_display_name() + " learned " + learn_spell.name + "!")
+                                        await dialog.finished
+                                        dialog.clear()
                         if exp_each[i] > 0:
                             exp_finished = false
             if dialog.is_finished:

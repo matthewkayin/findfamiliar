@@ -8,15 +8,11 @@ func _ready():
     process_mode = Node.PROCESS_MODE_ALWAYS
 
     var species_cat = load("res://familiar/species/catsith.tres")
-    var spell_scratch = load("res://familiar/spells/scratch.tres")
-    var spell_growl = load("res://familiar/spells/growl.tres")
     var item_gem = load("res://familiar/items/gem.tres")
     var item_potion = load("res://familiar/items/potion.tres")
 
     player_party.familiars.append(Familiar.new(species_cat, 6))
     player_party.familiars[0].nickname = "Jiji"
-    player_party.familiars[0].spells.append(spell_scratch)
-    player_party.familiars[0].spells.append(spell_growl)
 
     player_party.add_item(item_gem, 5)
     player_party.add_item(item_potion, 10)

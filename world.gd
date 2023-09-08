@@ -14,6 +14,10 @@ const TALLGRASS_COORDS = Vector2i(2, 1)
 @onready var player = $actors/player
 @onready var transition = $ui/transition
 
+@export_range(1, 100, 1) var wild_min_level: int = 1
+@export_range(1, 100, 1) var wild_max_level: int = 1
+@export var wild_familiars: Array[WildFamiliar]
+
 var tile_blocked
 
 func _ready():
@@ -38,7 +42,21 @@ func is_tall_grass(coordinate: Vector2):
 
 func check_for_encounter(coordinate: Vector2):
     var encounter_rate = tilemap.get_cell_tile_data(0, coordinate / TILE_SIZE).get_custom_data("encounter_rate")
-    return randi_range(0, 255) < encounter_rate
+    var encountered_familiar = randi_range(0, 255) < encounter_rate
+    if not encountered_familiar:
+        return null
+    
+    var familiar_level = randi_range(wild_min_level, wild_max_level)
+    var familiar_roll = randf_range(0, 1)
+    var rate = 0
+    for wild_familiar in wild_familiars:
+        rate += wild_familiar.rate
+        if familiar_roll <= rate:
+            var familiar = Familiar.new(wild_familiar.species, familiar_level)
+            return familiar
+
+    print("error! no familiar found on wild roll!")
+    return null
 
 func _process(_delta):
     pass

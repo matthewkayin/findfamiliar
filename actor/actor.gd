@@ -241,11 +241,13 @@ func begin_duel():
     enemy_party.familiars.clear()
     for witch_familiar in familiars:
         var familiar = Familiar.new(witch_familiar.species, witch_familiar.level)
-        for i in range(0, 4):
-            var witch_familiar_spell = witch_familiar["spell" + str(i + 1)]
-            if witch_familiar_spell == null:
-                continue
-            familiar.spells.append(witch_familiar_spell)
+        if witch_familiar.override_spells:
+            familiar.spells.clear()
+            for i in range(0, 4):
+                var witch_familiar_spell = witch_familiar["spell" + str(i + 1)]
+                if witch_familiar_spell == null:
+                    continue
+                familiar.spells.append(witch_familiar_spell)
         enemy_party.familiars.append(familiar)
     enemy_party.enemy_witch_name = duelist_name
     enemy_party.enemy_lose_message = post_duel_dialog

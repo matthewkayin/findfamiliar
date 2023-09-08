@@ -13,5 +13,4 @@ base_defense = 48
 base_agility = 65
 catch_rate = 0
 exp_yield = 128
-learn_spells = Array[Resource("res://familiar/spell.gd")]([])
-learn_level = Array[int]([])
+learn_spells = Array[Resource("res://familiar/learn_spell.gd")]([])
