@@ -404,7 +404,6 @@ func do_action(action):
             dialog.clear()
         else:
             await animator.animate_spell(action.actor, action.spell)
-            print("finished")
 
         if spell_hit:
             # Compute base damage

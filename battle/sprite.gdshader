@@ -17,12 +17,12 @@ void fragment() {
 
     float stat_boost_y;
     if (animation == 1) {
-        stat_boost_y = UV.y + (6.0 * progress);
+        stat_boost_y = UV.y + (4.0 * progress);
         while (stat_boost_y > 1.0) {
             stat_boost_y -= 1.0;
         }
     } else {
-        stat_boost_y = UV.y + (-6.0 * progress);
+        stat_boost_y = UV.y + (-4.0 * progress);
         while (stat_boost_y < 0.0) {
             stat_boost_y += 1.0;
         }

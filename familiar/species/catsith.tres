@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="Species" load_steps=7 format=3 uid="uid://cxix65ukm2hpq"]
+[gd_resource type="Resource" script_class="Species" load_steps=9 format=3 uid="uid://cxix65ukm2hpq"]
 
 [ext_resource type="Script" path="res://familiar/learn_spell.gd" id="1_lbbr2"]
 [ext_resource type="Script" path="res://familiar/species.gd" id="1_m1gf6"]
 [ext_resource type="Resource" uid="uid://brrs3jj51ffh5" path="res://familiar/spells/scratch.tres" id="2_7ftsm"]
 [ext_resource type="Resource" uid="uid://b4rc4ffosmyr0" path="res://familiar/spells/growl.tres" id="3_lm6nl"]
+[ext_resource type="Resource" uid="uid://c8p33rx0g1mpp" path="res://familiar/spells/bad_luck.tres" id="4_vwvkq"]
 
 [sub_resource type="Resource" id="Resource_nij2p"]
 script = ExtResource("1_lbbr2")
@@ -13,6 +14,11 @@ level = 0
 [sub_resource type="Resource" id="Resource_pymlg"]
 script = ExtResource("1_lbbr2")
 spell = ExtResource("3_lm6nl")
+level = 0
+
+[sub_resource type="Resource" id="Resource_3w1mq"]
+script = ExtResource("1_lbbr2")
+spell = ExtResource("4_vwvkq")
 level = 0
 
 [resource]
@@ -26,4 +32,4 @@ base_defense = 30
 base_agility = 50
 catch_rate = 128
 exp_yield = 128
-learn_spells = Array[ExtResource("1_lbbr2")]([SubResource("Resource_nij2p"), SubResource("Resource_pymlg")])
+learn_spells = Array[ExtResource("1_lbbr2")]([SubResource("Resource_nij2p"), SubResource("Resource_pymlg"), SubResource("Resource_3w1mq")])

@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://4xaqdp8x46q3"]
+[gd_scene load_steps=67 format=3 uid="uid://4xaqdp8x46q3"]
 
 [ext_resource type="Script" path="res://battle/battle.gd" id="1_62dho"]
 [ext_resource type="Script" path="res://battle/battle_animator.gd" id="2_ipy34"]
@@ -11,7 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://4nfivuyyr34l" path="res://battle/sprites/back/cat-sith.png" id="5_cs675"]
 [ext_resource type="Texture2D" uid="uid://bkf5ysfv4k137" path="res://battle/effects/stat_lower.png" id="5_i03p0"]
 [ext_resource type="PackedScene" uid="uid://e8xfwq5j4g1b" path="res://ui/healthbar/healthbar.tscn" id="6_303qm"]
+[ext_resource type="Texture2D" uid="uid://ddiebarodiyg4" path="res://battle/effects/bad_luck.png" id="7_b48e1"]
 [ext_resource type="Texture2D" uid="uid://c7cs7ff0rekkt" path="res://battle/effects/gem.png" id="7_nkmn6"]
+[ext_resource type="Texture2D" uid="uid://jxoo7ur6e0l4" path="res://battle/effects/leer.png" id="8_hbqhu"]
 [ext_resource type="Script" path="res://battle/gem_sprite.gd" id="8_hx3xp"]
 [ext_resource type="PackedScene" uid="uid://dichyeix0c5g3" path="res://ui/dialog/dialog.tscn" id="9_h1m2m"]
 [ext_resource type="PackedScene" uid="uid://d3s1nxt7qpaqm" path="res://ui/choicebox/spell_chooser.tscn" id="10_24sqf"]
@@ -26,6 +28,42 @@ shader_parameter/progress = 0.0
 shader_parameter/animation = 2
 shader_parameter/stat_boost_texture = ExtResource("4_7wm8v")
 shader_parameter/stat_lower_texture = ExtResource("5_i03p0")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_45qip"]
+atlas = ExtResource("7_b48e1")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_82pwn"]
+atlas = ExtResource("7_b48e1")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wbywi"]
+atlas = ExtResource("7_b48e1")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1apf"]
+atlas = ExtResource("7_b48e1")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fx2nv"]
+atlas = ExtResource("7_b48e1")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gwnxk"]
+atlas = ExtResource("7_b48e1")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0df0m"]
+atlas = ExtResource("7_b48e1")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ong1y"]
+atlas = ExtResource("7_b48e1")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vykhw"]
+atlas = ExtResource("7_b48e1")
+region = Rect2(512, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_58jcs"]
 atlas = ExtResource("4_0f1k0")
@@ -42,6 +80,26 @@ region = Rect2(192, 0, 96, 56)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ft3dp"]
 atlas = ExtResource("4_0f1k0")
 region = Rect2(288, 0, 96, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gojai"]
+atlas = ExtResource("8_hbqhu")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6eajp"]
+atlas = ExtResource("8_hbqhu")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h1hcj"]
+atlas = ExtResource("8_hbqhu")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fqqdo"]
+atlas = ExtResource("8_hbqhu")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_08j4w"]
+atlas = ExtResource("8_hbqhu")
+region = Rect2(256, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3n7re"]
 atlas = ExtResource("4_3r16g")
@@ -106,6 +164,38 @@ region = Rect2(160, 0, 40, 40)
 [sub_resource type="SpriteFrames" id="SpriteFrames_t2tca"]
 animations = [{
 "frames": [{
+"duration": 5.0,
+"texture": SubResource("AtlasTexture_45qip")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_82pwn")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_wbywi")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_f1apf")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_fx2nv")
+}, {
+"duration": 10.0,
+"texture": SubResource("AtlasTexture_gwnxk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0df0m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ong1y")
+}, {
+"duration": 10.0,
+"texture": SubResource("AtlasTexture_vykhw")
+}],
+"loop": false,
+"name": &"bad_luck",
+"speed": 24.0
+}, {
+"frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_58jcs")
 }, {
@@ -130,6 +220,26 @@ animations = [{
 "loop": false,
 "name": &"growl",
 "speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gojai")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6eajp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h1hcj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fqqdo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_08j4w")
+}],
+"loop": false,
+"name": &"leer",
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -311,8 +421,8 @@ texture = ExtResource("5_cs675")
 
 [node name="animation" type="AnimatedSprite2D" parent="player_sprite"]
 sprite_frames = SubResource("SpriteFrames_t2tca")
-animation = &"growl"
-frame = 6
+animation = &"bad_luck"
+frame = 8
 frame_progress = 1.0
 
 [node name="enemy_healthbar" parent="." instance=ExtResource("6_303qm")]

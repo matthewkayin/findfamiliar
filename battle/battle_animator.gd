@@ -150,9 +150,10 @@ func _process(delta):
             emit_signal("stat_effect_finished")
 
 func animate_spell(who: Battle.ActionActor, spell: Spell):
-    if not self.has_method("animate_" + spell.name.to_lower()):
+    var spell_name = spell.name.to_lower().replace(" ", "_")
+    if not self.has_method("animate_" + spell_name):
         return
-    await call("animate_" + spell.name.to_lower(), who)
+    await call("animate_" + spell_name, who)
 
 func animate_scratch(who: Battle.ActionActor):
     var defender_animation = enemy_animation if who == Battle.ActionActor.PLAYER else player_animation
@@ -174,3 +175,30 @@ func animate_growl(who: Battle.ActionActor):
     attacker_animation.flip_h = false
 
     await animate_stat_effect(defender_sprite, 2)
+
+func animate_leer(who: Battle.ActionActor):
+    var attacker_animation = player_animation if who == Battle.ActionActor.PLAYER else enemy_animation
+    var defender_sprite = enemy_sprite if who == Battle.ActionActor.PLAYER else player_sprite
+
+    attacker_animation.visible = true
+    attacker_animation.flip_h = who == Battle.ActionActor.ENEMY
+    attacker_animation.play("leer")
+    await attacker_animation.animation_finished
+    attacker_animation.visible = false
+    attacker_animation.flip_h = false
+
+    await animate_stat_effect(defender_sprite, 2)
+
+func animate_bad_luck(who: Battle.ActionActor):
+    var attacker_animation = player_animation if who == Battle.ActionActor.PLAYER else enemy_animation
+    var defender_sprite = enemy_sprite if who == Battle.ActionActor.PLAYER else player_sprite
+
+    attacker_animation.visible = true
+    attacker_animation.flip_h = who == Battle.ActionActor.ENEMY
+    attacker_animation.play("bad_luck")
+    await attacker_animation.animation_finished
+    attacker_animation.visible = false
+    attacker_animation.flip_h = false
+
+    await animate_stat_effect(defender_sprite, 2)
+
