@@ -13,25 +13,21 @@ const INFO = {
     Type.BURNED: {
         "apply_message": "\nwas burned!",
         "cure_message": "'s\nburn was cured!",
-        "animation": BattleAnimator.SpellAnimation.NONE,
         "stays_after_battle": true
     },
     Type.ASLEEP: {
         "apply_message": "\nfell asleep!",
         "cure_message": "\nwoke up!",
-        "animation": BattleAnimator.SpellAnimation.NONE,
         "stays_after_battle": false
     },
     Type.POISONED: {
         "apply_message": "\nwas poisoned!",
         "cure_message": "'s\npoison was cured!",
-        "animation": BattleAnimator.SpellAnimation.NONE,
         "stays_after_battle": true
     },
     Type.PARALYZED: {
         "apply_message": "\nwas paralyzed!",
         "cure_message": "'s\nparalysis was cured!",
-        "animation": BattleAnimator.SpellAnimation.NONE,
         "stays_after_battle": true
     }
 }

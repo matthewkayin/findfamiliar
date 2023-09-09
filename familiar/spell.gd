@@ -15,7 +15,6 @@ enum ConditionTarget {
 
 @export var name: String
 @export var type: Types.Type
-@export var animation: BattleAnimator.SpellAnimation
 @export_multiline var desc: String
 
 @export_group("Stats")

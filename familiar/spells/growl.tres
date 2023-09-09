@@ -6,7 +6,6 @@
 script = ExtResource("1_ewi67")
 name = "GROWL"
 type = 0
-animation = 0
 desc = ""
 power = 0
 damage_type = 2

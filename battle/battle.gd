@@ -275,6 +275,9 @@ func do_round(player_action):
         # enemy party defeated
         if enemy_party.is_defeated():
             if is_duel:
+                dialog.open("You defeated\n" + enemy_party.enemy_witch_name + "!")
+                await dialog.finished
+                dialog.clear()
                 await animator.animate_enemy_reenter()
                 dialog.open(enemy_party.enemy_lose_message)
                 await dialog.finished
@@ -399,6 +402,9 @@ func do_action(action):
             dialog.open(miss_message)
             await dialog.finished
             dialog.clear()
+        else:
+            await animator.animate_spell(action.actor, action.spell)
+            print("finished")
 
         if spell_hit:
             # Compute base damage
@@ -430,7 +436,6 @@ func do_action(action):
 
             defender.health = max(defender.health - damage, 0)
 
-            await animator.animate_spell(action.actor, action.spell.animation)
             defender_healthbar.update()
             await animator.animate_hurt((action.actor + 1) % 2, type_mod)
             if crit_mod == 2.0:
@@ -488,7 +493,6 @@ func do_action(action):
                     condition_target.condition = action.spell.condition
                     condition_target_healthbar.update()
                     dialog.open(condition_target_name + Condition.INFO[action.spell.condition].apply_message)
-                    await animator.animate_spell(Condition.INFO[action.spell.condition].animation)
                     if not dialog.is_finished:
                         await dialog.finished
                     dialog.clear()

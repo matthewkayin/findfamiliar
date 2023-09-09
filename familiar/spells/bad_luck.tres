@@ -6,7 +6,6 @@
 script = ExtResource("1_uhg5l")
 name = "BAD LUCK"
 type = 3
-animation = 0
 desc = ""
 power = 0
 damage_type = 2

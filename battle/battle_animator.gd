@@ -1,6 +1,8 @@
 extends Node2D
 class_name BattleAnimator
 
+signal stat_effect_finished
+
 @onready var player_party = get_node("/root/player_party")
 @onready var enemy_party = get_node("/root/enemy_party")
 
@@ -11,10 +13,8 @@ class_name BattleAnimator
 @onready var player_animation = get_node("../player_sprite/animation")
 @onready var enemy_animation = get_node("../enemy_sprite/animation")
 
-enum SpellAnimation {
-    NONE,
-    SCRATCH
-}
+var stat_effect_sprite = null
+var stat_effect_progress
 
 func _ready():
     player_sprite.texture = null
@@ -133,11 +133,44 @@ func animate_faint(who: Battle.ActionActor):
     animate_tween2.tween_property(sprite, "region_rect", Rect2(sprite.region_rect.position, Vector2(sprite.region_rect.size.x, 0)), 0.5)
     await animate_tween2.finished
 
-func animate_spell(who: Battle.ActionActor, spell_animation: SpellAnimation):
+func animate_stat_effect(sprite, anim_num: int):
+    stat_effect_sprite = sprite
+    stat_effect_sprite.material.set_shader_parameter("progress", 0.0)
+    stat_effect_sprite.material.set_shader_parameter("animation", anim_num)
+    stat_effect_progress = 0.0
+    await stat_effect_finished
+    stat_effect_sprite.material.set_shader_parameter("animation", 0)
+    stat_effect_sprite = null
+
+func _process(delta):
+    if stat_effect_sprite != null:
+        stat_effect_progress = min(stat_effect_progress + delta, 1.0)
+        stat_effect_sprite.material.set_shader_parameter("progress", stat_effect_progress)
+        if stat_effect_progress == 1.0:
+            emit_signal("stat_effect_finished")
+
+func animate_spell(who: Battle.ActionActor, spell: Spell):
+    if not self.has_method("animate_" + spell.name.to_lower()):
+        return
+    await call("animate_" + spell.name.to_lower(), who)
+
+func animate_scratch(who: Battle.ActionActor):
     var defender_animation = enemy_animation if who == Battle.ActionActor.PLAYER else player_animation
 
-    if spell_animation == SpellAnimation.SCRATCH:
-        defender_animation.visible = true
-        defender_animation.play("scratch")
-        await defender_animation.animation_finished
-        defender_animation.visible = false
+    defender_animation.visible = true
+    defender_animation.play("scratch")
+    await defender_animation.animation_finished
+    defender_animation.visible = false
+
+func animate_growl(who: Battle.ActionActor):
+    var attacker_animation = player_animation if who == Battle.ActionActor.PLAYER else enemy_animation
+    var defender_sprite = enemy_sprite if who == Battle.ActionActor.PLAYER else player_sprite
+
+    attacker_animation.visible = true
+    attacker_animation.flip_h = who == Battle.ActionActor.ENEMY
+    attacker_animation.play("growl")
+    await attacker_animation.animation_finished
+    attacker_animation.visible = false
+    attacker_animation.flip_h = false
+
+    await animate_stat_effect(defender_sprite, 2)

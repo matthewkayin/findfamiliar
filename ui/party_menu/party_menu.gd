@@ -139,7 +139,8 @@ func update_health():
 func update_cursor():
     cursor.global_position = minis[cursor_index.y].global_position + Vector2(-19, 2)
     start_animation()
-    get_parent().dialog.clear()
+    if not exp_cluster[0].visible:
+        get_parent().dialog.clear()
 
 func navigate_cursor(direction: int):
     var old_cursor_index = cursor_index.y

@@ -1,11 +1,15 @@
-[gd_scene load_steps=41 format=3 uid="uid://4xaqdp8x46q3"]
+[gd_scene load_steps=51 format=3 uid="uid://4xaqdp8x46q3"]
 
 [ext_resource type="Script" path="res://battle/battle.gd" id="1_62dho"]
 [ext_resource type="Script" path="res://battle/battle_animator.gd" id="2_ipy34"]
 [ext_resource type="Texture2D" uid="uid://wms1mx2tepno" path="res://battle/sprites/front/cat-sith.png" id="2_pp3su"]
+[ext_resource type="Shader" path="res://battle/sprite.gdshader" id="3_258tc"]
+[ext_resource type="Texture2D" uid="uid://dqjbj2x03budc" path="res://battle/effects/growl.png" id="4_0f1k0"]
 [ext_resource type="Texture2D" uid="uid://bquyv2dvslbeg" path="res://battle/effects/scratch.png" id="4_3r16g"]
+[ext_resource type="Texture2D" uid="uid://canoabld5qs20" path="res://battle/effects/stat_boost.png" id="4_7wm8v"]
 [ext_resource type="Texture2D" uid="uid://dchi32cbk6v8i" path="res://battle/effects/summon.png" id="4_wxfyl"]
 [ext_resource type="Texture2D" uid="uid://4nfivuyyr34l" path="res://battle/sprites/back/cat-sith.png" id="5_cs675"]
+[ext_resource type="Texture2D" uid="uid://bkf5ysfv4k137" path="res://battle/effects/stat_lower.png" id="5_i03p0"]
 [ext_resource type="PackedScene" uid="uid://e8xfwq5j4g1b" path="res://ui/healthbar/healthbar.tscn" id="6_303qm"]
 [ext_resource type="Texture2D" uid="uid://c7cs7ff0rekkt" path="res://battle/effects/gem.png" id="7_nkmn6"]
 [ext_resource type="Script" path="res://battle/gem_sprite.gd" id="8_hx3xp"]
@@ -15,6 +19,29 @@
 [ext_resource type="PackedScene" uid="uid://dyketwway3ubu" path="res://ui/popup/popup.tscn" id="13_hu1uc"]
 [ext_resource type="PackedScene" uid="uid://wphpyoii23gm" path="res://ui/party_menu/party_menu.tscn" id="14_u5hny"]
 [ext_resource type="PackedScene" uid="uid://q4cruliyg6x4" path="res://ui/choicebox/item_chooser.tscn" id="15_pduf7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k7cr1"]
+shader = ExtResource("3_258tc")
+shader_parameter/progress = 0.0
+shader_parameter/animation = 2
+shader_parameter/stat_boost_texture = ExtResource("4_7wm8v")
+shader_parameter/stat_lower_texture = ExtResource("5_i03p0")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_58jcs"]
+atlas = ExtResource("4_0f1k0")
+region = Rect2(0, 0, 96, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o0fmx"]
+atlas = ExtResource("4_0f1k0")
+region = Rect2(96, 0, 96, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6qg04"]
+atlas = ExtResource("4_0f1k0")
+region = Rect2(192, 0, 96, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ft3dp"]
+atlas = ExtResource("4_0f1k0")
+region = Rect2(288, 0, 96, 56)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3n7re"]
 atlas = ExtResource("4_3r16g")
@@ -78,6 +105,32 @@ region = Rect2(160, 0, 40, 40)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_t2tca"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_58jcs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o0fmx")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_6qg04")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_ft3dp")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_6qg04")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_ft3dp")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_6qg04")
+}],
+"loop": false,
+"name": &"growl",
+"speed": 14.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_3n7re")
@@ -147,6 +200,13 @@ animations = [{
 "name": &"unsummon",
 "speed": 12.0
 }]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1qpqh"]
+shader = ExtResource("3_258tc")
+shader_parameter/progress = null
+shader_parameter/animation = null
+shader_parameter/stat_boost_texture = ExtResource("4_7wm8v")
+shader_parameter/stat_lower_texture = ExtResource("5_i03p0")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nf1md"]
 atlas = ExtResource("7_nkmn6")
@@ -232,6 +292,7 @@ color = Color(0.901961, 0.890196, 0.847059, 1)
 
 [node name="enemy_sprite" type="Sprite2D" parent="."]
 texture_filter = 1
+material = SubResource("ShaderMaterial_k7cr1")
 position = Vector2(256, 64)
 scale = Vector2(2, 2)
 texture = ExtResource("2_pp3su")
@@ -240,19 +301,19 @@ region_rect = Rect2(0, 0, 40, 40)
 [node name="animation" type="AnimatedSprite2D" parent="enemy_sprite"]
 sprite_frames = SubResource("SpriteFrames_t2tca")
 animation = &"scratch"
-frame = 8
-frame_progress = 1.0
 
 [node name="player_sprite" type="Sprite2D" parent="."]
 texture_filter = 1
+material = SubResource("ShaderMaterial_1qpqh")
 position = Vector2(56, 184)
 scale = Vector2(2, 2)
 texture = ExtResource("5_cs675")
 
 [node name="animation" type="AnimatedSprite2D" parent="player_sprite"]
-visible = false
 sprite_frames = SubResource("SpriteFrames_t2tca")
-animation = &"unsummon"
+animation = &"growl"
+frame = 6
+frame_progress = 1.0
 
 [node name="enemy_healthbar" parent="." instance=ExtResource("6_303qm")]
 offset_left = 4.0
@@ -285,6 +346,7 @@ offset_right = 318.0
 offset_bottom = 287.0
 
 [node name="party_menu" parent="." instance=ExtResource("14_u5hny")]
+visible = false
 offset_left = 112.0
 offset_top = 86.0
 offset_right = 318.0
