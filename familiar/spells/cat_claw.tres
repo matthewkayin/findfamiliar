@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Spell" load_steps=2 format=3 uid="uid://bvlq74ilph1kn"]
+
+[ext_resource type="Script" path="res://familiar/spell.gd" id="1_lsqtp"]
+
+[resource]
+script = ExtResource("1_lsqtp")
+name = "CAT CLAW"
+type = 3
+desc = "Attack the
+boi"
+priority = 0
+power = 30
+damage_type = 0
+accuracy = 100
+condition_accuracy = 100
+condition_target = 2
+condition = 3
+strength_mod = 0
+intellect_mod = 0
+defense_mod = 0
+agility_mod = 0

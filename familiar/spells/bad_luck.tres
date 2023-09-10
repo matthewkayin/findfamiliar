@@ -7,6 +7,7 @@ script = ExtResource("1_uhg5l")
 name = "BAD LUCK"
 type = 3
 desc = ""
+priority = 0
 power = 0
 damage_type = 2
 accuracy = 0

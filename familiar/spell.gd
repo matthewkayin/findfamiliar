@@ -18,6 +18,7 @@ enum ConditionTarget {
 @export_multiline var desc: String
 
 @export_group("Stats")
+@export var priority: int = 0
 @export_range(0, 255, 1) var power: int
 @export var damage_type: DamageType
 @export_range(0, 100, 1) var accuracy: int

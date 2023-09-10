@@ -57,7 +57,7 @@ func refresh():
     var condition_index = 0
     if familiar.condition != Condition.Type.NONE:
         conditions.get_child(condition_index).visible = true
-        conditions.get_child(condition_index).get_child(0).frame = familiar.condition
+        conditions.get_child(condition_index).get_child(0).frame = Condition.INFO[familiar.condition].icon_frame
         condition_index += 1
     for stat_index in range(0, Familiar.STAT_NAMES.size()):
         var stage = familiar[Familiar.STAT_NAMES[stat_index] + "_stage"]
@@ -69,6 +69,17 @@ func refresh():
         conditions.get_child(condition_index).get_child(1).frame = offset
         conditions.get_child(condition_index).get_child(1).visible = true
         condition_index += 1
+    
+    var visible_icon_count = 0
+    for child in conditions.get_children():
+        if child.visible:
+            visible_icon_count += 1
+    if visible_icon_count <= 3:
+        conditions.add_theme_constant_override("separation", 24)
+    elif visible_icon_count == 4:
+        conditions.add_theme_constant_override("separation", 20)
+    elif visible_icon_count == 5:
+        conditions.add_theme_constant_override("separation", 16)
 
 func fast_update():
     displayed_health = party.familiars[0].health

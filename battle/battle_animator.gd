@@ -13,6 +13,12 @@ signal stat_effect_finished
 @onready var player_animation = get_node("../player_sprite/animation")
 @onready var enemy_animation = get_node("../enemy_sprite/animation")
 
+enum SpriteEffectAnim {
+    STAT_RAISE = 1,
+    STAT_LOWER = 2,
+    POISON = 3
+}
+
 var stat_effect_sprite = null
 var stat_effect_progress
 
@@ -133,7 +139,7 @@ func animate_faint(who: Battle.ActionActor):
     animate_tween2.tween_property(sprite, "region_rect", Rect2(sprite.region_rect.position, Vector2(sprite.region_rect.size.x, 0)), 0.5)
     await animate_tween2.finished
 
-func animate_stat_effect(sprite, anim_num: int):
+func animate_sprite_effect(sprite, anim_num: int):
     stat_effect_sprite = sprite
     stat_effect_sprite.material.set_shader_parameter("progress", 0.0)
     stat_effect_sprite.material.set_shader_parameter("animation", anim_num)
@@ -142,12 +148,34 @@ func animate_stat_effect(sprite, anim_num: int):
     stat_effect_sprite.material.set_shader_parameter("animation", 0)
     stat_effect_sprite = null
 
+func is_animating_sprite_effect() -> bool:
+    return stat_effect_sprite != null
+
 func _process(delta):
     if stat_effect_sprite != null:
         stat_effect_progress = min(stat_effect_progress + delta, 1.0)
         stat_effect_sprite.material.set_shader_parameter("progress", stat_effect_progress)
         if stat_effect_progress == 1.0:
             emit_signal("stat_effect_finished")
+
+func animate_condition(who: Battle.ActionActor, condition: Condition.Type):
+    var condition_name = Condition.Type.keys()[condition].to_lower().replace(" ", "_")
+    if not self.has_method("animate_" + condition_name):
+        return
+    await call("animate_" + condition_name, who)
+
+func animate_poisoned(who: Battle.ActionActor):
+    var sprite = player_sprite if who == Battle.ActionActor.PLAYER else enemy_sprite
+
+    var shake_tween = get_tree().create_tween()
+    var sprite_origin = sprite.position
+    shake_tween.tween_property(sprite, "position", sprite_origin + Vector2(-2, 0), 0.05)
+    for i in range(0, 8):
+        var side = Vector2(2, 0) if i % 2 == 0 else Vector2(-2, 0)
+        shake_tween.tween_property(sprite, "position", sprite_origin + side, 0.1)
+    shake_tween.tween_property(sprite, "position", sprite_origin, 0.05)
+    animate_sprite_effect(sprite, SpriteEffectAnim.POISON)
+    await shake_tween.finished
 
 func animate_spell(who: Battle.ActionActor, spell: Spell):
     var spell_name = spell.name.to_lower().replace(" ", "_")
@@ -174,7 +202,7 @@ func animate_growl(who: Battle.ActionActor):
     attacker_animation.visible = false
     attacker_animation.flip_h = false
 
-    await animate_stat_effect(defender_sprite, 2)
+    await animate_sprite_effect(defender_sprite, SpriteEffectAnim.STAT_LOWER)
 
 func animate_leer(who: Battle.ActionActor):
     var attacker_animation = player_animation if who == Battle.ActionActor.PLAYER else enemy_animation
@@ -187,7 +215,7 @@ func animate_leer(who: Battle.ActionActor):
     attacker_animation.visible = false
     attacker_animation.flip_h = false
 
-    await animate_stat_effect(defender_sprite, 2)
+    await animate_sprite_effect(defender_sprite, SpriteEffectAnim.STAT_LOWER)
 
 func animate_bad_luck(who: Battle.ActionActor):
     var attacker_animation = player_animation if who == Battle.ActionActor.PLAYER else enemy_animation
@@ -200,5 +228,52 @@ func animate_bad_luck(who: Battle.ActionActor):
     attacker_animation.visible = false
     attacker_animation.flip_h = false
 
-    await animate_stat_effect(defender_sprite, 2)
+    await animate_sprite_effect(defender_sprite, SpriteEffectAnim.STAT_LOWER)
 
+func animate_slam(who: Battle.ActionActor):
+    var attacker_sprite = player_sprite if who == Battle.ActionActor.PLAYER else enemy_sprite
+    var defender_animation = enemy_animation if who == Battle.ActionActor.PLAYER else player_animation
+
+    var attacker_movement = Vector2(16, 0) if who == Battle.ActionActor.PLAYER else Vector2(-16, 0)
+    var attack_tween = get_tree().create_tween()
+    attack_tween.tween_property(attacker_sprite, "position", attacker_sprite.position + attacker_movement, 0.1)
+    await attack_tween.finished
+    
+    defender_animation.visible = true
+    defender_animation.play("tackle_hit")
+
+    var attack_tween2 = get_tree().create_tween()
+    attack_tween2.tween_property(attacker_sprite, "position", attacker_sprite.position - attacker_movement, 0.1)
+    attack_tween2.tween_interval(0.1)
+    await attack_tween2.finished
+
+    defender_animation.visible = false
+
+func animate_rush(who: Battle.ActionActor):
+    var attacker_sprite = player_sprite if who == Battle.ActionActor.PLAYER else enemy_sprite
+    var attacker_animation = player_animation if who == Battle.ActionActor.PLAYER else enemy_animation
+    var defender_animation = enemy_animation if who == Battle.ActionActor.PLAYER else player_animation
+
+    var attacker_sprite_texture = attacker_sprite.texture
+    attacker_sprite.texture = null
+    attacker_animation.visible = true
+    attacker_animation.play("rush")
+    await attacker_animation.animation_finished
+    attacker_animation.visible = false
+
+    defender_animation.visible = true
+    defender_animation.play("tackle_hit")
+    var delay_tween = get_tree().create_tween()
+    delay_tween.tween_interval(0.15)
+    await delay_tween.finished
+
+    defender_animation.visible = false
+    attacker_sprite.texture = attacker_sprite_texture
+
+func animate_cat_claw(who: Battle.ActionActor):
+    var defender_animation = enemy_animation if who == Battle.ActionActor.PLAYER else player_animation
+
+    defender_animation.visible = true
+    defender_animation.play("cat_claw")
+    await defender_animation.animation_finished
+    defender_animation.visible = false

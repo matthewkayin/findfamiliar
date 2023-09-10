@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://4xaqdp8x46q3"]
+[gd_scene load_steps=80 format=3 uid="uid://4xaqdp8x46q3"]
 
 [ext_resource type="Script" path="res://battle/battle.gd" id="1_62dho"]
 [ext_resource type="Script" path="res://battle/battle_animator.gd" id="2_ipy34"]
@@ -13,19 +13,22 @@
 [ext_resource type="PackedScene" uid="uid://e8xfwq5j4g1b" path="res://ui/healthbar/healthbar.tscn" id="6_303qm"]
 [ext_resource type="Texture2D" uid="uid://ddiebarodiyg4" path="res://battle/effects/bad_luck.png" id="7_b48e1"]
 [ext_resource type="Texture2D" uid="uid://c7cs7ff0rekkt" path="res://battle/effects/gem.png" id="7_nkmn6"]
+[ext_resource type="Texture2D" uid="uid://cjc27easae5c2" path="res://battle/effects/cat_claw.png" id="8_5mxpu"]
 [ext_resource type="Texture2D" uid="uid://jxoo7ur6e0l4" path="res://battle/effects/leer.png" id="8_hbqhu"]
 [ext_resource type="Script" path="res://battle/gem_sprite.gd" id="8_hx3xp"]
 [ext_resource type="PackedScene" uid="uid://dichyeix0c5g3" path="res://ui/dialog/dialog.tscn" id="9_h1m2m"]
 [ext_resource type="PackedScene" uid="uid://d3s1nxt7qpaqm" path="res://ui/choicebox/spell_chooser.tscn" id="10_24sqf"]
+[ext_resource type="Texture2D" uid="uid://dl0qkaa6a1qjm" path="res://battle/effects/rush.png" id="10_56mqj"]
 [ext_resource type="PackedScene" uid="uid://dht3x47llx8nr" path="res://ui/choicebox/battle_actions.tscn" id="11_d80gd"]
 [ext_resource type="PackedScene" uid="uid://dyketwway3ubu" path="res://ui/popup/popup.tscn" id="13_hu1uc"]
+[ext_resource type="Texture2D" uid="uid://bngimpg1t3sso" path="res://battle/effects/tackle.png" id="13_y8165"]
 [ext_resource type="PackedScene" uid="uid://wphpyoii23gm" path="res://ui/party_menu/party_menu.tscn" id="14_u5hny"]
 [ext_resource type="PackedScene" uid="uid://q4cruliyg6x4" path="res://ui/choicebox/item_chooser.tscn" id="15_pduf7"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k7cr1"]
 shader = ExtResource("3_258tc")
 shader_parameter/progress = 0.0
-shader_parameter/animation = 2
+shader_parameter/animation = 3
 shader_parameter/stat_boost_texture = ExtResource("4_7wm8v")
 shader_parameter/stat_lower_texture = ExtResource("5_i03p0")
 
@@ -65,6 +68,30 @@ region = Rect2(448, 0, 64, 64)
 atlas = ExtResource("7_b48e1")
 region = Rect2(512, 0, 64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_c7lwj"]
+atlas = ExtResource("8_5mxpu")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_swhdj"]
+atlas = ExtResource("8_5mxpu")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_enjlt"]
+atlas = ExtResource("8_5mxpu")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lpuy6"]
+atlas = ExtResource("8_5mxpu")
+region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yg440"]
+atlas = ExtResource("8_5mxpu")
+region = Rect2(160, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_butc3"]
+atlas = ExtResource("8_5mxpu")
+region = Rect2(200, 0, 40, 40)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_58jcs"]
 atlas = ExtResource("4_0f1k0")
 region = Rect2(0, 0, 96, 56)
@@ -100,6 +127,18 @@ region = Rect2(192, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_08j4w"]
 atlas = ExtResource("8_hbqhu")
 region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8tub7"]
+atlas = ExtResource("10_56mqj")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pnuwa"]
+atlas = ExtResource("10_56mqj")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qrv4e"]
+atlas = ExtResource("10_56mqj")
+region = Rect2(96, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3n7re"]
 atlas = ExtResource("4_3r16g")
@@ -140,6 +179,10 @@ region = Rect2(40, 0, 40, 40)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ysv81"]
 atlas = ExtResource("4_wxfyl")
 region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sh1d2"]
+atlas = ExtResource("13_y8165")
+region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yq7w6"]
 atlas = ExtResource("4_wxfyl")
@@ -197,6 +240,38 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_c7lwj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_swhdj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_enjlt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lpuy6")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_yg440")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_butc3")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_yg440")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_butc3")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_yg440")
+}],
+"loop": false,
+"name": &"cat_claw",
+"speed": 24.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_58jcs")
 }, {
 "duration": 1.0,
@@ -240,6 +315,20 @@ animations = [{
 "loop": false,
 "name": &"leer",
 "speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8tub7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pnuwa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qrv4e")
+}],
+"loop": false,
+"name": &"rush",
+"speed": 15.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -289,6 +378,14 @@ animations = [{
 "loop": false,
 "name": &"summon",
 "speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sh1d2")
+}],
+"loop": false,
+"name": &"tackle_hit",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -410,7 +507,7 @@ region_rect = Rect2(0, 0, 40, 40)
 
 [node name="animation" type="AnimatedSprite2D" parent="enemy_sprite"]
 sprite_frames = SubResource("SpriteFrames_t2tca")
-animation = &"scratch"
+animation = &"cat_claw"
 
 [node name="player_sprite" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -421,8 +518,8 @@ texture = ExtResource("5_cs675")
 
 [node name="animation" type="AnimatedSprite2D" parent="player_sprite"]
 sprite_frames = SubResource("SpriteFrames_t2tca")
-animation = &"bad_luck"
-frame = 8
+animation = &"growl"
+frame = 6
 frame_progress = 1.0
 
 [node name="enemy_healthbar" parent="." instance=ExtResource("6_303qm")]

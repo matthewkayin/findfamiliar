@@ -238,6 +238,10 @@ func do_round(player_action):
         player_first = true
     elif enemy_action.type == ActionType.RUN or enemy_action.type == ActionType.SWITCH or enemy_action.type == ActionType.ITEM:
         player_first = false
+    elif player_action.spell.priority > enemy_action.spell.priority:
+        player_first = true
+    elif player_action.spell.priority < enemy_action.spell.priority:
+        player_first = false
     elif player_party.familiars[0].get_agility() == enemy_party.familiars[0].get_agility():
         player_first = randi_range(0, 1) == 0
     else:
@@ -491,6 +495,7 @@ func do_action(action):
                 if condition_target.condition == Condition.Type.NONE:
                     condition_target.condition = action.spell.condition
                     condition_target_healthbar.update()
+                    animator.animate_condition(ActionActor.ENEMY if action.actor == ActionActor.PLAYER else ActionActor.PLAYER, action.spell.condition)
                     dialog.open(condition_target_name + Condition.INFO[action.spell.condition].apply_message)
                     if not dialog.is_finished:
                         await dialog.finished
@@ -579,6 +584,20 @@ func do_action(action):
         burn_message += familiar.get_display_name() + "\ntook burn damage!"
         dialog.open(burn_message)
         await dialog.finished
+        dialog.clear()
+    elif familiar.condition == Condition.Type.POISONED:
+        var healthbar = player_healthbar if action.actor == ActionActor.PLAYER else enemy_healthbar
+        familiar.health = max(familiar.health - int(familiar.max_health / 8.0), 0)
+        healthbar.update()
+
+        var poison_message = ""
+        if action.actor == ActionActor.ENEMY:
+            poison_message += "Enemy "
+        poison_message += familiar.get_display_name() + "\ntook poison damage!"
+        dialog.open(poison_message)
+        await animator.animate_condition(action.actor, familiar.condition)
+        if not dialog.is_finished:
+            await dialog.finished
         dialog.clear()
 
 func battle_end():

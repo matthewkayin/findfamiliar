@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="Spell" load_steps=2 format=3 uid="uid://brrs3jj51ffh5"]
+[gd_resource type="Resource" script_class="Spell" load_steps=2 format=3 uid="uid://b3u2rjw52li51"]
 
-[ext_resource type="Script" path="res://familiar/spell.gd" id="1_4bku1"]
+[ext_resource type="Script" path="res://familiar/spell.gd" id="1_6r8vw"]
 
 [resource]
-script = ExtResource("1_4bku1")
-name = "SCRATCH"
+script = ExtResource("1_6r8vw")
+name = "SLAM"
 type = 0
 desc = "Attack the
 boi"

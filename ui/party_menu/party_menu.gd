@@ -76,7 +76,7 @@ func open(p_allow_back: bool = true, exp_mode: bool = false):
         name_label[i].text = party.familiars[i].get_display_name()
         level_label[i].text = "Lv" + str(party.familiars[i].level)
         displayed_health[i] = party.familiars[i].health
-        condition[i].frame = party.familiars[i].condition
+        condition[i].frame = Condition.INFO[party.familiars[i].condition].icon_frame
 
         health_cluster[i].visible = not exp_mode
         condition[i].visible = party.familiars[i].condition != Condition.Type.NONE and not exp_mode
