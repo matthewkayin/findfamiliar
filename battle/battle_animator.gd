@@ -5,6 +5,7 @@ signal process_finished
 
 @onready var flame_effect_texture = preload("res://battle/effects/flame.png")
 @onready var water_effect_texture = preload("res://battle/effects/water.png")
+@onready var leaf_effect_texture = preload("res://battle/effects/leaf.png")
 
 @onready var player_party = get_node("/root/player_party")
 @onready var enemy_party = get_node("/root/enemy_party")
@@ -354,6 +355,7 @@ func animate_water_jet(who: Battle.ActionActor):
         })
 
         water_sprite.position = water_sprite_begin_position
+        water_sprite.hframes = 2
         water_sprite.flip_h = who == Battle.ActionActor.ENEMY
         water_sprite.flip_v = who == Battle.ActionActor.ENEMY
         water_sprite.scale = Vector2(2.0, 2.0)
@@ -370,8 +372,14 @@ func process_water_jet(delta):
     for i in range(0, water_sprites.size()):
         var sprite = water_sprites[i]
         sprite.progress += delta * 1.5
-        if sprite.progress >= 1.0:
+        if sprite.progress >= 1.3:
             to_remove.append(i)
+            continue
+        if sprite.progress >= 1.0:
+            sprite.sprite.frame = 1
+            sprite.sprite.flip_h = i % 2 == 1
+            sprite.sprite.flip_v = false
+            sprite.sprite.position = water_sprite_end_position + (Vector2(-0.2 if sprite.sprite.flip_h else 0.2, 1) * (((sprite.progress - 1.0) / 0.3) * 8))
             continue
         sprite.sprite.position = water_sprite_begin_position + ((water_sprite_end_position - water_sprite_begin_position) * sprite.progress)
         sprite.sprite.position += Vector2(0, -1) * 30.0 * sin(sprite.progress * 3.14)
@@ -384,3 +392,50 @@ func process_water_jet(delta):
     if water_sprites.size() == 0:
         emit_signal("process_finished")
         process_state = ""
+
+func animate_leaf_blade(who: Battle.ActionActor):
+    var leaf_begin_position = player_sprite.position + Vector2(-20, 48) if who == Battle.ActionActor.PLAYER else enemy_sprite.position + Vector2(20, 48)
+    var leaf_pos2 = player_sprite.position + Vector2(20, 0) if who == Battle.ActionActor.PLAYER else enemy_sprite.position + Vector2(-20, 0)
+    var leaf_pos3 = player_sprite.position + Vector2(-20, -48) if who == Battle.ActionActor.PLAYER else enemy_sprite.position + Vector2(20, -48)
+    var leaf_pos4 = enemy_sprite.position + Vector2(-40, 0) if who == Battle.ActionActor.PLAYER else player_sprite.position + Vector2(48, 0)
+    var defender_animation = enemy_animation if who == Battle.ActionActor.PLAYER else player_animation
+
+    var leaf_sprite = Sprite2D.new()
+    leaf_sprite.texture = leaf_effect_texture
+    leaf_sprite.flip_h = who == Battle.ActionActor.ENEMY
+    leaf_sprite.hframes = 2
+    get_parent().add_child(leaf_sprite)
+    leaf_sprite.position = leaf_begin_position
+
+    var speed = 0.4
+
+    var leaf_x_tween = get_tree().create_tween().set_parallel(true)
+    leaf_x_tween.tween_property(leaf_sprite, "position:x", leaf_pos2.x, speed)
+    leaf_x_tween.tween_property(leaf_sprite, "position:y", leaf_pos2.y, speed).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+    await leaf_x_tween.finished
+
+    leaf_sprite.flip_h = not leaf_sprite.flip_h
+    var leaf_x_tween2 = get_tree().create_tween().set_parallel(true)
+    leaf_x_tween2.tween_property(leaf_sprite, "position:x", leaf_pos3.x, speed)
+    leaf_x_tween2.tween_property(leaf_sprite, "position:y", leaf_pos3.y, speed).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+    await leaf_x_tween2.finished
+
+    leaf_sprite.flip_h = not leaf_sprite.flip_h
+    leaf_sprite.flip_v = leaf_sprite.flip_h
+    leaf_sprite.frame = 1
+    var leaf_tween = get_tree().create_tween()
+    leaf_tween.tween_property(leaf_sprite, "position", leaf_pos4, 0.3)
+    await leaf_tween.finished
+
+    leaf_sprite.visible = false
+    leaf_sprite.queue_free()
+
+    defender_animation.flip_h = who == Battle.ActionActor.ENEMY
+    defender_animation.flip_v = who == Battle.ActionActor.ENEMY
+    defender_animation.visible = true
+    defender_animation.play("leaf_cut")
+    await defender_animation.animation_finished
+    defender_animation.visible = false
+    defender_animation.flip_h = false
+    defender_animation.flip_v = false
+

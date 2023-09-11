@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=3 uid="uid://4xaqdp8x46q3"]
+[gd_scene load_steps=91 format=3 uid="uid://4xaqdp8x46q3"]
 
 [ext_resource type="Script" path="res://battle/battle.gd" id="1_62dho"]
 [ext_resource type="Script" path="res://battle/battle_animator.gd" id="2_ipy34"]
@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://d3s1nxt7qpaqm" path="res://ui/choicebox/spell_chooser.tscn" id="10_24sqf"]
 [ext_resource type="Texture2D" uid="uid://dl0qkaa6a1qjm" path="res://battle/effects/rush.png" id="10_56mqj"]
 [ext_resource type="PackedScene" uid="uid://dht3x47llx8nr" path="res://ui/choicebox/battle_actions.tscn" id="11_d80gd"]
+[ext_resource type="Texture2D" uid="uid://cob75y0q5h2o1" path="res://battle/effects/leaf_cut.png" id="12_u35mp"]
 [ext_resource type="PackedScene" uid="uid://dyketwway3ubu" path="res://ui/popup/popup.tscn" id="13_hu1uc"]
 [ext_resource type="Texture2D" uid="uid://bngimpg1t3sso" path="res://battle/effects/tackle.png" id="13_y8165"]
 [ext_resource type="PackedScene" uid="uid://wphpyoii23gm" path="res://ui/party_menu/party_menu.tscn" id="14_u5hny"]
@@ -121,6 +122,30 @@ region = Rect2(192, 0, 96, 56)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ft3dp"]
 atlas = ExtResource("4_0f1k0")
 region = Rect2(288, 0, 96, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5vp7i"]
+atlas = ExtResource("12_u35mp")
+region = Rect2(0, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7yl4v"]
+atlas = ExtResource("12_u35mp")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_scpog"]
+atlas = ExtResource("12_u35mp")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4c0da"]
+atlas = ExtResource("12_u35mp")
+region = Rect2(120, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j7uis"]
+atlas = ExtResource("12_u35mp")
+region = Rect2(160, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w0n4k"]
+atlas = ExtResource("12_u35mp")
+region = Rect2(200, 0, 40, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gojai"]
 atlas = ExtResource("8_hbqhu")
@@ -309,6 +334,29 @@ animations = [{
 "loop": false,
 "name": &"growl",
 "speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5vp7i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7yl4v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_scpog")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4c0da")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j7uis")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w0n4k")
+}],
+"loop": false,
+"name": &"leaf_cut",
+"speed": 24.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -534,8 +582,8 @@ texture = ExtResource("5_cs675")
 
 [node name="animation" type="AnimatedSprite2D" parent="player_sprite"]
 sprite_frames = SubResource("SpriteFrames_t2tca")
-animation = &"growl"
-frame = 6
+animation = &"leaf_cut"
+frame = 5
 frame_progress = 1.0
 
 [node name="enemy_healthbar" parent="." instance=ExtResource("6_303qm")]
