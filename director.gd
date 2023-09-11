@@ -19,7 +19,7 @@ func _ready():
 
 func _process(_delta):
     if world == null:
-        world = get_node("/root/world")
+        world = get_node_or_null("/root/world")
 
 func start_battle(is_witch_battle: bool = false):
     get_tree().paused = true
@@ -33,6 +33,7 @@ func start_battle(is_witch_battle: bool = false):
     # start battle
     var root = get_parent()
     root.remove_child(world)
+    battle_instance.test_battle = false
     root.add_child(battle_instance)
     get_tree().paused = false
     battle_instance.battle_start(is_witch_battle)

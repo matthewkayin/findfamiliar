@@ -34,12 +34,48 @@ enum ActionType {
     RUN
 }
 
+var test_battle: bool = true
+@export var player_familiars: Array[WitchFamiliar]
+@export var test_is_duel: bool = false
+@export var enemy_familiars: Array[WitchFamiliar]
+
 var is_duel: bool = false
 var player_escape_attempts: int = 0
 var choosing_item_target: bool = false
 
 func _ready():
     party_menu.clear_warning.connect(dialog.clear)
+
+    if test_battle:
+        player_party.familiars.clear()
+        for witch_familiar in player_familiars:
+            var familiar = Familiar.new(witch_familiar.species, witch_familiar.level)
+            if witch_familiar.override_spells:
+                familiar.spells.clear()
+                for i in range(0, 4):
+                    var witch_familiar_spell = witch_familiar["spell" + str(i + 1)]
+                    if witch_familiar_spell == null:
+                        continue
+                    familiar.spells.append(witch_familiar_spell)
+            player_party.familiars.append(familiar)
+        is_duel = test_is_duel
+        enemy_party.familiars.clear()
+        for witch_familiar in enemy_familiars:
+            var familiar = Familiar.new(witch_familiar.species, witch_familiar.level)
+            if witch_familiar.override_spells:
+                familiar.spells.clear()
+                for i in range(0, 4):
+                    var witch_familiar_spell = witch_familiar["spell" + str(i + 1)]
+                    if witch_familiar_spell == null:
+                        continue
+                    familiar.spells.append(witch_familiar_spell)
+            enemy_party.familiars.append(familiar)
+            if not is_duel:
+                break
+        enemy_party.enemy_witch_name = "TEST FRIEND"
+        enemy_party.enemy_lose_message = "Ack, I lost."
+        enemy_party.enemy_witch_sprite = load("res://battle/sprites/witches/frida.png")
+        battle_start()
 
 func battle_start(is_witch_battle: bool = false):
     is_duel = is_witch_battle
@@ -385,7 +421,7 @@ func do_action(action):
 
         # check if move hits
         var spell_hit: bool = false
-        if action.spell.damage_type == Spell.DamageType.PHYSICAL:
+        if action.spell.damage_type != Spell.DamageType.NONE:
             var accuracy_dc: int = action.spell.accuracy + (float(attacker.get_agility() - defender.get_agility()) / 1.5)
             spell_hit = randi_range(0, 100) <= accuracy_dc
         # check if condition hit
@@ -431,7 +467,7 @@ func do_action(action):
             var crit_mod: float = 1.0
             var crit_chance: int = int(attacker.get_agility() / 2.0)
             var crit_value: int = randi_range(0, 255)
-            if crit_value <= crit_chance:
+            if action.spell.damage_type == Spell.DamageType.PHYSICAL and crit_value <= crit_chance:
                 crit_mod = 2.0
 
             var random_mod: float = randf_range(0.85, 1.0)

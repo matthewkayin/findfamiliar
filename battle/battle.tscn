@@ -1,9 +1,11 @@
-[gd_scene load_steps=80 format=3 uid="uid://4xaqdp8x46q3"]
+[gd_scene load_steps=84 format=3 uid="uid://4xaqdp8x46q3"]
 
 [ext_resource type="Script" path="res://battle/battle.gd" id="1_62dho"]
 [ext_resource type="Script" path="res://battle/battle_animator.gd" id="2_ipy34"]
 [ext_resource type="Texture2D" uid="uid://wms1mx2tepno" path="res://battle/sprites/front/cat-sith.png" id="2_pp3su"]
+[ext_resource type="Script" path="res://familiar/witch_familiar.gd" id="2_t1780"]
 [ext_resource type="Shader" path="res://battle/sprite.gdshader" id="3_258tc"]
+[ext_resource type="Resource" uid="uid://cxix65ukm2hpq" path="res://familiar/species/catsith.tres" id="3_ayuj8"]
 [ext_resource type="Texture2D" uid="uid://dqjbj2x03budc" path="res://battle/effects/growl.png" id="4_0f1k0"]
 [ext_resource type="Texture2D" uid="uid://bquyv2dvslbeg" path="res://battle/effects/scratch.png" id="4_3r16g"]
 [ext_resource type="Texture2D" uid="uid://canoabld5qs20" path="res://battle/effects/stat_boost.png" id="4_7wm8v"]
@@ -24,6 +26,18 @@
 [ext_resource type="Texture2D" uid="uid://bngimpg1t3sso" path="res://battle/effects/tackle.png" id="13_y8165"]
 [ext_resource type="PackedScene" uid="uid://wphpyoii23gm" path="res://ui/party_menu/party_menu.tscn" id="14_u5hny"]
 [ext_resource type="PackedScene" uid="uid://q4cruliyg6x4" path="res://ui/choicebox/item_chooser.tscn" id="15_pduf7"]
+
+[sub_resource type="Resource" id="Resource_qp1lq"]
+script = ExtResource("2_t1780")
+species = ExtResource("3_ayuj8")
+level = 5
+override_spells = false
+
+[sub_resource type="Resource" id="Resource_m7ueh"]
+script = ExtResource("2_t1780")
+species = ExtResource("3_ayuj8")
+level = 5
+override_spells = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k7cr1"]
 shader = ExtResource("3_258tc")
@@ -488,6 +502,8 @@ blend_mode = 1
 [node name="battle" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_62dho")
+player_familiars = Array[ExtResource("2_t1780")]([SubResource("Resource_qp1lq")])
+enemy_familiars = Array[ExtResource("2_t1780")]([SubResource("Resource_m7ueh")])
 
 [node name="animator" type="Node2D" parent="."]
 script = ExtResource("2_ipy34")
@@ -523,6 +539,7 @@ frame = 6
 frame_progress = 1.0
 
 [node name="enemy_healthbar" parent="." instance=ExtResource("6_303qm")]
+z_index = 1
 offset_left = 4.0
 offset_top = 6.0
 offset_right = 44.0
@@ -530,6 +547,7 @@ offset_bottom = 46.0
 is_enemy = true
 
 [node name="player_healthbar" parent="." instance=ExtResource("6_303qm")]
+z_index = 1
 offset_left = 164.0
 offset_top = 157.0
 offset_right = 204.0
@@ -547,6 +565,7 @@ offset = Vector2(-8, -16)
 script = ExtResource("8_hx3xp")
 
 [node name="dialog" parent="." instance=ExtResource("9_h1m2m")]
+z_index = 1
 offset_left = 2.0
 offset_top = 231.0
 offset_right = 318.0
@@ -554,6 +573,7 @@ offset_bottom = 287.0
 
 [node name="party_menu" parent="." instance=ExtResource("14_u5hny")]
 visible = false
+z_index = 1
 offset_left = 112.0
 offset_top = 86.0
 offset_right = 318.0
@@ -561,6 +581,7 @@ offset_bottom = 231.0
 
 [node name="item_warning" parent="." instance=ExtResource("13_hu1uc")]
 visible = false
+z_index = 1
 offset_top = 205.0
 offset_bottom = 224.0
 timeout_duration = 1.5
@@ -571,6 +592,7 @@ one_shot = true
 
 [node name="battle_actions" parent="." instance=ExtResource("11_d80gd")]
 visible = false
+z_index = 1
 offset_left = 176.0
 offset_top = 231.0
 offset_right = 318.0
@@ -578,6 +600,7 @@ offset_bottom = 287.0
 
 [node name="spell_chooser" parent="." instance=ExtResource("10_24sqf")]
 visible = false
+z_index = 1
 offset_left = 2.0
 offset_top = 231.0
 offset_right = 236.0
@@ -585,6 +608,7 @@ offset_bottom = 287.0
 
 [node name="item_chooser" parent="." instance=ExtResource("15_pduf7")]
 visible = false
+z_index = 1
 offset_left = 2.0
 offset_top = 103.0
 offset_right = 148.0
@@ -592,6 +616,7 @@ offset_bottom = 231.0
 
 [node name="whiteout" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
+z_index = 2
 material = SubResource("CanvasItemMaterial_bykr6")
 offset_right = 320.0
 offset_bottom = 288.0

@@ -1,7 +1,10 @@
 extends Node2D
 class_name BattleAnimator
 
-signal stat_effect_finished
+signal process_finished
+
+@onready var flame_effect_texture = preload("res://battle/effects/flame.png")
+@onready var water_effect_texture = preload("res://battle/effects/water.png")
 
 @onready var player_party = get_node("/root/player_party")
 @onready var enemy_party = get_node("/root/enemy_party")
@@ -19,6 +22,8 @@ enum SpriteEffectAnim {
     POISON = 3
 }
 
+var process_state = ""
+
 var stat_effect_sprite = null
 var stat_effect_progress
 
@@ -27,6 +32,13 @@ func _ready():
     enemy_sprite.texture = null
     player_animation.visible = false
     enemy_animation.visible = false
+
+func _process(delta):
+    if process_state == "":
+        return
+    if not has_method("process_" + process_state):
+        return
+    call("process_" + process_state, delta)
 
 func animate_enter(is_duel: bool):
     enemy_sprite.texture = enemy_party.enemy_witch_sprite if is_duel else load("res://battle/sprites/front/" + enemy_party.familiars[0].species.name.replace(" ", "-").to_lower() + ".png")
@@ -144,19 +156,21 @@ func animate_sprite_effect(sprite, anim_num: int):
     stat_effect_sprite.material.set_shader_parameter("progress", 0.0)
     stat_effect_sprite.material.set_shader_parameter("animation", anim_num)
     stat_effect_progress = 0.0
-    await stat_effect_finished
+    process_state = "sprite_effect"
+    await process_finished
     stat_effect_sprite.material.set_shader_parameter("animation", 0)
     stat_effect_sprite = null
+    process_state = ""
 
 func is_animating_sprite_effect() -> bool:
     return stat_effect_sprite != null
 
-func _process(delta):
-    if stat_effect_sprite != null:
-        stat_effect_progress = min(stat_effect_progress + delta, 1.0)
-        stat_effect_sprite.material.set_shader_parameter("progress", stat_effect_progress)
-        if stat_effect_progress == 1.0:
-            emit_signal("stat_effect_finished")
+func process_sprite_effect(delta):
+    stat_effect_progress = min(stat_effect_progress + delta, 1.0)
+    stat_effect_sprite.material.set_shader_parameter("progress", stat_effect_progress)
+    if stat_effect_progress == 1.0:
+        process_state = ""
+        emit_signal("process_finished")
 
 func animate_condition(who: Battle.ActionActor, condition: Condition.Type):
     var condition_name = Condition.Type.keys()[condition].to_lower().replace(" ", "_")
@@ -277,3 +291,96 @@ func animate_cat_claw(who: Battle.ActionActor):
     defender_animation.play("cat_claw")
     await defender_animation.animation_finished
     defender_animation.visible = false
+
+func animate_flare(who: Battle.ActionActor):
+    var fire_sprite_begin_position = player_sprite.position + Vector2(20, -20 - flame_effect_texture.get_height()) if who == Battle.ActionActor.PLAYER else enemy_sprite.position + Vector2(-20, 20 + flame_effect_texture.get_height())
+    var fire_sprite_end_position = enemy_sprite.position + Vector2(0, 56 - (flame_effect_texture.get_height() / 4.0)) if who == Battle.ActionActor.PLAYER else player_sprite.position + Vector2(0, 48 - (flame_effect_texture.get_height() / 4.0))
+    fire_sprite_end_position.x -= flame_effect_texture.get_width()
+
+    var fire_sprites = []
+    for i in range(0, 3):
+        var fire_sprite = Sprite2D.new()
+        fire_sprite.texture = flame_effect_texture
+        fire_sprite.hframes = 2
+        fire_sprite.frame = 0
+        get_parent().add_child(fire_sprite)
+        fire_sprites.append(fire_sprite)
+
+        fire_sprite.position = fire_sprite_begin_position
+        var fire_tween = get_tree().create_tween()
+        fire_tween.tween_property(fire_sprite, "position", fire_sprite_end_position, 0.5)
+        fire_sprite_end_position.x += flame_effect_texture.get_width()
+        if i == 2:
+            await fire_tween.finished
+        else:
+            var delay_tween = get_tree().create_tween()
+            delay_tween.tween_interval(0.1)
+            await delay_tween.finished
+
+    for sprite in fire_sprites:
+        sprite.scale = Vector2(2.0, 2.0)
+    for j in range(0, 4):
+        var fire_tween = get_tree().create_tween()
+        fire_tween.tween_interval(0.2)
+        await fire_tween.finished
+        for sprite in fire_sprites:
+            sprite.frame = (sprite.frame + 1) % 2
+
+    var delay_tween = get_tree().create_tween()
+    delay_tween.tween_interval(0.2)
+    await delay_tween.finished
+
+    for sprite in fire_sprites:
+        sprite.visible = false
+        sprite.queue_free()
+
+var water_sprite_begin_position: Vector2 
+var water_sprite_end_position: Vector2 
+var water_sprites = []
+
+func animate_water_jet(who: Battle.ActionActor):
+    water_sprite_begin_position = player_sprite.position + Vector2(20, -20 - water_effect_texture.get_height()) if who == Battle.ActionActor.PLAYER else enemy_sprite.position + Vector2(-20, 20 + water_effect_texture.get_height())
+    water_sprite_end_position = enemy_sprite.position if who == Battle.ActionActor.PLAYER else player_sprite.position
+
+    water_sprites = []
+    process_state = "water_jet"
+    for i in range(0, 5):
+        var water_sprite = Sprite2D.new()
+        water_sprite.texture = water_effect_texture
+        get_parent().add_child(water_sprite)
+        water_sprites.append({
+            "sprite": water_sprite,
+            "progress": 0.0 
+        })
+
+        water_sprite.position = water_sprite_begin_position
+        water_sprite.flip_h = who == Battle.ActionActor.ENEMY
+        water_sprite.flip_v = who == Battle.ActionActor.ENEMY
+        water_sprite.scale = Vector2(2.0, 2.0)
+
+        var delay_tween = get_tree().create_tween()
+        delay_tween.tween_interval(0.1)
+        await delay_tween.finished
+
+    if water_sprites.size() != 0:
+        await process_finished
+    
+func process_water_jet(delta):
+    var to_remove = []
+    for i in range(0, water_sprites.size()):
+        var sprite = water_sprites[i]
+        sprite.progress += delta * 1.5
+        if sprite.progress >= 1.0:
+            to_remove.append(i)
+            continue
+        sprite.sprite.position = water_sprite_begin_position + ((water_sprite_end_position - water_sprite_begin_position) * sprite.progress)
+        sprite.sprite.position += Vector2(0, -1) * 30.0 * sin(sprite.progress * 3.14)
+    for index in to_remove:
+        var sprite = water_sprites[index]
+        sprite.sprite.position = water_sprite_end_position
+        sprite.sprite.visible = false
+        sprite.sprite.queue_free()
+        water_sprites.remove_at(index)
+    if water_sprites.size() == 0:
+        emit_signal("process_finished")
+        process_state = ""
