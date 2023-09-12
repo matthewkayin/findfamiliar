@@ -42,6 +42,7 @@ var test_battle: bool = true
 var is_duel: bool = false
 var player_escape_attempts: int = 0
 var choosing_item_target: bool = false
+var enemy_ai = EnemyAI.new()
 
 func _ready():
     party_menu.clear_warning.connect(dialog.clear)
@@ -79,6 +80,10 @@ func _ready():
 
 func battle_start(is_witch_battle: bool = false):
     is_duel = is_witch_battle
+
+    enemy_ai.player_party = player_party
+    enemy_ai.enemy_party = enemy_party
+    enemy_ai.difficulty = EnemyAI.Difficulty.WITCH if is_duel else EnemyAI.Difficulty.WILD
 
     player_party.before_battle()
     enemy_party.before_battle()
@@ -256,17 +261,9 @@ func _process(_delta):
             })
         return
 
-func enemy_choose_action():
-    var spell = enemy_party.familiars[0].spells[randi_range(0, enemy_party.familiars[0].spells.size() - 1)]
-    return {
-        "actor": ActionActor.ENEMY,
-        "type": ActionType.SPELL,
-        "spell": spell
-    }
-
 func do_round(player_action):
     # enemy chooses action
-    var enemy_action = enemy_choose_action()
+    var enemy_action = enemy_ai.choose_action()
 
     # determine turn order
     var player_first: bool
@@ -446,46 +443,20 @@ func do_action(action):
             await animator.animate_spell(action.actor, action.spell)
 
         if spell_hit:
-            # Compute base damage
-            var attacker_attack: float = attacker.get_strength() if action.spell.damage_type == Spell.DamageType.PHYSICAL else attacker.get_intellect()
-            var defender_defense: float = defender.get_defense() if action.spell.damage_type == Spell.DamageType.PHYSICAL else defender.get_intellect()
-            var base_damage: float = (((((2.0 * attacker.level) / 5.0) + 2.0) * action.spell.power * (attacker_attack / defender_defense)) / 50.0) + 2.0
-
-            # Compute STAB
-            var stab: float = 1
-            if attacker.species.type == action.spell.type:
-                stab = 1.5
-
-            # Compute weakness / resistance
-            var type_mod: float = 1.0
-            if Types.INFO[defender.species.type].weaknesses.has(action.spell.type):
-                type_mod = 2.0
-            elif Types.INFO[defender.species.type].resistances.has(action.spell.type):
-                type_mod = 0.5
-
-            # Compute crit
-            var crit_mod: float = 1.0
-            var crit_chance: int = int(attacker.get_agility() / 2.0)
-            var crit_value: int = randi_range(0, 255)
-            if action.spell.damage_type == Spell.DamageType.PHYSICAL and crit_value <= crit_chance:
-                crit_mod = 2.0
-
-            var random_mod: float = randf_range(0.85, 1.0)
-            var damage = int(base_damage * stab * type_mod * crit_mod * random_mod)
-
-            defender.health = max(defender.health - damage, 0)
+            var result = Battle.calculate_damage(attacker, defender, action.spell)
+            defender.health = max(defender.health - result.damage, 0)
 
             defender_healthbar.update()
-            await animator.animate_hurt((action.actor + 1) % 2, type_mod)
-            if crit_mod == 2.0:
+            await animator.animate_hurt((action.actor + 1) % 2, result.type_mod)
+            if result.crit_mod == 2.0:
                 dialog.open("Critical hit!")
                 await dialog.finished
                 dialog.clear()
-            if type_mod == 2.0:
+            if result.type_mod == 2.0:
                 dialog.open("It's super effective!")
                 await dialog.finished
                 dialog.clear()
-            if type_mod == 0.5:
+            if result.type_mod == 0.5:
                 dialog.open("It's not very effective...")
                 await dialog.finished
                 dialog.clear()
@@ -642,3 +613,38 @@ func battle_end():
     await whiteout_tween.finished
     player_party.after_battle()
     emit_signal("finished")
+
+static func calculate_damage(attacker: Familiar, defender: Familiar, spell: Spell):
+    # Compute base damage
+    var attacker_attack: float = attacker.get_strength() if spell.damage_type == Spell.DamageType.PHYSICAL else attacker.get_intellect()
+    var defender_defense: float = defender.get_defense() if spell.damage_type == Spell.DamageType.PHYSICAL else defender.get_intellect()
+    var base_damage: float = (((((2.0 * attacker.level) / 5.0) + 2.0) * spell.power * (attacker_attack / defender_defense)) / 50.0) + 2.0
+
+    # Compute STAB
+    var stab: float = 1
+    if attacker.species.type == spell.type:
+        stab = 1.5
+
+    # Compute weakness / resistance
+    var type_mod: float = 1.0
+    if Types.INFO[defender.species.type].weaknesses.has(spell.type):
+        type_mod = 2.0
+    elif Types.INFO[defender.species.type].resistances.has(spell.type):
+        type_mod = 0.5
+
+    # Compute crit
+    var crit_mod: float = 1.0
+    var crit_chance: int = int(attacker.get_agility() / 2.0)
+    var crit_value: int = randi_range(0, 255)
+    if spell.damage_type == Spell.DamageType.PHYSICAL and crit_value <= crit_chance:
+        crit_mod = 2.0
+
+    var random_mod: float = randf_range(0.85, 1.0)
+    var damage = int(base_damage * stab * type_mod * crit_mod * random_mod)
+
+    return {
+        "damage": damage,
+        "randomless_damage": int(base_damage * stab * type_mod * 0.85),
+        "type_mod": type_mod,
+        "crit_mod": crit_mod
+    }
