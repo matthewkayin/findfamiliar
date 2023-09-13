@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="Species" load_steps=9 format=3 uid="uid://c8hxto0ud22ha"]
+
+[ext_resource type="Script" path="res://familiar/species.gd" id="1_grdoh"]
+[ext_resource type="Script" path="res://familiar/learn_spell.gd" id="1_il50d"]
+[ext_resource type="Resource" uid="uid://brrs3jj51ffh5" path="res://familiar/spells/scratch.tres" id="2_44ava"]
+[ext_resource type="Resource" uid="uid://b4rc4ffosmyr0" path="res://familiar/spells/growl.tres" id="3_ifxhs"]
+[ext_resource type="Resource" uid="uid://bx2k7y87jfrmw" path="res://familiar/spells/rush.tres" id="4_sufoq"]
+
+[sub_resource type="Resource" id="Resource_c6ep2"]
+script = ExtResource("1_il50d")
+spell = ExtResource("2_44ava")
+level = 0
+
+[sub_resource type="Resource" id="Resource_inon4"]
+script = ExtResource("1_il50d")
+spell = ExtResource("3_ifxhs")
+level = 0
+
+[sub_resource type="Resource" id="Resource_31e26"]
+script = ExtResource("1_il50d")
+spell = ExtResource("4_sufoq")
+level = 6
+
+[resource]
+script = ExtResource("1_grdoh")
+name = "BEANIN"
+type = 0
+base_health = 37
+base_strength = 56
+base_intellect = 25
+base_defense = 40
+base_agility = 71
+catch_rate = 255
+exp_yield = 57
+learn_spells = Array[ExtResource("1_il50d")]([SubResource("Resource_c6ep2"), SubResource("Resource_inon4"), SubResource("Resource_31e26")])

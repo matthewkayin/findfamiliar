@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="Species" load_steps=9 format=3 uid="uid://d25ouoxij621t"]
+
+[ext_resource type="Script" path="res://familiar/species.gd" id="1_alu8d"]
+[ext_resource type="Script" path="res://familiar/learn_spell.gd" id="1_nsuqr"]
+[ext_resource type="Resource" uid="uid://b3u2rjw52li51" path="res://familiar/spells/slam.tres" id="2_arb00"]
+[ext_resource type="Resource" uid="uid://3tnp4h82kwo6" path="res://familiar/spells/leer.tres" id="3_d1cqo"]
+[ext_resource type="Resource" uid="uid://cew86akt5wur4" path="res://familiar/spells/flare.tres" id="4_texjg"]
+
+[sub_resource type="Resource" id="Resource_hjlf3"]
+script = ExtResource("1_nsuqr")
+spell = ExtResource("2_arb00")
+level = 0
+
+[sub_resource type="Resource" id="Resource_ohuly"]
+script = ExtResource("1_nsuqr")
+spell = ExtResource("3_d1cqo")
+level = 0
+
+[sub_resource type="Resource" id="Resource_2puak"]
+script = ExtResource("1_nsuqr")
+spell = ExtResource("4_texjg")
+level = 7
+
+[resource]
+script = ExtResource("1_alu8d")
+name = "FIREBAT"
+type = 2
+base_health = 44
+base_strength = 43
+base_intellect = 65
+base_defense = 44
+base_agility = 50
+catch_rate = 128
+exp_yield = 64
+learn_spells = Array[ExtResource("1_nsuqr")]([SubResource("Resource_hjlf3"), SubResource("Resource_ohuly"), SubResource("Resource_2puak")])

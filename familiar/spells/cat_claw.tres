@@ -6,12 +6,14 @@
 script = ExtResource("1_lsqtp")
 name = "CAT CLAW"
 type = 3
-desc = ""
+desc = "Damages enemy.
+Has a 30% chance
+to poison."
 priority = 0
 power = 30
 damage_type = 0
 accuracy = 100
-condition_accuracy = 100
+condition_accuracy = 30
 condition_target = 2
 condition = 3
 strength_mod = 0

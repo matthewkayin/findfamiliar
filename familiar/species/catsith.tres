@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="Species" load_steps=9 format=3 uid="uid://dheenbqrdypdo"]
+
+[ext_resource type="Script" path="res://familiar/species.gd" id="1_ekc8y"]
+[ext_resource type="Script" path="res://familiar/learn_spell.gd" id="1_fbqco"]
+[ext_resource type="Resource" uid="uid://brrs3jj51ffh5" path="res://familiar/spells/scratch.tres" id="2_hrh5a"]
+[ext_resource type="Resource" uid="uid://c8p33rx0g1mpp" path="res://familiar/spells/bad_luck.tres" id="3_s4s6d"]
+[ext_resource type="Resource" uid="uid://bvlq74ilph1kn" path="res://familiar/spells/cat_claw.tres" id="4_0y36g"]
+
+[sub_resource type="Resource" id="Resource_la1ec"]
+script = ExtResource("1_fbqco")
+spell = ExtResource("2_hrh5a")
+level = 0
+
+[sub_resource type="Resource" id="Resource_423is"]
+script = ExtResource("1_fbqco")
+spell = ExtResource("3_s4s6d")
+level = 0
+
+[sub_resource type="Resource" id="Resource_u0oyc"]
+script = ExtResource("1_fbqco")
+spell = ExtResource("4_0y36g")
+level = 6
+
+[resource]
+script = ExtResource("1_ekc8y")
+name = "CAT SITH"
+type = 3
+base_health = 43
+base_strength = 46
+base_intellect = 57
+base_defense = 37
+base_agility = 51
+catch_rate = 100
+exp_yield = 67
+learn_spells = Array[ExtResource("1_fbqco")]([SubResource("Resource_la1ec"), SubResource("Resource_423is"), SubResource("Resource_u0oyc")])

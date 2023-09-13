@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="Species" load_steps=9 format=3 uid="uid://byaut4nx2u6bk"]
+
+[ext_resource type="Script" path="res://familiar/species.gd" id="1_ijkcq"]
+[ext_resource type="Script" path="res://familiar/learn_spell.gd" id="1_uf35h"]
+[ext_resource type="Resource" uid="uid://b3u2rjw52li51" path="res://familiar/spells/slam.tres" id="2_5scr0"]
+[ext_resource type="Resource" uid="uid://3tnp4h82kwo6" path="res://familiar/spells/leer.tres" id="3_e0fhy"]
+[ext_resource type="Resource" uid="uid://cgwu2n1eqf4pa" path="res://familiar/spells/water_jet.tres" id="4_70byr"]
+
+[sub_resource type="Resource" id="Resource_l7qyg"]
+script = ExtResource("1_uf35h")
+spell = ExtResource("2_5scr0")
+level = 0
+
+[sub_resource type="Resource" id="Resource_nt6ju"]
+script = ExtResource("1_uf35h")
+spell = ExtResource("3_e0fhy")
+level = 0
+
+[sub_resource type="Resource" id="Resource_1eano"]
+script = ExtResource("1_uf35h")
+spell = ExtResource("4_70byr")
+level = 7
+
+[resource]
+script = ExtResource("1_ijkcq")
+name = "ADDER"
+type = 1
+base_health = 42
+base_strength = 51
+base_intellect = 44
+base_defense = 44
+base_agility = 65
+catch_rate = 128
+exp_yield = 64
+learn_spells = Array[ExtResource("1_uf35h")]([SubResource("Resource_l7qyg"), SubResource("Resource_nt6ju"), SubResource("Resource_1eano")])

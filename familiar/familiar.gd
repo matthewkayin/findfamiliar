@@ -108,7 +108,11 @@ func get_agility() -> int:
     return int(agility * get_stat_mod(agility_stage))
 
 func get_luck() -> float:
-    return get_stat_mod(luck_stage)
+    if luck_stage > 0:
+        return (3.0 + luck_stage) / 3.0
+    if luck_stage < 0:
+        return 3.0 / (3.0 + abs(luck_stage))
+    return 1.0
 
 # level, stats, and experience
 

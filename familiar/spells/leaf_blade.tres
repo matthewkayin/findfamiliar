@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Spell" load_steps=2 format=3 uid="uid://gpordg7q1cm4"]
+[gd_resource type="Resource" script_class="Spell" load_steps=2 format=3 uid="uid://cn6nkmpebx8sa"]
 
 [ext_resource type="Script" path="res://familiar/spell.gd" id="1_cg73i"]
 
@@ -6,10 +6,9 @@
 script = ExtResource("1_cg73i")
 name = "LEAF BLADE"
 type = 4
-desc = "Attack the
-boi"
+desc = "Damages enemy."
 priority = 0
-power = 30
+power = 40
 damage_type = 1
 accuracy = 100
 condition_accuracy = 0
@@ -19,3 +18,4 @@ strength_mod = 0
 intellect_mod = 0
 defense_mod = 0
 agility_mod = 0
+luck_mod = 0

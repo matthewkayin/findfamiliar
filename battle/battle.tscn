@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://wms1mx2tepno" path="res://battle/sprites/front/cat-sith.png" id="2_pp3su"]
 [ext_resource type="Script" path="res://familiar/witch_familiar.gd" id="2_t1780"]
 [ext_resource type="Shader" path="res://battle/sprite.gdshader" id="3_258tc"]
-[ext_resource type="Resource" uid="uid://cxix65ukm2hpq" path="res://familiar/species/catsith.tres" id="3_ayuj8"]
+[ext_resource type="Resource" uid="uid://dheenbqrdypdo" path="res://familiar/species/catsith.tres" id="3_ayuj8"]
 [ext_resource type="Texture2D" uid="uid://dqjbj2x03budc" path="res://battle/effects/growl.png" id="4_0f1k0"]
 [ext_resource type="Texture2D" uid="uid://bquyv2dvslbeg" path="res://battle/effects/scratch.png" id="4_3r16g"]
 [ext_resource type="Texture2D" uid="uid://canoabld5qs20" path="res://battle/effects/stat_boost.png" id="4_7wm8v"]
