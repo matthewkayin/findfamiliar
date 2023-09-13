@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c40l8lra1la1k"
-path="res://.godot/imported/owlcub.png-917411cd0205500d9d15b7f9f5983707.ctex"
+uid="uid://cb56kr4k0ja5a"
+path="res://.godot/imported/ursalet.png-96fad72d4004b511edf1200281c277af.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://battle/sprites/back/owlcub.png"
-dest_files=["res://.godot/imported/owlcub.png-917411cd0205500d9d15b7f9f5983707.ctex"]
+source_file="res://battle/sprites/front/ursalet.png"
+dest_files=["res://.godot/imported/ursalet.png-96fad72d4004b511edf1200281c277af.ctex"]
 
 [params]
 

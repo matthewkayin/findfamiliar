@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://sxr3ucetkgy6"]
+[gd_scene load_steps=29 format=3 uid="uid://sxr3ucetkgy6"]
 
 [ext_resource type="Script" path="res://world/world.gd" id="1_dpxob"]
 [ext_resource type="Script" path="res://familiar/wild_familiar.gd" id="2_b6ie8"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://familiar/witch_familiar.gd" id="10_jhc3v"]
 [ext_resource type="Resource" uid="uid://brrs3jj51ffh5" path="res://familiar/spells/scratch.tres" id="12_epkjl"]
 [ext_resource type="Resource" uid="uid://b4rc4ffosmyr0" path="res://familiar/spells/growl.tres" id="13_11nsj"]
+[ext_resource type="PackedScene" uid="uid://wphpyoii23gm" path="res://ui/party_menu/party_menu.tscn" id="13_65u2p"]
 [ext_resource type="PackedScene" uid="uid://da4twrxii2p3p" path="res://actor/player.tscn" id="14_4e2pi"]
 
 [sub_resource type="Resource" id="Resource_nij2p"]
@@ -135,6 +136,8 @@ offset_left = 2.0
 offset_top = 231.0
 offset_right = 318.0
 offset_bottom = 287.0
+
+[node name="party_menu" parent="ui" instance=ExtResource("13_65u2p")]
 
 [node name="Node" type="Node" parent="."]
 

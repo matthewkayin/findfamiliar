@@ -138,7 +138,7 @@ func _process(_delta):
             battle_actions.close()
         elif battle_actions.choice == "SWITCH":
             battle_actions.close()
-            party_menu.open()
+            party_menu.open(PartyMenu.Mode.SWITCH)
         elif battle_actions.choice == "ITEM":
             battle_actions.close()
             item_chooser.open(player_party.items)
@@ -184,12 +184,6 @@ func _process(_delta):
         if party_menu.choice == -1:
             party_menu.close()
             battle_actions_open(true)
-        elif not player_party.familiars[party_menu.choice].is_living():
-            dialog.set_text_fancy(player_party.familiars[party_menu.choice].get_display_name() + " is out\nof energy!", dialog.CHAR_SPEED_POPUP)
-            party_menu.is_finished = false
-        elif party_menu.choice == 0:
-            dialog.set_text_fancy(player_party.familiars[0].get_display_name() + " is already\nfighting!", dialog.CHAR_SPEED_POPUP)
-            party_menu.is_finished = false
         else:
             if player_party.familiars[0].is_living():
                 party_menu.close()
@@ -230,7 +224,7 @@ func _process(_delta):
             elif chosen_item.type == Item.ItemType.HEALING:
                 item_chooser.close()
                 choosing_item_target = true
-                party_menu.open()
+                party_menu.open(PartyMenu.Mode.ITEM)
         return
 
     # PARTY MENU USING ITEM
@@ -240,7 +234,7 @@ func _process(_delta):
             item_chooser.open(player_party.items, true)
             choosing_item_target = false
         elif not player_party.familiars[party_menu.choice].is_living():
-            dialog.set_text_fancy(player_party.familiars[party_menu.choice].get_display_name() + " is out\nof energy!", dialog.CHAR_SPEED_POPUP)
+            party_menu.dialog.set_text_fancy(player_party.familiars[party_menu.choice].get_display_name() + " is out\nof energy!", dialog.CHAR_SPEED_POPUP)
             party_menu.is_finished = false
         else:
             # use the item
@@ -267,7 +261,9 @@ func do_round(player_action):
 
     # determine turn order
     var player_first: bool
-    if player_action.type == ActionType.RUN or player_action.type == ActionType.SWITCH or player_action.type == ActionType.ITEM:
+    if player_action.type == ActionType.NONE:
+        player_first = false
+    elif player_action.type == ActionType.RUN or player_action.type == ActionType.SWITCH or player_action.type == ActionType.ITEM:
         player_first = true
     elif enemy_action.type == ActionType.RUN or enemy_action.type == ActionType.SWITCH or enemy_action.type == ActionType.ITEM:
         player_first = false
@@ -339,8 +335,8 @@ func do_round(player_action):
                 if i == 0:
                     exp_each[i] += exp_yield_remainder
 
-            dialog.open("You gained\n" + str(int(exp_yield)) + " EXP. Points!")
-            party_menu.open(false, true)
+            await party_menu.open(PartyMenu.Mode.EXP)
+            party_menu.dialog.open("You gained\n" + str(int(exp_yield)) + " EXP. Points!")
 
             var exp_finished = false
             while not exp_finished:
@@ -353,9 +349,9 @@ func do_round(player_action):
                         var leveled_up = player_party.familiars[i].give_exp(1)
                         if leveled_up:
                             # announce level up
-                            dialog.open(player_party.familiars[i].get_display_name() + " grew to\nlevel " + str(player_party.familiars[i].level) + "!")
+                            party_menu.dialog.open(player_party.familiars[i].get_display_name() + " grew to\nlevel " + str(player_party.familiars[i].level) + "!")
                             await dialog.finished
-                            dialog.clear()
+                            party_menu.dialog.clear()
 
                             # check for any learned spells
                             for learn_spell in player_party.familiars[i].species.learn_spells:
@@ -365,21 +361,21 @@ func do_round(player_action):
                                         pass
                                     else:
                                         player_party.familiars[i].spells.append(learn_spell)
-                                        dialog.open(player_party.familiars[i].get_display_name() + " learned " + learn_spell.name + "!")
+                                        party_menu.dialog.open(player_party.familiars[i].get_display_name() + " learned " + learn_spell.name + "!")
                                         await dialog.finished
-                                        dialog.clear()
+                                        party_menu.dialog.clear()
                         if exp_each[i] > 0:
                             exp_finished = false
-            if dialog.is_finished:
-                dialog.open("")
-            await dialog.finished
+            if party_menu.dialog.is_finished:
+                party_menu.dialog.open("")
+            await party_menu.dialog.finished
             battle_end()
             return
         # end enemy party defeated
 
         # switch
         if not player_party.familiars[0].is_living():
-            party_menu.open(false)
+            party_menu.open(PartyMenu.Mode.SWITCH_REQUIRED)
             await resume_round
             if turn_number == 0 and actions[1].actor == ActionActor.PLAYER:
                 skip_next_turn = true
@@ -589,7 +585,9 @@ func do_action(action):
             burn_message += "Enemy "
         burn_message += familiar.get_display_name() + "\ntook burn damage!"
         dialog.open(burn_message)
-        await dialog.finished
+        await animator.animate_condition(action.actor, familiar.condition)
+        if not dialog.is_finished:
+            await dialog.finished
         dialog.clear()
     elif familiar.condition == Condition.Type.POISONED:
         var healthbar = player_healthbar if action.actor == ActionActor.PLAYER else enemy_healthbar

@@ -38,6 +38,11 @@ void fragment() {
 
         float mix_value = 1.0 - (abs(0.5 - progress) / 0.5);
         COLOR = mix(sampled, mix_color, mix_value);
+    } else if (animation == 4) {
+        vec4 mix_color = vec4(215.0 / 255.0, 88.0 / 255.0, 65.0 / 255.0, 1.0);
+
+        float mix_value = 1.0 - (abs(0.5 - progress) / 0.5);
+        COLOR = mix(sampled, mix_color, mix_value);
     } else {
         COLOR = sampled;
     }

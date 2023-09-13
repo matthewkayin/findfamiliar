@@ -4,6 +4,7 @@ signal updated_cursor
 signal closed
 
 @onready var cursor = $cursor
+@onready var party_menu = get_node("../party_menu")
 
 var choice_labels = []
 var cursor_index = Vector2i(0, 0)
@@ -99,3 +100,8 @@ func _process(_delta):
     if Input.is_action_just_pressed("action"):
         finished = true
         choice = choice_labels[cursor_index.x][cursor_index.y].text
+        if choice == "FAMILIAR":
+            party_menu.open(PartyMenu.Mode.STATUS)
+            await party_menu.finished
+            party_menu.close()
+            finished = false

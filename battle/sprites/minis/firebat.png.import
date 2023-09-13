@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bwthiys75av5q"
-path="res://.godot/imported/kazot.png-6d06327f824a163153a031406b331768.ctex"
+path="res://.godot/imported/firebat.png-bf0a6ddb5e55d0d2d24db16233f4fea3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://battle/sprites/minis/kazot.png"
-dest_files=["res://.godot/imported/kazot.png-6d06327f824a163153a031406b331768.ctex"]
+source_file="res://battle/sprites/minis/firebat.png"
+dest_files=["res://.godot/imported/firebat.png-bf0a6ddb5e55d0d2d24db16233f4fea3.ctex"]
 
 [params]
 

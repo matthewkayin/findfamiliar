@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3dc7p50rx51t"
-path="res://.godot/imported/kazot.png-d028dd1ebb1fa2f4087c71bf106eb1b0.ctex"
+uid="uid://bxyapd7gy875g"
+path="res://.godot/imported/ursalet.png-702f10c164a0b453855bf54fed684ba7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://battle/sprites/back/kazot.png"
-dest_files=["res://.godot/imported/kazot.png-d028dd1ebb1fa2f4087c71bf106eb1b0.ctex"]
+source_file="res://battle/sprites/minis/ursalet.png"
+dest_files=["res://.godot/imported/ursalet.png-702f10c164a0b453855bf54fed684ba7.ctex"]
 
 [params]
 

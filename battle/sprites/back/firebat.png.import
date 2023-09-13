@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxyapd7gy875g"
-path="res://.godot/imported/owlcub.png-cbd9d1ea4176984a70b7e58982aef154.ctex"
+uid="uid://3dc7p50rx51t"
+path="res://.godot/imported/firebat.png-4f586d38945a65db22c5a70af43317fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://battle/sprites/minis/owlcub.png"
-dest_files=["res://.godot/imported/owlcub.png-cbd9d1ea4176984a70b7e58982aef154.ctex"]
+source_file="res://battle/sprites/back/firebat.png"
+dest_files=["res://.godot/imported/firebat.png-4f586d38945a65db22c5a70af43317fc.ctex"]
 
 [params]
 

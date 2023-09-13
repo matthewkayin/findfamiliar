@@ -20,7 +20,8 @@ signal process_finished
 enum SpriteEffectAnim {
     STAT_RAISE = 1,
     STAT_LOWER = 2,
-    POISON = 3
+    POISON = 3,
+    BURNED = 4
 }
 
 var process_state = ""
@@ -191,6 +192,35 @@ func animate_poisoned(who: Battle.ActionActor):
     shake_tween.tween_property(sprite, "position", sprite_origin, 0.05)
     animate_sprite_effect(sprite, SpriteEffectAnim.POISON)
     await shake_tween.finished
+
+func animate_burned(who: Battle.ActionActor):
+    var sprite = player_sprite if who == Battle.ActionActor.PLAYER else enemy_sprite
+    var start_position = player_sprite.position if who == Battle.ActionActor.PLAYER else enemy_sprite.position
+    start_position += Vector2(0, 32)
+
+    var fire_sprites = []
+    animate_sprite_effect(sprite, SpriteEffectAnim.BURNED)
+    for i in range(0, 5):
+        var fire_sprite = Sprite2D.new()
+        fire_sprite.texture = flame_effect_texture
+        fire_sprite.hframes = 2
+        fire_sprite.scale = Vector2(1.5, 1.5)
+        var offset = Vector2(6, 0) if i % 2 == 0 else Vector2(-6, 0)
+        fire_sprite.position = start_position + offset
+        get_parent().add_child(fire_sprite)
+
+        var fire_tween = get_tree().create_tween().set_parallel(true)
+        fire_tween.tween_property(fire_sprite, "position", start_position + Vector2(0, -48), 0.5)
+        fire_tween.tween_property(fire_sprite, "scale", Vector2(0, 0), 0.5)
+        if i == 4:
+            await fire_tween.finished
+        else:
+            var delay_tween = get_tree().create_tween()
+            delay_tween.tween_interval(0.1)
+            await delay_tween.finished
+
+    for fire_sprite in fire_sprites:
+        fire_sprite.queue_free()
 
 func animate_spell(who: Battle.ActionActor, spell: Spell):
     var spell_name = spell.name.to_lower().replace(" ", "_")
