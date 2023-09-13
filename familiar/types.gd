@@ -7,70 +7,72 @@ enum Type {
     DARK = 3,
     NATURE = 4,
     EARTH = 5,
-    LIGHTNING = 6
+    LIGHTNING = 6,
+    AIR = 7,
+    GHOST = 8,
+    MIND = 9
 }
 
-const INFO = {
+const NO_EFFECT: float = 0.0
+const SUPER_EFFECTIVE: float = 2.0
+const NOT_EFFECTIVE: float = 0.5
+
+const EFFECTIVENESS = {
     Type.NORMAL: {
-        "weaknesses": [],
-        "resistances": [],
+        Type.GHOST: NO_EFFECT
     },
     Type.WATER: {
-        "weaknesses": [
-            Type.NATURE,
-            Type.LIGHTNING
-        ],
-        "resistances": [
-            Type.FIRE,
-            Type.EARTH
-        ]
+        Type.FIRE: SUPER_EFFECTIVE,
+        Type.EARTH: SUPER_EFFECTIVE,
+        Type.LIGHTNING: NOT_EFFECTIVE
     },
     Type.FIRE: {
-        "weaknesses": [
-            Type.WATER,
-            Type.EARTH
-        ],
-        "resistances": [
-            Type.DARK,
-            Type.NATURE
-        ]
+        Type.DARK: SUPER_EFFECTIVE,
+        Type.NATURE: SUPER_EFFECTIVE,
+        Type.EARTH: NOT_EFFECTIVE,
+        Type.AIR: NOT_EFFECTIVE
     },
     Type.DARK: {
-        "weaknesses": [
-            Type.FIRE,
-            Type.LIGHTNING
-        ],
-        "resistances": [
-            Type.NATURE
-        ]
+        Type.NATURE: SUPER_EFFECTIVE,
+        Type.GHOST: SUPER_EFFECTIVE,
+        Type.FIRE: NOT_EFFECTIVE,
+        Type.MIND: NOT_EFFECTIVE
     },
     Type.NATURE: {
-        "weaknesses": [
-            Type.DARK,
-            Type.FIRE
-        ],
-        "resistances": [
-            Type.EARTH,
-            Type.WATER
-        ]
+        Type.EARTH: SUPER_EFFECTIVE,
+        Type.WATER: SUPER_EFFECTIVE,
+        Type.DARK: NOT_EFFECTIVE,
+        Type.FIRE: SUPER_EFFECTIVE,
+        Type.AIR: NOT_EFFECTIVE
     },
     Type.EARTH: {
-        "weaknesses": [
-            Type.NATURE,
-            Type.WATER
-        ],
-        "resistances": [
-            Type.LIGHTNING,
-            Type.FIRE
-        ]
+        Type.FIRE: SUPER_EFFECTIVE,
+        Type.LIGHTNING: SUPER_EFFECTIVE,
+        Type.AIR: SUPER_EFFECTIVE,
+        Type.WATER: NOT_EFFECTIVE,
+        Type.MIND: NOT_EFFECTIVE,
+        Type.NATURE: NOT_EFFECTIVE
+    },
+    Type.AIR: {
+        Type.FIRE: SUPER_EFFECTIVE,
+        Type.NATURE: SUPER_EFFECTIVE,
+        Type.LIGHTNING: NOT_EFFECTIVE,
+        Type.EARTH: NOT_EFFECTIVE
     },
     Type.LIGHTNING: {
-        "weaknesses": [
-            Type.EARTH,
-        ],
-        "resistances": [
-            Type.WATER,
-            Type.DARK
-        ]
+        Type.AIR: SUPER_EFFECTIVE,
+        Type.WATER: SUPER_EFFECTIVE,
+        Type.EARTH: NOT_EFFECTIVE
+    },
+    Type.GHOST: {
+        Type.NORMAL: NO_EFFECT,
+        Type.MIND: SUPER_EFFECTIVE,
+        Type.GHOST: SUPER_EFFECTIVE,
+        Type.DARK: NOT_EFFECTIVE
+    },
+    Type.MIND: {
+        Type.DARK: SUPER_EFFECTIVE,
+        Type.EARTH: SUPER_EFFECTIVE,
+        Type.GHOST: NOT_EFFECTIVE
     }
 }

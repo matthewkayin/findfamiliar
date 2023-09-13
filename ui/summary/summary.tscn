@@ -641,7 +641,6 @@ scale = Vector2(2, 2)
 texture = ExtResource("4_y12t0")
 
 [node name="spell_desc" type="NinePatchRect" parent="."]
-visible = false
 layout_mode = 0
 offset_left = 8.0
 offset_top = 185.0
@@ -660,14 +659,10 @@ offset_left = 6.0
 offset_right = 262.0
 offset_bottom = 102.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Reflect enemy's
-next attack. Does
-not work against
-physical spells."
+text = "Damages enemy."
 label_settings = SubResource("LabelSettings_6lpgl")
 
 [node name="spell_info" type="NinePatchRect" parent="."]
-visible = false
 layout_mode = 0
 offset_left = 8.0
 offset_top = 95.0

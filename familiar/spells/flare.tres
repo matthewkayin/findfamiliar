@@ -6,16 +6,17 @@
 script = ExtResource("1_vlsy7")
 name = "FLARE"
 type = 2
-desc = "Attack the
-boi"
+desc = "Deals damage. May
+burn enemy."
 priority = 0
-power = 30
+power = 40
 damage_type = 1
 accuracy = 100
-condition_accuracy = 0
-condition_target = 0
-condition = 0
+condition_accuracy = 10
+condition_target = 2
+condition = 1
 strength_mod = 0
 intellect_mod = 0
 defense_mod = 0
 agility_mod = 0
+luck_mod = 0

@@ -6,8 +6,7 @@
 script = ExtResource("1_lsqtp")
 name = "CAT CLAW"
 type = 3
-desc = "Attack the
-boi"
+desc = ""
 priority = 0
 power = 30
 damage_type = 0
@@ -19,3 +18,4 @@ strength_mod = 0
 intellect_mod = 0
 defense_mod = 0
 agility_mod = 0
+luck_mod = 0

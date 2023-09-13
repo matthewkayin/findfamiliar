@@ -419,13 +419,12 @@ func do_action(action):
         # check if move hits
         var spell_hit: bool = false
         if action.spell.damage_type != Spell.DamageType.NONE:
-            var accuracy_dc: int = action.spell.accuracy + (float(attacker.get_agility() - defender.get_agility()) / 1.5)
+            var accuracy_dc: int = action.spell.accuracy * attacker.get_luck()
             spell_hit = randi_range(0, 100) <= accuracy_dc
         # check if condition hit
         var condition_hit: bool = false
-        var condition_dc: int = action.spell.condition_accuracy
         if defender.is_living() and action.spell.condition_target == Spell.ConditionTarget.OPPONENT:
-            condition_dc += int(float(attacker.get_intellect() - defender.get_intellect()) / 1.5)
+            var condition_dc: int = action.spell.condition_accuracy * attacker.get_luck()
             condition_hit = randi_range(0, 100) <= condition_dc
         elif action.spell.condition_target == Spell.ConditionTarget.SELF: 
             condition_hit = true
@@ -627,10 +626,8 @@ static func calculate_damage(attacker: Familiar, defender: Familiar, spell: Spel
 
     # Compute weakness / resistance
     var type_mod: float = 1.0
-    if Types.INFO[defender.species.type].weaknesses.has(spell.type):
-        type_mod = 2.0
-    elif Types.INFO[defender.species.type].resistances.has(spell.type):
-        type_mod = 0.5
+    if Types.EFFECTIVENESS[spell.type].has(defender.species.type):
+        type_mod = Types.EFFECTIVENESS[spell.type][defender.species.type]
 
     # Compute crit
     var crit_mod: float = 1.0

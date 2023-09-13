@@ -1,7 +1,7 @@
 extends Node
 class_name Familiar
 
-const STAT_NAMES = ["strength", "intellect", "defense", "agility"]
+const STAT_NAMES = ["strength", "intellect", "defense", "agility", "luck"]
 
 enum Zodiac {
     ARIES = 0,
@@ -47,6 +47,7 @@ var strength_stage: int = 0
 var intellect_stage: int = 0
 var defense_stage: int = 0
 var agility_stage: int = 0
+var luck_stage: int = 0
 var has_participated: bool = false
 
 func _init(as_species: Species, at_level: int):
@@ -92,7 +93,10 @@ func get_stat_mod(stage: int) -> float:
     return 1.0
 
 func get_strength() -> int:
-    return int(strength * get_stat_mod(strength_stage))
+    var burn_mod = 1.0
+    if condition == Condition.Type.BURNED:
+        burn_mod = 0.7
+    return int(strength * get_stat_mod(strength_stage) * burn_mod)
 
 func get_intellect() -> int:
     return int(intellect * get_stat_mod(intellect_stage))
@@ -102,6 +106,9 @@ func get_defense() -> int:
 
 func get_agility() -> int:
     return int(agility * get_stat_mod(agility_stage))
+
+func get_luck() -> float:
+    return get_stat_mod(luck_stage)
 
 # level, stats, and experience
 

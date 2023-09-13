@@ -6,8 +6,7 @@
 script = ExtResource("1_au0c7")
 name = "WATER JET"
 type = 1
-desc = "Attack the
-boi"
+desc = "Damages enemy."
 priority = 0
 power = 30
 damage_type = 1
@@ -19,3 +18,4 @@ strength_mod = 0
 intellect_mod = 0
 defense_mod = 0
 agility_mod = 0
+luck_mod = 0

@@ -6,7 +6,8 @@
 script = ExtResource("1_uhg5l")
 name = "BAD LUCK"
 type = 3
-desc = ""
+desc = "Lowers opponent's
+LUCK."
 priority = 0
 power = 0
 damage_type = 2
@@ -17,4 +18,5 @@ condition = 0
 strength_mod = 0
 intellect_mod = 0
 defense_mod = 0
-agility_mod = -1
+agility_mod = 0
+luck_mod = -1

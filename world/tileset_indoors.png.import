@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://culmfv7u8om36"
-path="res://.godot/imported/tallgrass_step.png-648dc7d387c973a0c0c1c4a249b315d1.ctex"
+uid="uid://badux04nyncki"
+path="res://.godot/imported/tileset_indoors.png-5f31d61bf379bf67f248657b35dbdd2b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tallgrass_step.png"
-dest_files=["res://.godot/imported/tallgrass_step.png-648dc7d387c973a0c0c1c4a249b315d1.ctex"]
+source_file="res://world/tileset_indoors.png"
+dest_files=["res://.godot/imported/tileset_indoors.png-5f31d61bf379bf67f248657b35dbdd2b.ctex"]
 
 [params]
 

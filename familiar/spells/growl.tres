@@ -6,7 +6,8 @@
 script = ExtResource("1_ewi67")
 name = "GROWL"
 type = 0
-desc = ""
+desc = "Lowers enemy's
+STRENGTH."
 priority = 0
 power = 0
 damage_type = 2
@@ -18,3 +19,4 @@ strength_mod = -1
 intellect_mod = 0
 defense_mod = 0
 agility_mod = 0
+luck_mod = 0

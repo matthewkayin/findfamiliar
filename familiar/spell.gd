@@ -31,3 +31,4 @@ enum ConditionTarget {
 @export_range(-6, 6, 1) var intellect_mod: int = 0
 @export_range(-6, 6, 1) var defense_mod: int = 0
 @export_range(-6, 6, 1) var agility_mod: int = 0
+@export_range(-6, 6, 1) var luck_mod: int = 0

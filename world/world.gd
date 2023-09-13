@@ -41,8 +41,9 @@ func is_tall_grass(coordinate: Vector2):
     return tilemap.get_cell_atlas_coords(0, coordinate / TILE_SIZE) == TALLGRASS_COORDS
 
 func check_for_encounter(coordinate: Vector2):
-    var encounter_rate = tilemap.get_cell_tile_data(0, coordinate / TILE_SIZE).get_custom_data("encounter_rate")
-    var encountered_familiar = randi_range(0, 255) < encounter_rate
+    if not tilemap.get_cell_tile_data(0, coordinate / TILE_SIZE).get_custom_data("encounter"):
+        return null
+    var encountered_familiar = randi_range(0, 255) < 20
     if not encountered_familiar:
         return null
     

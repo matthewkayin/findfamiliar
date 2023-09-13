@@ -6,7 +6,8 @@
 script = ExtResource("1_1xhkw")
 name = "LEER"
 type = 0
-desc = ""
+desc = "Lowers enemy's
+DEFENSE."
 priority = 0
 power = 0
 damage_type = 2
@@ -18,3 +19,4 @@ strength_mod = 0
 intellect_mod = 0
 defense_mod = -1
 agility_mod = 0
+luck_mod = 0

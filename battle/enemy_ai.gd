@@ -68,7 +68,7 @@ func enemy_can_2hko():
     return int(result.damage * 2.0) >= player_party.familiars[0].health
 
 func is_disadvantaged(defender: Familiar, attacker: Familiar):
-    return Types.INFO[defender.species.type].weaknesses.has(attacker.species.type)
+    return Types.EFFECTIVENESS[attacker.species.type].has(defender.species.type) and Types.EFFECTIVENESS[attacker.species.type][defender.species.type] == 2.0
 
 func is_advantaged(attacker: Familiar, defender: Familiar):
     return is_disadvantaged(defender, attacker)
