@@ -27,16 +27,8 @@ func _ready():
             else:
                 letter.text = charset[char_index]
                 char_index += 1
-
-    var species_cat = load("res://familiar/species/catsith.tres")
-    var spell_scratch = load("res://familiar/spells/scratch.tres")
-    var spell_growl = load("res://familiar/spells/growl.tres")
-    var player_party = get_node("/root/player_party")
-    player_party.familiars.append(Familiar.new(species_cat, 5))
-    player_party.familiars[0].nickname = "Jiji"
-    player_party.familiars[0].spells.append(spell_scratch)
-    player_party.familiars[0].spells.append(spell_growl)
-    open(player_party.familiars[0])
+    
+    visible = false
 
 func _mini_anim_timeout():
     prompt_icon.frame = (prompt_icon.frame + 1) % 2
@@ -56,6 +48,7 @@ func open(familiar: Familiar):
     mini_anim_timer.start(0.2)
     cursor_blink_timer.start(0.5)
     refresh()
+    visible = true
 
 func close():
     mini_anim_timer.stop()

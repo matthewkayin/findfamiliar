@@ -3,6 +3,7 @@ class_name Species
 
 @export var name: String
 @export var type: Types.Type
+@export_multiline var desc: String
 
 @export_group("Stats")
 @export_range(0, 255, 1) var base_health: int

@@ -1,4 +1,4 @@
-[gd_scene load_steps=94 format=3 uid="uid://4xaqdp8x46q3"]
+[gd_scene load_steps=96 format=3 uid="uid://4xaqdp8x46q3"]
 
 [ext_resource type="Script" path="res://battle/battle.gd" id="1_62dho"]
 [ext_resource type="Script" path="res://battle/battle_animator.gd" id="2_ipy34"]
@@ -29,6 +29,8 @@
 [ext_resource type="Texture2D" uid="uid://bngimpg1t3sso" path="res://battle/effects/tackle.png" id="13_y8165"]
 [ext_resource type="PackedScene" uid="uid://wphpyoii23gm" path="res://ui/party_menu/party_menu.tscn" id="14_u5hny"]
 [ext_resource type="PackedScene" uid="uid://q4cruliyg6x4" path="res://ui/choicebox/item_chooser.tscn" id="15_pduf7"]
+[ext_resource type="PackedScene" uid="uid://cwubrdm0ydjh7" path="res://ui/bestiary_entry/bestiary_entry.tscn" id="30_clal1"]
+[ext_resource type="PackedScene" uid="uid://2f2e0ef1tovq" path="res://ui/name_dialog/name_dialog.tscn" id="31_crf6y"]
 
 [sub_resource type="Resource" id="Resource_r4kjl"]
 script = ExtResource("2_t1780")
@@ -664,6 +666,12 @@ offset_bottom = 231.0
 
 [node name="party_menu" parent="." instance=ExtResource("14_u5hny")]
 z_index = 2
+
+[node name="bestiary_entry" parent="." instance=ExtResource("30_clal1")]
+z_index = 1
+
+[node name="name_dialog" parent="." instance=ExtResource("31_crf6y")]
+z_index = 1
 
 [node name="whiteout" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)

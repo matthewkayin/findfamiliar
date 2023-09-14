@@ -31,6 +31,7 @@ level = 6
 script = ExtResource("7_uoshk")
 name = "BEANIN"
 type = 0
+desc = ""
 base_health = 30
 base_strength = 56
 base_intellect = 25

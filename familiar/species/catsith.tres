@@ -25,6 +25,10 @@ level = 6
 script = ExtResource("1_ekc8y")
 name = "CAT SITH"
 type = 3
+desc = "Spectral, black cats with white
+spots on their chest. Cat Sith
+are believed to steal the
+souls of the unburied dead."
 base_health = 43
 base_strength = 46
 base_intellect = 57

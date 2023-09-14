@@ -1,11 +1,9 @@
-[gd_scene load_steps=25 format=3 uid="uid://sxr3ucetkgy6"]
+[gd_scene load_steps=19 format=3 uid="uid://sxr3ucetkgy6"]
 
 [ext_resource type="Script" path="res://world/world.gd" id="1_dpxob"]
 [ext_resource type="Script" path="res://familiar/wild_familiar.gd" id="2_b6ie8"]
-[ext_resource type="Script" path="res://familiar/learn_spell.gd" id="3_54wrx"]
+[ext_resource type="Resource" uid="uid://c8hxto0ud22ha" path="res://familiar/species/beanin.tres" id="3_83o44"]
 [ext_resource type="Texture2D" uid="uid://d27yyntagyn2k" path="res://world/tiles.png" id="4_2vf18"]
-[ext_resource type="Resource" uid="uid://c8p33rx0g1mpp" path="res://familiar/spells/bad_luck.tres" id="5_wsrkx"]
-[ext_resource type="Resource" uid="uid://bvlq74ilph1kn" path="res://familiar/spells/cat_claw.tres" id="6_uhboe"]
 [ext_resource type="Script" path="res://familiar/species.gd" id="7_1ekwd"]
 [ext_resource type="PackedScene" uid="uid://c1gfvqxec8bbx" path="res://actor/actor.tscn" id="8_u85ou"]
 [ext_resource type="PackedScene" uid="uid://d4hi1fmnd81s1" path="res://ui/world/world_ui.tscn" id="8_yrwqo"]
@@ -16,37 +14,9 @@
 [ext_resource type="PackedScene" uid="uid://da4twrxii2p3p" path="res://actor/player.tscn" id="14_4e2pi"]
 [ext_resource type="PackedScene" uid="uid://db1emu0xlgbkg" path="res://world/house/house_short.tscn" id="19_2o4lg"]
 
-[sub_resource type="Resource" id="Resource_nij2p"]
-script = ExtResource("3_54wrx")
-spell = ExtResource("12_epkjl")
-level = 0
-
-[sub_resource type="Resource" id="Resource_n0dw4"]
-script = ExtResource("3_54wrx")
-spell = ExtResource("5_wsrkx")
-level = 0
-
-[sub_resource type="Resource" id="Resource_810jp"]
-script = ExtResource("3_54wrx")
-spell = ExtResource("6_uhboe")
-level = 6
-
-[sub_resource type="Resource" id="Resource_27t5g"]
-script = ExtResource("7_1ekwd")
-name = "BEANIN"
-type = 0
-base_health = 30
-base_strength = 56
-base_intellect = 25
-base_defense = 36
-base_agility = 71
-catch_rate = 255
-exp_yield = 57
-learn_spells = Array[ExtResource("3_54wrx")]([SubResource("Resource_nij2p"), SubResource("Resource_n0dw4"), SubResource("Resource_810jp")])
-
 [sub_resource type="Resource" id="Resource_ewls6"]
 script = ExtResource("2_b6ie8")
-species = SubResource("Resource_27t5g")
+species = ExtResource("3_83o44")
 rate = 1.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q1ho6"]
@@ -73,6 +43,7 @@ sources/0 = SubResource("TileSetAtlasSource_q1ho6")
 script = ExtResource("7_1ekwd")
 name = "ADDER"
 type = 1
+desc = ""
 base_health = 42
 base_strength = 60
 base_intellect = 50
@@ -80,7 +51,7 @@ base_defense = 48
 base_agility = 65
 catch_rate = 0
 exp_yield = 128
-learn_spells = Array[ExtResource("3_54wrx")]([])
+learn_spells = Array[Resource("res://familiar/learn_spell.gd")]([])
 
 [sub_resource type="Resource" id="Resource_jfbmk"]
 script = ExtResource("10_jhc3v")
@@ -115,8 +86,7 @@ y_sort_enabled = true
 
 [node name="actor" parent="actors" instance=ExtResource("8_u85ou")]
 position = Vector2(192, 16)
-behavior = "iwalk down 4
-walk up 4"
+behavior = "face right"
 dialog = Array[String](["If you're looking for a familiar,
 you're better off checking in
 the tall grass."])

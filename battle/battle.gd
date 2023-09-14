@@ -19,6 +19,8 @@ signal resume_round
 @onready var enemy_healthbar = $enemy_healthbar
 @onready var gem_sprite = $gem_sprite
 @onready var exp_timer = $exp_timer
+@onready var bestiary_entry = $bestiary_entry
+@onready var name_dialog = $name_dialog
 @onready var whiteout = $whiteout
 
 enum ActionActor {
@@ -43,6 +45,7 @@ var is_duel: bool = false
 var player_escape_attempts: int = 0
 var choosing_item_target: bool = false
 var enemy_ai = EnemyAI.new()
+var battle_ended = false
 
 func _ready():
     party_menu.clear_warning.connect(dialog.clear)
@@ -76,6 +79,8 @@ func _ready():
         enemy_party.enemy_witch_name = "TEST FRIEND"
         enemy_party.enemy_lose_message = "Ack, I lost."
         enemy_party.enemy_witch_sprite = load("res://battle/sprites/witches/frida.png")
+
+        enemy_party.familiars[0].health = 1
         battle_start()
 
 func battle_start(is_witch_battle: bool = false):
@@ -108,6 +113,8 @@ func battle_start(is_witch_battle: bool = false):
     battle_actions_open()
 
 func battle_actions_open(remember_cursor: bool = false):
+    if battle_ended:
+        return
     dialog.set_text("What will\n" + player_party.familiars[0].get_display_name() + " do?") 
     battle_actions.open(remember_cursor)
 
@@ -350,7 +357,7 @@ func do_round(player_action):
                         if leveled_up:
                             # announce level up
                             party_menu.dialog.open(player_party.familiars[i].get_display_name() + " grew to\nlevel " + str(player_party.familiars[i].level) + "!")
-                            await dialog.finished
+                            await party_menu.dialog.finished
                             party_menu.dialog.clear()
 
                             # check for any learned spells
@@ -360,9 +367,9 @@ func do_round(player_action):
                                         # TODO have players choose which move to forget
                                         pass
                                     else:
-                                        player_party.familiars[i].spells.append(learn_spell)
-                                        party_menu.dialog.open(player_party.familiars[i].get_display_name() + " learned " + learn_spell.name + "!")
-                                        await dialog.finished
+                                        player_party.familiars[i].spells.append(learn_spell.spell)
+                                        party_menu.dialog.open(player_party.familiars[i].get_display_name() + " learned " + learn_spell.spell.name + "!")
+                                        await party_menu.dialog.finished
                                         party_menu.dialog.clear()
                         if exp_each[i] > 0:
                             exp_finished = false
@@ -540,6 +547,18 @@ func do_action(action):
 
             dialog.open("Gotcha! " + familiar.get_display_name() + "\nwas caught!")
             await dialog.finished
+            bestiary_entry.open(familiar.species, BestiaryEntry.Mode.SINGLE_ENTRY)
+            await bestiary_entry.finished
+            bestiary_entry.close()
+            if bestiary_entry.choice == "YES":
+                name_dialog.open(familiar)
+                await name_dialog.finished
+                if name_dialog.input != "":
+                    familiar.nickname = name_dialog.input
+                name_dialog.close()
+            player_party.familiars.append(familiar)
+            dialog.open(familiar.get_display_name() + " joined the party!")
+            await dialog.finished
             battle_end()
         else:
             gem_sprite.visible = false
@@ -605,6 +624,7 @@ func do_action(action):
         dialog.clear()
 
 func battle_end():
+    battle_ended = true
     var whiteout_tween = get_tree().create_tween()
     whiteout_tween.tween_property(whiteout, "modulate", Color(1, 1, 1, 1), 0.5)
     await whiteout_tween.finished

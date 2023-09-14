@@ -7,23 +7,13 @@ var world = null
 func _ready():
     process_mode = Node.PROCESS_MODE_ALWAYS
 
-    var config = ConfigFile.new()
-    var err = config.load("user://settings.ini")
-    print(OS.get_user_data_dir())
-    if err == OK:
-        var window_size = config.get_value("settings", "resolution").split("x")
-        get_window().set_size(Vector2(int(window_size[0]), int(window_size[1])))
-    else:
-        var resolution_str = str(get_window().size.x) + "x" + str(get_window().size.y)
-        config.set_value("settings", "resolution", resolution_str)
-        config.save("user://settings.ini")
-
     var species_cat = load("res://familiar/species/catsith.tres")
     var item_gem = load("res://familiar/items/gem.tres")
     var item_potion = load("res://familiar/items/potion.tres")
 
-    player_party.familiars.append(Familiar.new(species_cat, 6))
+    player_party.familiars.append(Familiar.new(species_cat, 5))
     player_party.familiars[0].nickname = "Jiji"
+    player_party.familiars[0].experience += player_party.familiars[0].get_experience_to_next_level() - 1
 
     player_party.add_item(item_gem, 5)
     player_party.add_item(item_potion, 10)

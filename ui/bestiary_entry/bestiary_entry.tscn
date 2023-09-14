@@ -1,0 +1,217 @@
+[gd_scene load_steps=14 format=3 uid="uid://cwubrdm0ydjh7"]
+
+[ext_resource type="Texture2D" uid="uid://cunfjnx27gwlq" path="res://ui/frame.png" id="1_2x2r3"]
+[ext_resource type="Texture2D" uid="uid://wms1mx2tepno" path="res://battle/sprites/front/cat-sith.png" id="2_55fcf"]
+[ext_resource type="Script" path="res://ui/bestiary_entry/bestiary_entry.gd" id="2_e64uk"]
+[ext_resource type="FontFile" uid="uid://bpv2n8psitkui" path="res://ui/BitPotionExt.ttf" id="3_06i32"]
+[ext_resource type="FontFile" uid="uid://hyh7a7k6lkav" path="res://ui/BitPotion.ttf" id="4_7ndju"]
+[ext_resource type="Texture2D" uid="uid://cqve3mnfvk083" path="res://ui/cursor.png" id="5_v7elm"]
+[ext_resource type="Texture2D" uid="uid://tc458rasd81c" path="res://ui/spell_info/types.png" id="6_4nyhn"]
+[ext_resource type="PackedScene" uid="uid://dichyeix0c5g3" path="res://ui/dialog/dialog.tscn" id="8_4cifh"]
+[ext_resource type="Script" path="res://ui/choicebox/choicebox.gd" id="9_yb606"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_y7v1n"]
+line_spacing = -8.0
+font = ExtResource("3_06i32")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_qbnag"]
+line_spacing = 0.0
+font = ExtResource("4_7ndju")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_2exjx"]
+line_spacing = 0.0
+font = ExtResource("4_7ndju")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_xvftt"]
+line_spacing = 0.0
+font = ExtResource("4_7ndju")
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+
+[node name="bestiary_entry" type="NinePatchRect"]
+texture_filter = 1
+offset_right = 320.0
+offset_bottom = 288.0
+texture = ExtResource("1_2x2r3")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource("2_e64uk")
+
+[node name="sprite_frame" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 37.0
+offset_right = 146.0
+offset_bottom = 173.0
+texture = ExtResource("1_2x2r3")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="sprite" type="Sprite2D" parent="sprite_frame"]
+position = Vector2(68, 68)
+scale = Vector2(2, 2)
+texture = ExtResource("2_55fcf")
+
+[node name="desc_frame" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 181.0
+offset_right = 310.0
+offset_bottom = 273.0
+texture = ExtResource("1_2x2r3")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="label" type="Label" parent="desc_frame"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 6.0
+offset_right = 262.0
+offset_bottom = 102.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Spectral, black cats with white
+spots on their chest. Cat Sith
+are believed to steal the
+souls of the unburied dead."
+label_settings = SubResource("LabelSettings_y7v1n")
+
+[node name="header" type="Label" parent="."]
+layout_mode = 0
+offset_left = 9.0
+offset_right = 185.0
+offset_bottom = 52.0
+text = "BESTIARY"
+label_settings = SubResource("LabelSettings_qbnag")
+
+[node name="page_label" type="Label" parent="header"]
+layout_mode = 0
+offset_left = 168.0
+offset_right = 344.0
+offset_bottom = 52.0
+text = "PAGE"
+label_settings = SubResource("LabelSettings_qbnag")
+horizontal_alignment = 1
+
+[node name="page_left_arrow" type="Sprite2D" parent="header"]
+position = Vector2(217, 15)
+scale = Vector2(2, 2)
+texture = ExtResource("5_v7elm")
+flip_h = true
+
+[node name="page_right_arrow" type="Sprite2D" parent="header"]
+position = Vector2(293, 15)
+scale = Vector2(2, 2)
+texture = ExtResource("5_v7elm")
+
+[node name="name_frame" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 152.0
+offset_top = 37.0
+offset_right = 310.0
+offset_bottom = 96.0
+texture = ExtResource("1_2x2r3")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="name_label" type="Label" parent="name_frame"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 1.0
+offset_right = 184.0
+offset_bottom = 53.0
+text = "CAT SITH "
+label_settings = SubResource("LabelSettings_2exjx")
+
+[node name="type_label" type="Label" parent="name_frame/name_label"]
+layout_mode = 0
+offset_top = 26.0
+offset_right = 176.0
+offset_bottom = 78.0
+text = "TYPE:"
+label_settings = SubResource("LabelSettings_2exjx")
+
+[node name="type_value" type="Label" parent="name_frame/name_label/type_label"]
+layout_mode = 0
+offset_left = 68.0
+offset_right = 244.0
+offset_bottom = 52.0
+text = "LIGHTNING"
+label_settings = SubResource("LabelSettings_2exjx")
+
+[node name="type_icon" type="Sprite2D" parent="name_frame/name_label/type_label"]
+position = Vector2(48, 7)
+texture = ExtResource("6_4nyhn")
+centered = false
+hframes = 7
+frame = 3
+
+[node name="dialog" parent="." instance=ExtResource("8_4cifh")]
+z_index = 1
+layout_mode = 0
+offset_left = 10.0
+offset_top = 217.0
+offset_right = 310.0
+offset_bottom = 273.0
+
+[node name="actions" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 222.0
+offset_top = 157.0
+offset_right = 310.0
+offset_bottom = 213.0
+texture = ExtResource("1_2x2r3")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+script = ExtResource("9_yb606")
+
+[node name="options" type="Control" parent="actions"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="col1" type="Control" parent="actions/options"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="label" type="Label" parent="actions/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 1.0
+offset_right = 278.0
+offset_bottom = 39.0
+text = "YES"
+label_settings = SubResource("LabelSettings_xvftt")
+
+[node name="label3" type="Label" parent="actions/options/col1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 22.0
+offset_top = 25.0
+offset_right = 278.0
+offset_bottom = 63.0
+text = "NO"
+label_settings = SubResource("LabelSettings_xvftt")
+
+[node name="cursor" type="Sprite2D" parent="actions"]
+position = Vector2(12, 16)
+scale = Vector2(2, 2)
+texture = ExtResource("5_v7elm")
