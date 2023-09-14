@@ -108,6 +108,7 @@ layer_0/tile_data = PackedInt32Array(0, 0, 0, 1, 0, 0, 2, 65536, 0, 3, 65536, 0,
 
 [node name="house_short" parent="." instance=ExtResource("19_2o4lg")]
 position = Vector2(112, 16)
+leads_to = "res://world/house.tscn"
 
 [node name="actors" type="Node2D" parent="."]
 y_sort_enabled = true
@@ -128,3 +129,10 @@ familiars = Array[ExtResource("10_jhc3v")]([SubResource("Resource_jfbmk")])
 
 [node name="player" parent="actors" instance=ExtResource("14_4e2pi")]
 position = Vector2(128, 64)
+
+[node name="spawn_points" type="Node2D" parent="."]
+
+[node name="0" type="Node2D" parent="spawn_points"]
+position = Vector2(128, 32)
+
+[node name="exits" type="Node2D" parent="."]

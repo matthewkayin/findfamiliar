@@ -4,6 +4,7 @@ extends Node2D
 @onready var door = $door
 
 @export var leads_to: String
+@export var entrance_id: int = 0
 
 func _ready():
     add_to_group("obstacles")
@@ -20,3 +21,8 @@ func open_door():
     door.play("open")
     await door.animation_finished
     door.play("opened")
+
+func close_door():
+    door.play("close")
+    await door.animation_finished
+    door.play("closed")

@@ -1,5 +1,7 @@
 extends Node2D
 
+signal stepped
+
 @onready var director = get_node("/root/director")
 @onready var enemy_party = get_node("/root/enemy_party")
 @onready var pause_menu = get_node("../../ui/pause_menu")
@@ -20,6 +22,7 @@ var is_moving: bool = false
 var next_tile_position: Vector2
 var is_interacting: bool = false
 var is_entering_duel: bool = false
+var disable_input: bool = false
 
 var next_scene = null
 
@@ -39,11 +42,11 @@ func update_behavior(delta):
         return
 
     # check input
-    if Input.is_action_just_pressed("menu"):
+    if Input.is_action_just_pressed("menu") and not disable_input:
         pause_menu.open()
 
     # interaction
-    if Input.is_action_just_pressed("action") and not is_moving and not is_interacting:
+    if Input.is_action_just_pressed("action") and not is_moving and not is_interacting and not disable_input:
         var interact_coord = position + (direction * World.TILE_SIZE)
         for npc in get_tree().get_nodes_in_group("npcs"):
             if npc.position == interact_coord and not npc.is_moving:
@@ -63,7 +66,7 @@ func update_behavior(delta):
     # directional input
     input_direction = Vector2.ZERO
     for direction_name in World.DIRECTIONS.keys():
-        if Input.is_action_pressed(direction_name):
+        if Input.is_action_pressed(direction_name) and not disable_input:
             input_direction = World.DIRECTIONS[direction_name]
             break
 
@@ -83,6 +86,7 @@ func update_behavior(delta):
             is_moving = true
         else:
             var house = world.is_tile_door(next_position)
+            var exit = world.is_tile_exit(next_position)
             if house != null:
                 #next_scene = load(house.leads_to)
                 is_entering_duel = true
@@ -91,6 +95,8 @@ func update_behavior(delta):
                 previous_position = position
                 next_tile_position = next_position
                 is_moving = true
+            elif exit != null:
+                director.enter_world(exit.leads_to, exit.entrance_id)
 
     # set facing direction
     if is_moving:
@@ -123,6 +129,7 @@ func update_behavior(delta):
             var next_position = next_tile_position + (input_direction * World.TILE_SIZE)
             var next_position_blocked = world.is_tile_blocked(next_position)
             var house = world.is_tile_door(next_position)
+            var exit = world.is_tile_exit(next_position)
 
             if input_direction == direction and not next_position_blocked and wild_familiar == null and not entering_duel:
                 position += direction * step
@@ -130,7 +137,6 @@ func update_behavior(delta):
                 position = next_tile_position
 
             if input_direction != Vector2.ZERO and house != null:
-                #next_scene = load(house.leads_to)
                 is_moving = false
                 is_entering_duel = true
                 await house.open_door()
@@ -142,11 +148,17 @@ func update_behavior(delta):
                 is_moving = false
                 if tallgrass_step.animation == "step":
                     tallgrass_step.play("in_grass")
+                emit_signal("stepped")
             else:
                 previous_position = next_tile_position
                 next_tile_position = next_position
 
-            if entering_duel:
+            var entering_house = world.is_tile_door(position)
+            if entering_house != null:
+                director.enter_world(entering_house.leads_to, entering_house.entrance_id)
+            elif exit != null:
+                director.enter_world(exit.leads_to, exit.entrance_id)
+            elif entering_duel:
                 input_direction = Vector2.ZERO
                 is_moving = false
                 is_entering_duel = true

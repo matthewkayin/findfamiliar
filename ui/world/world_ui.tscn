@@ -17,11 +17,12 @@ process_mode = 3
 
 [node name="transition" type="ColorRect" parent="."]
 process_mode = 3
+visible = false
 z_index = 3
 material = SubResource("ShaderMaterial_7jwas")
 offset_right = 320.0
 offset_bottom = 288.0
-color = Color(0, 0, 0, 1)
+color = Color(0.121569, 0.0901961, 0.0941176, 1)
 script = ExtResource("2_53wx0")
 
 [node name="pause_menu" parent="." instance=ExtResource("3_h3ivb")]

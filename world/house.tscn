@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://ipxsv78bab7l"]
+[gd_scene load_steps=19 format=3 uid="uid://ipxsv78bab7l"]
 
 [ext_resource type="Script" path="res://world/world.gd" id="1_8xqcd"]
 [ext_resource type="Script" path="res://familiar/wild_familiar.gd" id="2_ax8jg"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://familiar/species.gd" id="7_uoshk"]
 [ext_resource type="PackedScene" uid="uid://d4hi1fmnd81s1" path="res://ui/world/world_ui.tscn" id="8_54e7n"]
 [ext_resource type="Texture2D" uid="uid://badux04nyncki" path="res://world/tileset_indoors.png" id="9_vhn16"]
+[ext_resource type="Script" path="res://world/exit.gd" id="11_tbanv"]
 [ext_resource type="PackedScene" uid="uid://da4twrxii2p3p" path="res://actor/player.tscn" id="15_au07y"]
 
 [sub_resource type="Resource" id="Resource_nij2p"]
@@ -80,3 +81,20 @@ y_sort_enabled = true
 
 [node name="player" parent="actors" instance=ExtResource("15_au07y")]
 position = Vector2(32, 128)
+
+[node name="spawn_points" type="Node2D" parent="."]
+
+[node name="0" type="Node2D" parent="spawn_points"]
+position = Vector2(32, 128)
+
+[node name="exits" type="Node2D" parent="."]
+
+[node name="0" type="Node2D" parent="exits"]
+position = Vector2(32, 144)
+script = ExtResource("11_tbanv")
+leads_to = "res://world/world.tscn"
+
+[node name="1" type="Node2D" parent="exits"]
+position = Vector2(48, 144)
+script = ExtResource("11_tbanv")
+leads_to = "res://world/world.tscn"

@@ -13,6 +13,7 @@ const TALLGRASS_COORDS = Vector2i(2, 1)
 @onready var tilemap = $tilemap
 @onready var player = $actors/player
 @onready var transition = $ui/transition
+@onready var exits = $exits
 
 @export_range(1, 100, 1) var wild_min_level: int = 1
 @export_range(1, 100, 1) var wild_max_level: int = 1
@@ -21,7 +22,21 @@ const TALLGRASS_COORDS = Vector2i(2, 1)
 var tile_blocked
 
 func _ready():
-    pass
+    transition.fade_in()
+    var house = is_tile_door(player.position)
+    if house != null:
+        house.door.play("opened")
+        player.disable_input = true
+        player.is_moving = true
+        player.next_tile_position = player.position + (player.direction * TILE_SIZE)
+        await player.stepped
+        house.close_door()
+        player.disable_input = false
+
+
+func spawn_player(entrance_id: int, with_direction: Vector2):
+    $actors/player.position = $spawn_points.get_child(entrance_id).position
+    $actors/player.direction = with_direction
 
 static func get_direction_name(from_direction: Vector2) -> String:
     for direction_name in DIRECTIONS.keys():
@@ -47,6 +62,12 @@ func is_tile_door(coordinate: Vector2):
     for house in get_tree().get_nodes_in_group("houses"):
         if house.is_door_coordinate(coordinate):
             return house
+    return null
+
+func is_tile_exit(coordinate: Vector2):
+    for exit in exits.get_children():
+        if exit.position == coordinate:
+            return exit
     return null
 
 func is_tall_grass(coordinate: Vector2):
