@@ -35,7 +35,19 @@ func is_tile_blocked(coordinate: Vector2):
             return true
         elif walker.position == coordinate:
             return true
-    return tilemap.get_cell_tile_data(0, coordinate / TILE_SIZE).get_custom_data("blocked")
+    for obstacle in get_tree().get_nodes_in_group("obstacles"):
+        if obstacle.is_blocking_coordinate(coordinate):
+            return true
+    var data = tilemap.get_cell_tile_data(0, coordinate / TILE_SIZE)
+    if data == null:
+        return true
+    return data.get_custom_data("blocked")
+
+func is_tile_door(coordinate: Vector2):
+    for house in get_tree().get_nodes_in_group("houses"):
+        if house.is_door_coordinate(coordinate):
+            return house
+    return null
 
 func is_tall_grass(coordinate: Vector2):
     return tilemap.get_cell_atlas_coords(0, coordinate / TILE_SIZE) == TALLGRASS_COORDS

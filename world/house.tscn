@@ -1,0 +1,82 @@
+[gd_scene load_steps=18 format=3 uid="uid://ipxsv78bab7l"]
+
+[ext_resource type="Script" path="res://world/world.gd" id="1_8xqcd"]
+[ext_resource type="Script" path="res://familiar/wild_familiar.gd" id="2_ax8jg"]
+[ext_resource type="Script" path="res://familiar/learn_spell.gd" id="3_xlulr"]
+[ext_resource type="Resource" uid="uid://brrs3jj51ffh5" path="res://familiar/spells/scratch.tres" id="4_7caf1"]
+[ext_resource type="Resource" uid="uid://c8p33rx0g1mpp" path="res://familiar/spells/bad_luck.tres" id="5_sivsh"]
+[ext_resource type="Resource" uid="uid://bvlq74ilph1kn" path="res://familiar/spells/cat_claw.tres" id="6_3wgcy"]
+[ext_resource type="Script" path="res://familiar/species.gd" id="7_uoshk"]
+[ext_resource type="PackedScene" uid="uid://d4hi1fmnd81s1" path="res://ui/world/world_ui.tscn" id="8_54e7n"]
+[ext_resource type="Texture2D" uid="uid://badux04nyncki" path="res://world/tileset_indoors.png" id="9_vhn16"]
+[ext_resource type="PackedScene" uid="uid://da4twrxii2p3p" path="res://actor/player.tscn" id="15_au07y"]
+
+[sub_resource type="Resource" id="Resource_nij2p"]
+script = ExtResource("3_xlulr")
+spell = ExtResource("4_7caf1")
+level = 0
+
+[sub_resource type="Resource" id="Resource_n0dw4"]
+script = ExtResource("3_xlulr")
+spell = ExtResource("5_sivsh")
+level = 0
+
+[sub_resource type="Resource" id="Resource_810jp"]
+script = ExtResource("3_xlulr")
+spell = ExtResource("6_3wgcy")
+level = 6
+
+[sub_resource type="Resource" id="Resource_27t5g"]
+script = ExtResource("7_uoshk")
+name = "BEANIN"
+type = 0
+base_health = 30
+base_strength = 56
+base_intellect = 25
+base_defense = 36
+base_agility = 71
+catch_rate = 255
+exp_yield = 57
+learn_spells = Array[ExtResource("3_xlulr")]([SubResource("Resource_nij2p"), SubResource("Resource_n0dw4"), SubResource("Resource_810jp")])
+
+[sub_resource type="Resource" id="Resource_ewls6"]
+script = ExtResource("2_ax8jg")
+species = SubResource("Resource_27t5g")
+rate = 1.0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rsjlx"]
+texture = ExtResource("9_vhn16")
+0:0/0 = 0
+1:0/0 = 0
+1:0/0/custom_data_0 = true
+0:1/0 = 0
+1:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_lbdni"]
+custom_data_layer_0/name = "blocked"
+custom_data_layer_0/type = 1
+custom_data_layer_1/name = "encounter"
+custom_data_layer_1/type = 1
+sources/0 = SubResource("TileSetAtlasSource_rsjlx")
+
+[node name="world" type="Node2D"]
+texture_filter = 1
+scale = Vector2(2, 2)
+script = ExtResource("1_8xqcd")
+wild_min_level = 3
+wild_max_level = 2
+wild_familiars = Array[ExtResource("2_ax8jg")]([SubResource("Resource_ewls6")])
+
+[node name="ui" parent="." instance=ExtResource("8_54e7n")]
+
+[node name="tilemap" type="TileMap" parent="."]
+position = Vector2(-1, 0)
+tile_set = SubResource("TileSet_lbdni")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 65536, 0, 65536, 0, 0, 131072, 0, 0, 196608, 0, 0, 262144, 0, 0, 327680, 0, 0, 393216, 0, 0, 458752, 0, 0, 524288, 0, 0, 1, 65536, 0, 65537, 0, 0, 131073, 0, 0, 196609, 0, 0, 262145, 0, 0, 327681, 0, 0, 393217, 0, 0, 458753, 0, 0, 524289, 0, 0, 2, 65536, 0, 65538, 0, 0, 131074, 0, 0, 196610, 0, 0, 262146, 0, 0, 327682, 0, 0, 393218, 0, 0, 458754, 0, 0, 524290, 0, 1, 3, 65536, 0, 65539, 0, 0, 131075, 0, 0, 196611, 0, 0, 262147, 0, 0, 327683, 0, 0, 393219, 0, 0, 458755, 0, 0, 524291, 65536, 1, 4, 65536, 0, 65540, 0, 0, 131076, 0, 0, 196612, 0, 0, 262148, 0, 0, 327684, 0, 0, 393220, 0, 0, 458756, 0, 0, 524292, 0, 0, 5, 65536, 0, 65541, 0, 0, 131077, 0, 0, 196613, 0, 0, 262149, 0, 0, 327685, 0, 0, 393221, 0, 0, 458757, 0, 0, 524293, 0, 0, 6, 65536, 0, 65542, 0, 0, 131078, 0, 0, 196614, 0, 0, 262150, 0, 0, 327686, 0, 0, 393222, 0, 0, 458758, 0, 0, 524294, 0, 0, 7, 65536, 0, 65543, 0, 0, 131079, 0, 0, 196615, 0, 0, 262151, 0, 0, 327687, 0, 0, 393223, 0, 0, 458759, 0, 0, 524295, 0, 0, 8, 65536, 0, 65544, 0, 0, 131080, 0, 0, 196616, 0, 0, 262152, 0, 0, 327688, 0, 0, 393224, 0, 0, 458760, 0, 0, 524296, 0, 0)
+
+[node name="actors" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="player" parent="actors" instance=ExtResource("15_au07y")]
+position = Vector2(32, 128)

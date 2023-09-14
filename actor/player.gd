@@ -21,6 +21,8 @@ var next_tile_position: Vector2
 var is_interacting: bool = false
 var is_entering_duel: bool = false
 
+var next_scene = null
+
 func _ready():
     add_to_group("walkers")
 
@@ -79,6 +81,16 @@ func update_behavior(delta):
             previous_position = position
             next_tile_position = next_position
             is_moving = true
+        else:
+            var house = world.is_tile_door(next_position)
+            if house != null:
+                #next_scene = load(house.leads_to)
+                is_entering_duel = true
+                await house.open_door()
+                is_entering_duel = false
+                previous_position = position
+                next_tile_position = next_position
+                is_moving = true
 
     # set facing direction
     if is_moving:
@@ -110,13 +122,23 @@ func update_behavior(delta):
 
             var next_position = next_tile_position + (input_direction * World.TILE_SIZE)
             var next_position_blocked = world.is_tile_blocked(next_position)
+            var house = world.is_tile_door(next_position)
 
             if input_direction == direction and not next_position_blocked and wild_familiar == null and not entering_duel:
                 position += direction * step
             else:
                 position = next_tile_position
 
-            if input_direction == Vector2.ZERO or next_position_blocked or wild_familiar != null:
+            if input_direction != Vector2.ZERO and house != null:
+                #next_scene = load(house.leads_to)
+                is_moving = false
+                is_entering_duel = true
+                await house.open_door()
+                is_entering_duel = false
+                previous_position = position
+                next_tile_position = next_position
+                is_moving = true
+            elif input_direction == Vector2.ZERO or next_position_blocked or wild_familiar != null:
                 is_moving = false
                 if tallgrass_step.animation == "step":
                     tallgrass_step.play("in_grass")

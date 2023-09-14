@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://d4hi1fmnd81s1"]
+
+[ext_resource type="Shader" path="res://world/transition.gdshader" id="1_xca0l"]
+[ext_resource type="Script" path="res://world/transition.gd" id="2_53wx0"]
+[ext_resource type="PackedScene" uid="uid://bywr2strkf8m1" path="res://ui/pause_menu/pause_menu.tscn" id="3_h3ivb"]
+[ext_resource type="PackedScene" uid="uid://dichyeix0c5g3" path="res://ui/dialog/dialog.tscn" id="4_lj4ut"]
+[ext_resource type="PackedScene" uid="uid://wphpyoii23gm" path="res://ui/party_menu/party_menu.tscn" id="5_50pw4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7jwas"]
+shader = ExtResource("1_xca0l")
+shader_parameter/progress = 0.0
+shader_parameter/snap_size = 4.0
+shader_parameter/diamond_size = 16.0
+
+[node name="ui" type="CanvasLayer"]
+process_mode = 3
+
+[node name="transition" type="ColorRect" parent="."]
+process_mode = 3
+z_index = 3
+material = SubResource("ShaderMaterial_7jwas")
+offset_right = 320.0
+offset_bottom = 288.0
+color = Color(0, 0, 0, 1)
+script = ExtResource("2_53wx0")
+
+[node name="pause_menu" parent="." instance=ExtResource("3_h3ivb")]
+visible = false
+offset_left = 216.0
+offset_top = 2.0
+offset_right = 318.0
+offset_bottom = 154.0
+
+[node name="dialog" parent="." instance=ExtResource("4_lj4ut")]
+visible = false
+offset_left = 2.0
+offset_top = 231.0
+offset_right = 318.0
+offset_bottom = 287.0
+
+[node name="party_menu" parent="." instance=ExtResource("5_50pw4")]
+visible = false

@@ -1,0 +1,112 @@
+[gd_scene load_steps=15 format=3 uid="uid://db1emu0xlgbkg"]
+
+[ext_resource type="Texture2D" uid="uid://4ownloaer5b7" path="res://world/house/house_short.png" id="1_ckf7n"]
+[ext_resource type="Script" path="res://world/house/house.gd" id="1_qs2sh"]
+[ext_resource type="Texture2D" uid="uid://dk18cwblfoxsh" path="res://world/house/door.png" id="2_7ajmo"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hl77l"]
+atlas = ExtResource("2_7ajmo")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0pg54"]
+atlas = ExtResource("2_7ajmo")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_18v7a"]
+atlas = ExtResource("2_7ajmo")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_boy8h"]
+atlas = ExtResource("2_7ajmo")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pq7tb"]
+atlas = ExtResource("2_7ajmo")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qfdm8"]
+atlas = ExtResource("2_7ajmo")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e018s"]
+atlas = ExtResource("2_7ajmo")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b3n0w"]
+atlas = ExtResource("2_7ajmo")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hdftu"]
+atlas = ExtResource("2_7ajmo")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l263b"]
+atlas = ExtResource("2_7ajmo")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4cpxm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hl77l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0pg54")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_18v7a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_boy8h")
+}],
+"loop": false,
+"name": &"close",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pq7tb")
+}],
+"loop": false,
+"name": &"closed",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qfdm8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e018s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b3n0w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hdftu")
+}],
+"loop": false,
+"name": &"open",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l263b")
+}],
+"loop": false,
+"name": &"opened",
+"speed": 8.0
+}]
+
+[node name="house_short" type="Node2D"]
+texture_filter = 1
+script = ExtResource("1_qs2sh")
+
+[node name="sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_ckf7n")
+centered = false
+
+[node name="door" type="AnimatedSprite2D" parent="."]
+position = Vector2(16, 16)
+sprite_frames = SubResource("SpriteFrames_4cpxm")
+animation = &"close"
+centered = false

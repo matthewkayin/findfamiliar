@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://urogubusa0wt"
-path="res://.godot/imported/house_window.png-284a53e9236743d96dea8404ad3dc55a.ctex"
+uid="uid://dhv3um02sl6h"
+path="res://.godot/imported/baba_yga.png-ebebc3dac86303c08c56c2d46d0c8517.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://world/house_window.png"
-dest_files=["res://.godot/imported/house_window.png-284a53e9236743d96dea8404ad3dc55a.ctex"]
+source_file="res://actor/baba_yga.png"
+dest_files=["res://.godot/imported/baba_yga.png-ebebc3dac86303c08c56c2d46d0c8517.ctex"]
 
 [params]
 

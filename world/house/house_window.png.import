@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dk18cwblfoxsh"
-path="res://.godot/imported/door.png-614f3afc361ee8268e99f572490e9d5e.ctex"
+uid="uid://urogubusa0wt"
+path="res://.godot/imported/house_window.png-2fb3e37b889b985e88610e54b565fa5c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://world/door.png"
-dest_files=["res://.godot/imported/door.png-614f3afc361ee8268e99f572490e9d5e.ctex"]
+source_file="res://world/house/house_window.png"
+dest_files=["res://.godot/imported/house_window.png-2fb3e37b889b985e88610e54b565fa5c.ctex"]
 
 [params]
 
