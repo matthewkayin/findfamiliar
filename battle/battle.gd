@@ -61,7 +61,7 @@ func _ready():
                     if witch_familiar_spell == null:
                         continue
                     familiar.spells.append(witch_familiar_spell)
-            player_party.familiars.append(familiar)
+            player_party.add_familiar(familiar)
         is_duel = test_is_duel
         enemy_party.familiars.clear()
         for witch_familiar in enemy_familiars:
@@ -73,14 +73,14 @@ func _ready():
                     if witch_familiar_spell == null:
                         continue
                     familiar.spells.append(witch_familiar_spell)
-            enemy_party.familiars.append(familiar)
+            enemy_party.add_familiar(familiar)
             if not is_duel:
                 break
         enemy_party.enemy_witch_name = "TEST FRIEND"
         enemy_party.enemy_lose_message = "Ack, I lost."
         enemy_party.enemy_witch_sprite = load("res://battle/sprites/witches/frida.png")
 
-        enemy_party.familiars[0].health = 1
+        enemy_party.get_familiar(0).health = 1
         battle_start()
 
 func battle_start(is_witch_battle: bool = false):
@@ -103,7 +103,7 @@ func battle_start(is_witch_battle: bool = false):
         await summon_familiar(ActionActor.ENEMY, true)
     else:
         enemy_healthbar.open()
-        dialog.open("A wild " + enemy_party.familiars[0].get_display_name() + " appeared!")
+        dialog.open("A wild " + enemy_party.get_familiar(0).get_display_name() + " appeared!")
         await dialog.finished
         dialog.clear()
 
@@ -115,13 +115,13 @@ func battle_start(is_witch_battle: bool = false):
 func battle_actions_open(remember_cursor: bool = false):
     if battle_ended:
         return
-    dialog.set_text("What will\n" + player_party.familiars[0].get_display_name() + " do?") 
+    dialog.set_text("What will\n" + player_party.get_familiar(0).get_display_name() + " do?") 
     battle_actions.open(remember_cursor)
 
 func summon_familiar(who: ActionActor, animate_exit: bool = false):
     var party = player_party if who == ActionActor.PLAYER else enemy_party
     var message = "You " if who == ActionActor.PLAYER else enemy_party.enemy_witch_name + "\n"
-    message += "summoned " + party.familiars[0].get_display_name() + "!"
+    message += "summoned " + party.get_familiar(0).get_display_name() + "!"
 
     dialog.open(message)
     if animate_exit:
@@ -139,7 +139,7 @@ func _process(_delta):
     if battle_actions.is_open() and battle_actions.finished:
         if battle_actions.choice == "SPELL":
             var spell_options: Array[String] = []
-            for spell in player_party.familiars[0].spells:
+            for spell in player_party.get_familiar(0).spells:
                 spell_options.append(spell.name)
             spell_chooser.open_with(spell_options)
             battle_actions.close()
@@ -173,7 +173,7 @@ func _process(_delta):
         else:
             # get chosen spell
             var chosen_spell: Spell = null
-            for spell in player_party.familiars[0].spells:
+            for spell in player_party.get_familiar(0).spells:
                 if spell_chooser.choice == spell.name:
                     chosen_spell = spell
                     break
@@ -192,7 +192,7 @@ func _process(_delta):
             party_menu.close()
             battle_actions_open(true)
         else:
-            if player_party.familiars[0].is_living():
+            if player_party.get_familiar(0).is_living():
                 party_menu.close()
                 do_round({
                     "actor": ActionActor.PLAYER,
@@ -278,10 +278,10 @@ func do_round(player_action):
         player_first = true
     elif player_action.spell.priority < enemy_action.spell.priority:
         player_first = false
-    elif player_party.familiars[0].get_agility() == enemy_party.familiars[0].get_agility():
+    elif player_party.get_familiar(0).get_agility() == enemy_party.get_familiar(0).get_agility():
         player_first = randi_range(0, 1) == 0
     else:
-        player_first = player_party.familiars[0].get_agility() > enemy_party.familiars[0].get_agility()
+        player_first = player_party.get_familiar(0).get_agility() > enemy_party.get_familiar(0).get_agility()
 
     # do each turn
     var actions = [player_action, enemy_action] if player_first else [enemy_action, player_action]
@@ -290,16 +290,16 @@ func do_round(player_action):
         var skip_next_turn: bool = false
 
         # check if player familiar is dead
-        if not player_party.familiars[0].is_living():
-            dialog.open(player_party.familiars[0].get_display_name() + " was defeated!")
+        if not player_party.get_familiar(0).is_living():
+            dialog.open(player_party.get_familiar(0).get_display_name() + " was defeated!")
             await animator.animate_faint(ActionActor.PLAYER)
             if not dialog.is_finished:
                 await dialog.finished
             player_healthbar.close()
             dialog.clear()
         # check if enemy familiar is dead
-        if not enemy_party.familiars[0].is_living():
-            dialog.open("Enemy " + enemy_party.familiars[0].get_display_name() + " was defeated!")
+        if not enemy_party.get_familiar(0).is_living():
+            dialog.open("Enemy " + enemy_party.get_familiar(0).get_display_name() + " was defeated!")
             await animator.animate_faint(ActionActor.ENEMY)
             if not dialog.is_finished:
                 await dialog.finished
@@ -381,12 +381,12 @@ func do_round(player_action):
         # end enemy party defeated
 
         # switch
-        if not player_party.familiars[0].is_living():
+        if not player_party.get_familiar(0).is_living():
             party_menu.open(PartyMenu.Mode.SWITCH_REQUIRED)
             await resume_round
             if turn_number == 0 and actions[1].actor == ActionActor.PLAYER:
                 skip_next_turn = true
-        if not enemy_party.familiars[0].is_living():
+        if not enemy_party.get_familiar(0).is_living():
             # TODO enemy switch
             if turn_number == 0 and actions[1].actor == ActionActor.ENEMY:
                 skip_next_turn = true
@@ -405,8 +405,8 @@ func do_action(action):
     # SPELL
     if action.type == ActionType.SPELL:
         # setup attacker and defender
-        var attacker: Familiar = player_party.familiars[0] if action.actor == ActionActor.PLAYER else enemy_party.familiars[0]
-        var defender: Familiar = enemy_party.familiars[0] if action.actor == ActionActor.PLAYER else player_party.familiars[0]
+        var attacker: Familiar = player_party.get_familiar(0) if action.actor == ActionActor.PLAYER else enemy_party.get_familiar(0)
+        var defender: Familiar = enemy_party.get_familiar(0) if action.actor == ActionActor.PLAYER else player_party.get_familiar(0)
         var attacker_healthbar = player_healthbar if action.actor == ActionActor.PLAYER else enemy_healthbar
         var defender_healthbar = enemy_healthbar if action.actor == ActionActor.PLAYER else player_healthbar
 
@@ -469,7 +469,7 @@ func do_action(action):
 
         if condition_hit:
             var condition_target = attacker if action.spell.condition_target == Spell.ConditionTarget.SELF else defender
-            var condition_target_name = condition_target.get_display_name() if condition_target == player_party.familiars[0] else "Enemy " + condition_target.get_display_name()
+            var condition_target_name = condition_target.get_display_name() if condition_target == player_party.get_familiar(0) else "Enemy " + condition_target.get_display_name()
             var condition_target_healthbar = attacker_healthbar if action.spell.condition_target == Spell.ConditionTarget.SELF else defender_healthbar
 
             # handle stats
@@ -515,7 +515,7 @@ func do_action(action):
 
         await animator.animate_unsummon(action.actor)
 
-        player_party.familiars[0].clear_stat_mods()
+        player_party.get_familiar(0).clear_stat_mods()
         attacker_party.switch(0, action.index)
 
         var delay_tween = get_tree().create_tween()
@@ -524,7 +524,7 @@ func do_action(action):
         await summon_familiar(action.actor)
     # TRY TO CATCH FAMILIAR
     elif action.type == ActionType.ITEM and action.item.type == Item.ItemType.GEM:
-        var familiar = enemy_party.familiars[0]
+        var familiar = enemy_party.get_familiar(0)
         var catch_dc: int = int(max(familiar.species.catch_rate * ((((3.0 * familiar.max_health) - (2.0 * familiar.health)) / (3.0 * familiar.max_health))), 1))
         var catch_roll: int = randi_range(0, 255)
         var catch_successful = catch_roll < catch_dc
@@ -556,7 +556,7 @@ func do_action(action):
                 if name_dialog.input != "":
                     familiar.nickname = name_dialog.input
                 name_dialog.close()
-            player_party.familiars.append(familiar)
+            player_party.add_familiar(familiar)
             dialog.open(familiar.get_display_name() + " joined the party!")
             await dialog.finished
             battle_end()
@@ -569,9 +569,9 @@ func do_action(action):
     # RUN
     elif action.type == ActionType.RUN:
         player_escape_attempts += 1
-        var escape_successful = player_party.familiars[0].get_agility() >= enemy_party.familiars[0].get_agility()
+        var escape_successful = player_party.get_familiar(0).get_agility() >= enemy_party.get_familiar(0).get_agility()
         if not escape_successful:
-            var escape_odds = floor((player_party.familiars[0].get_agility() * 32.0) / (int(enemy_party.familiars[0].get_agility() / 4.0) % 256)) + (30 * player_escape_attempts)
+            var escape_odds = floor((player_party.get_familiar(0).get_agility() * 32.0) / (int(enemy_party.get_familiar(0).get_agility() / 4.0) % 256)) + (30 * player_escape_attempts)
             escape_successful = escape_odds > 255 or randi_range(0, 255) < escape_odds
         
         if escape_successful:
@@ -590,7 +590,7 @@ func do_action(action):
         player_escape_attempts = 0
 
     # update battle flag
-    var familiar = player_party.familiars[0] if action.actor == ActionActor.PLAYER else enemy_party.familiars[0]
+    var familiar = player_party.get_familiar(0) if action.actor == ActionActor.PLAYER else enemy_party.get_familiar(0)
     familiar.has_participated = true
 
     # apply burn damage

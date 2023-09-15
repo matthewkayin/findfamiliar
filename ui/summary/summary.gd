@@ -54,6 +54,8 @@ signal finished
 @onready var spell_info_spell_type_icon = $spell_info/spell_type_icon
 @onready var spell_info_spell_type_label = $spell_info/spell_type_icon/label
 
+@onready var timer = $timer
+
 enum Page {
     STATS,
     SPELLS
@@ -70,18 +72,25 @@ func _ready():
     expbar_max_width = expbar.size.x
     visible = false
 
+    timer.timeout.connect(_on_timer_timeout)
+
     prepared_spells.updated_cursor.connect(open_spell_info)
     known_spells.updated_cursor.connect(open_spell_info)
+
+func _on_timer_timeout():
+    if player_party.get_familiar(familiar_index).is_living() and page == Page.SPELLS:
+        mini_header_mini.frame = 1 if mini_header_mini.frame == 0 else 0
 
 func close():
     visible = false
 
 func open(index: int):
     open_stats_page(index)
+    timer.start(0.2)
 
 func open_stats_page(index: int):
     familiar_index = index
-    var familiar = player_party.familiars[familiar_index]
+    var familiar = player_party.get_familiar(familiar_index)
 
     page = Page.STATS
     page_label.text = "STATS"
@@ -102,7 +111,15 @@ func open_stats_page(index: int):
 
     health_cluster.visible = true
     health_amount.text = str(familiar.health) + "/" + str(familiar.max_health)
-    healthbar.size.x = int((float(familiar.health) / float(familiar.max_health)) * healthbar_max_width)
+    var health_percent = float(familiar.health) / float(familiar.max_health)
+    healthbar.size.x = int(health_percent * healthbar_max_width)
+
+    if health_percent > 0.5:
+        healthbar.color = Healthbar.HEALTHBAR_COLOR_GREEN
+    elif health_percent > 0.2:
+        healthbar.color = Healthbar.HEALTHBAR_COLOR_YELLOW
+    else:
+        healthbar.color = Healthbar.HEALTHBAR_COLOR_RED
 
     if familiar.condition == Condition.Type.NONE:
         status_icon.visible = false

@@ -1,4 +1,5 @@
 extends Control
+class_name Healthbar
 
 signal finished
 
@@ -27,7 +28,7 @@ func _ready():
     visible = false
 
 func open():
-    displayed_health = party.familiars[0].health
+    displayed_health = party.get_familiar(0).health
     refresh()
     visible = true
 
@@ -36,7 +37,7 @@ func close():
 
 func refresh():
     # refresh healthbar
-    var familiar = party.familiars[0]
+    var familiar = party.get_familiar(0)
     name_label.text = familiar.get_display_name()
     level_label.text = "Lv" + str(familiar.level)
     health_amount.text = str(int(displayed_health)) + "/" + str(familiar.max_health)
@@ -71,13 +72,13 @@ func refresh():
         condition_index += 1
     
 func fast_update():
-    displayed_health = party.familiars[0].health
+    displayed_health = party.get_familiar(0).health
     refresh()
 
 func update():
     is_interpolating = true
     var health_tween = get_tree().create_tween()
-    health_tween.tween_property(self, "displayed_health", party.familiars[0].health, 1.0)
+    health_tween.tween_property(self, "displayed_health", party.get_familiar(0).health, 1.0)
     await health_tween.finished
     is_interpolating = false
     refresh()

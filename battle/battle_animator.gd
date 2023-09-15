@@ -43,7 +43,7 @@ func _process(delta):
     call("process_" + process_state, delta)
 
 func animate_enter(is_duel: bool):
-    enemy_sprite.texture = enemy_party.enemy_witch_sprite if is_duel else load("res://battle/sprites/front/" + enemy_party.familiars[0].species.name.replace(" ", "-").to_lower() + ".png")
+    enemy_sprite.texture = enemy_party.enemy_witch_sprite if is_duel else load("res://battle/sprites/front/" + enemy_party.get_familiar(0).species.name.replace(" ", "-").to_lower() + ".png")
     enemy_sprite.position = Vector2(-64, 64) 
     enemy_sprite.visible = true
 
@@ -86,7 +86,7 @@ func animate_summon(who: Battle.ActionActor):
     var healthbar = player_healthbar if who == Battle.ActionActor.PLAYER else enemy_healthbar
     var face = "back" if who == Battle.ActionActor.PLAYER else "front"
     var party = player_party if who == Battle.ActionActor.PLAYER else enemy_party
-    var species_sprite = load("res://battle/sprites/" + face + "/" + party.familiars[0].species.name.replace(" ", "-").to_lower() + ".png")
+    var species_sprite = load("res://battle/sprites/" + face + "/" + party.get_familiar(0).species.name.replace(" ", "-").to_lower() + ".png")
 
     sprite.position = Vector2(56, 184) if who == Battle.ActionActor.PLAYER else Vector2(256, 64)
     sprite.texture = null

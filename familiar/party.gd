@@ -1,12 +1,19 @@
 extends Node
 class_name Party
 
-var old_familiar_order: Array[Familiar] = []
 var familiars: Array[Familiar] = []
+var familiar_order: Array[int] = []
 var items: Dictionary = {}
 var enemy_witch_name: String
 var enemy_witch_sprite: Texture2D
 var enemy_lose_message: String
+
+func get_familiar(index: int) -> Familiar:
+    return familiars[familiar_order[index]]
+
+func add_familiar(familiar: Familiar):
+    familiars.append(familiar)
+    familiar_order.append(familiar_order.size())
 
 func get_living_familiar_count():
     var count = 0
@@ -25,11 +32,6 @@ func before_turn():
     pass
 
 func before_battle():
-    # Remember the party order
-    old_familiar_order = []
-    for i in range(0, familiars.size()):
-        old_familiar_order.append(familiars[i])
-
     # Reset participation flags
     for familiar in familiars:
         familiar.has_participated = false
@@ -43,14 +45,14 @@ func before_battle():
     if first_living_index != -1 and first_living_index != 0:
         switch(0, first_living_index)
 
-    familiars[0].has_participated = true
+    get_familiar(0).has_participated = true
 
 func after_battle():
     # Recall the party order
-    familiars = []
-    for i in range(0, old_familiar_order.size()):
-        familiars.append(old_familiar_order[i])
-    
+    familiar_order.clear()
+    for i in range(0, familiars.size()):
+        familiar_order.append(i)
+
     # clear conditions
     for familiar in familiars:
         familiar.clear_stat_mods()
@@ -58,6 +60,11 @@ func after_battle():
             familiar.condition = Condition.Type.NONE
 
 func switch(index_a: int, index_b: int):
+    var temp = familiar_order[index_a]
+    familiar_order[index_a] = familiar_order[index_b]
+    familiar_order[index_b] = temp
+
+func hard_switch(index_a: int, index_b: int):
     var temp = familiars[index_a]
     familiars[index_a] = familiars[index_b]
     familiars[index_b] = temp
@@ -79,4 +86,5 @@ func use_item(item: Item, index: int):
     remove_item(item, 1)
 
     if item.type == Item.ItemType.HEALING:
-        familiars[index].health = min(familiars[index].health + item.value, familiars[index].max_health)
+        var familiar = get_familiar(index)
+        familiar.health = min(familiar.health + item.value, familiar.max_health)

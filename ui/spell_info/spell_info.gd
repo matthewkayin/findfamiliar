@@ -10,7 +10,7 @@ func _ready():
     get_parent().closed.connect(close)
 
 func _on_spell_chooser_update_cursor():
-    open(get_node("/root/player_party").familiars[0].spells[get_parent().cursor_index.x + (2 * get_parent().cursor_index.y)])
+    open(get_node("/root/player_party").get_familiar(0).spells[get_parent().cursor_index.x + (2 * get_parent().cursor_index.y)])
 
 func open(spell: Spell):
     damage_type_icon.frame = 0 if spell.damage_type == Spell.DamageType.PHYSICAL else 1

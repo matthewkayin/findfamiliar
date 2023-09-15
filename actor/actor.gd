@@ -248,7 +248,7 @@ func begin_duel():
                 if witch_familiar_spell == null:
                     continue
                 familiar.spells.append(witch_familiar_spell)
-        enemy_party.familiars.append(familiar)
+        enemy_party.add_familiar(familiar)
     enemy_party.enemy_witch_name = duelist_name
     enemy_party.enemy_lose_message = post_duel_dialog
     enemy_party.enemy_witch_sprite = battle_sprite

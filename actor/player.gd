@@ -168,7 +168,7 @@ func update_behavior(delta):
                 input_direction = Vector2.ZERO
                 is_moving = false
                 enemy_party.familiars.clear()
-                enemy_party.familiars.append(wild_familiar)
+                enemy_party.add_familiar(wild_familiar)
                 director.start_battle()
         # player has not reached tile, move normally
         else:

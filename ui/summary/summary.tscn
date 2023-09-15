@@ -728,3 +728,5 @@ offset_bottom = 71.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "LIGHTNING"
 label_settings = SubResource("LabelSettings_6lpgl")
+
+[node name="timer" type="Timer" parent="."]

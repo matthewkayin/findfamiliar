@@ -12,7 +12,7 @@ var difficulty: Difficulty
 
 func choose_action():
     if difficulty == Difficulty.WILD:
-        var spell = enemy_party.familiars[0].spells[randi_range(0, enemy_party.familiars[0].spells.size() - 1)]
+        var spell = enemy_party.get_familiar(0).spells[randi_range(0, enemy_party.get_familiar(0).spells.size() - 1)]
         return {
             "actor": Battle.ActionActor.ENEMY,
             "type": Battle.ActionType.SPELL,
@@ -20,7 +20,7 @@ func choose_action():
         }
 
     var possible_actions = []
-    for spell in enemy_party.familiars[0].spells:
+    for spell in enemy_party.get_familiar(0).spells:
         var action = {
             "actor": Battle.ActionActor.ENEMY,
             "type": Battle.ActionType.SPELL,
@@ -52,20 +52,20 @@ func get_strongest_spell(attacker: Familiar, defender: Familiar):
     }
 
 func player_can_1hko():
-    var result = get_strongest_spell(player_party.familiars[0], enemy_party.familiars[0])
-    return result.damage >= enemy_party.familiars[0].health
+    var result = get_strongest_spell(player_party.get_familiar(0), enemy_party.get_familiar(0))
+    return result.damage >= enemy_party.get_familiar(0).health
 
 func player_can_2hko():
-    var result = get_strongest_spell(player_party.familiars[0], enemy_party.familiars[0])
-    return int(result.damage * 2.0) >= enemy_party.familiars[0].health
+    var result = get_strongest_spell(player_party.get_familiar(0), enemy_party.get_familiar(0))
+    return int(result.damage * 2.0) >= enemy_party.get_familiar(0).health
 
 func enemy_can_1hko():
-    var result = get_strongest_spell(enemy_party.familiars[0], player_party.familiars[0])
-    return result.damage >= player_party.familiars[0].health
+    var result = get_strongest_spell(enemy_party.get_familiar(0), player_party.get_familiar(0))
+    return result.damage >= player_party.get_familiar(0).health
 
 func enemy_can_2hko():
-    var result = get_strongest_spell(enemy_party.familiars[0], player_party.familiars[0])
-    return int(result.damage * 2.0) >= player_party.familiars[0].health
+    var result = get_strongest_spell(enemy_party.get_familiar(0), player_party.get_familiar(0))
+    return int(result.damage * 2.0) >= player_party.get_familiar(0).health
 
 func is_disadvantaged(defender: Familiar, attacker: Familiar):
     return Types.EFFECTIVENESS[attacker.species.type].has(defender.species.type) and Types.EFFECTIVENESS[attacker.species.type][defender.species.type] == 2.0
@@ -74,12 +74,12 @@ func is_advantaged(attacker: Familiar, defender: Familiar):
     return is_disadvantaged(defender, attacker)
 
 func predict_player_action():
-    var player_can_kill = player_party.familiars[0].get_speed() > enemy_party.familiars[0].get_speed() and player_can_1hko()
-    var player_is_disadvantaged = is_disadvantaged(player_party.familiars[0], enemy_party.familiars[0])
-    var player_is_advantaged = is_advantaged(player_party.familiars[0], enemy_party.familiars[0])
+    var player_can_kill = player_party.get_familiar(0).get_speed() > enemy_party.get_familiar(0).get_speed() and player_can_1hko()
+    var player_is_disadvantaged = is_disadvantaged(player_party.get_familiar(0), enemy_party.get_familiar(0))
+    var player_is_advantaged = is_advantaged(player_party.get_familiar(0), enemy_party.get_familiar(0))
     var player_has_advantaged_reserve = false
     for i in range(1, player_party.familiars.size()):
-        if is_advantaged(player_party.familiars[i], enemy_party.familiars[0]):
+        if is_advantaged(player_party.familiars[i], enemy_party.get_familiar(0)):
             player_has_advantaged_reserve = true
             break
 
@@ -96,27 +96,27 @@ func predict_player_action():
             "action": Battle.ActionType.SWITCH
         }
 
-    var result = get_strongest_spell(player_party.familiars[0], enemy_party.familiars[0])
+    var result = get_strongest_spell(player_party.get_familiar(0), enemy_party.get_familiar(0))
     return {
         "action": Battle.ActionType.SPELL,
         "spell": result.spell
     }
 
 func score_spell(spell: Spell):
-    var damage_score: float = Battle.calculate_damage(enemy_party.familiars[0], player_party.familiars[0], spell).randomless_damage / float(player_party.familiars[0].health)
+    var damage_score: float = Battle.calculate_damage(enemy_party.get_familiar(0), player_party.get_familiar(0), spell).randomless_damage / float(player_party.get_familiar(0).health)
     var stat_mod_score: float = 0.0
     if not player_can_1hko() and not enemy_can_2hko():
         for stat_name in Familiar.STAT_NAMES:
             var spell_stat_mod = spell[stat_name + "_mod"]
-            if stat_name == "agility" and enemy_party.familiars[0].get_agility() > player_party.familiars[0].get_agility():
+            if stat_name == "agility" and enemy_party.get_familiar(0).get_agility() > player_party.get_familiar(0).get_agility():
                 continue
-            if spell.condition_target == Spell.ConditionTarget.SELF and enemy_party.familiars[0][stat_name + "_stage"] >= spell_stat_mod * 2:
+            if spell.condition_target == Spell.ConditionTarget.SELF and enemy_party.get_familiar(0)[stat_name + "_stage"] >= spell_stat_mod * 2:
                 continue
-            if spell.condition_target == Spell.ConditionTarget.OPPONENT and player_party.familiars[0][stat_name + "_stage"] <= spell_stat_mod * 2:
+            if spell.condition_target == Spell.ConditionTarget.OPPONENT and player_party.get_familiar(0)[stat_name + "_stage"] <= spell_stat_mod * 2:
                 continue
             stat_mod_score += 0.2 * abs(spell_stat_mod)
     var condition_score: float = 0.0
-    if spell.condition != Condition.Type.NONE and spell.condition_target == Spell.ConditionTarget.OPPONENT and player_party.familiars[0].condition == Condition.Type.NONE and not enemy_can_2hko():
+    if spell.condition != Condition.Type.NONE and spell.condition_target == Spell.ConditionTarget.OPPONENT and player_party.get_familiar(0).condition == Condition.Type.NONE and not enemy_can_2hko():
         condition_score = spell.condition_accuracy / 100.0
 
     return damage_score + stat_mod_score + condition_score

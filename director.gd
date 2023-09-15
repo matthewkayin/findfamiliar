@@ -11,9 +11,9 @@ func _ready():
     var item_gem = load("res://familiar/items/gem.tres")
     var item_potion = load("res://familiar/items/potion.tres")
 
-    player_party.familiars.append(Familiar.new(species_cat, 5))
-    player_party.familiars[0].nickname = "Jiji"
-    player_party.familiars[0].experience += player_party.familiars[0].get_experience_to_next_level() - 1
+    player_party.add_familiar(Familiar.new(species_cat, 5))
+    player_party.get_familiar(0).nickname = "Jiji"
+    player_party.get_familiar(0).experience += player_party.get_familiar(0).get_experience_to_next_level() - 1
 
     player_party.add_item(item_gem, 5)
     player_party.add_item(item_potion, 10)
