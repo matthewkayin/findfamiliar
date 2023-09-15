@@ -117,6 +117,6 @@ func score_spell(spell: Spell):
             stat_mod_score += 0.2 * abs(spell_stat_mod)
     var condition_score: float = 0.0
     if spell.condition != Condition.Type.NONE and spell.condition_target == Spell.ConditionTarget.OPPONENT and player_party.get_familiar(0).condition == Condition.Type.NONE and not enemy_can_2hko():
-        condition_score = spell.condition_accuracy / 100.0
+        condition_score = (spell.accuracy / 100.0) * (spell.condition_chance / 100.0)
 
     return damage_score + stat_mod_score + condition_score

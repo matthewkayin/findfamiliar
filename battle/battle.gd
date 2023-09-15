@@ -426,8 +426,8 @@ func do_action(action):
             spell_hit = randi_range(0, 100) <= accuracy_dc
         # check if condition hit
         var condition_hit: bool = false
-        if defender.is_living() and action.spell.condition_target == Spell.ConditionTarget.OPPONENT:
-            var condition_dc: int = action.spell.condition_accuracy * attacker.get_luck()
+        if spell_hit and defender.is_living() and action.spell.condition_target == Spell.ConditionTarget.OPPONENT:
+            var condition_dc: int = action.spell.condition_chance * attacker.get_luck()
             condition_hit = randi_range(0, 100) <= condition_dc
         elif action.spell.condition_target == Spell.ConditionTarget.SELF: 
             condition_hit = true

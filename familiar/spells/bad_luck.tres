@@ -11,8 +11,8 @@ LUCK."
 priority = 0
 power = 0
 damage_type = 2
-accuracy = 0
-condition_accuracy = 100
+accuracy = 100
+condition_chance = 100
 condition_target = 2
 condition = 0
 strength_mod = 0

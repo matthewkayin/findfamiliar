@@ -22,7 +22,7 @@ enum ConditionTarget {
 @export_range(0, 255, 1) var power: int
 @export var damage_type: DamageType
 @export_range(0, 100, 1) var accuracy: int
-@export_range(0, 100, 1) var condition_accuracy: int
+@export_range(0, 100, 1) var condition_chance: int
 
 @export_group("Condition")
 @export var condition_target: ConditionTarget = ConditionTarget.NONE

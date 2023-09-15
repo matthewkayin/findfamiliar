@@ -20,7 +20,6 @@ func open(spell: Spell):
     var accuracy_string = str(spell.accuracy)
     if spell.damage_type == Spell.DamageType.NONE:
         damage_string = "---"
-        accuracy_string = str(spell.condition_accuracy) 
     label.text = "POW: " + damage_string + "\nACC: " + accuracy_string + "\n"
     visible = true
 
